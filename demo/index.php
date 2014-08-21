@@ -14,7 +14,7 @@ use Duality\System\Structure\HtmlDoc;
 use Duality\System\Ajax;
 
 // Create a server, load request and create default response
-$server = new Server('localhost', '/duality/tests');
+$server = new Server('localhost', '/duality/demo');
 $request = new Http;
 $request->parseFromGlobals();
 $response = $server->createResponse();
@@ -28,7 +28,7 @@ $server->addRoute('/\/example\/json/i', function(&$request, &$response) use ($se
 // Create default server response (an HTML document)
 $server->addRoute('/\//i', function(&$request, &$response) use ($server) {
 	$doc = new HtmlDoc();
-	$template = new TextFile('./tests/data/template.html');
+	$template = new TextFile('./demo/data/template.html');
 	$template->getContent();
 	$doc->loadFile($template);
 	$doc->appendTo('//div[@id="container"]', '<h1 id="title">Hello Duality!</h1>');
