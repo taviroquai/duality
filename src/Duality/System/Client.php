@@ -40,8 +40,8 @@ class Client
 		$header[] = "Cache-Control: max-age=0"; 
 		$header[] = "Connection: keep-alive"; 
 		$header[] = "Keep-Alive:timeout=5, max=100"; 
-		$header[] = "Accept-Charset:ISO-8859-1,utf-8;q=0.7,*;q=0.3"; 
-		$header[] = "Accept-Language:es-ES,es;q=0.8"; 
+		$header[] = "Accept-Charset:utf-8,ISO-8859-1;q=0.7,*;q=0.3"; 
+		$header[] = "Accept-Language:en-US,en;q=0.8"; 
 		$header[] = "Pragma: ";
 
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
