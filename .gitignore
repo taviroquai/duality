@@ -5,3 +5,4 @@ composer.lock
 Thumbs.db
 duality.sublime-project
 duality.sublime-workspace
+/nbproject
