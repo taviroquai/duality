@@ -3,3 +3,5 @@ composer.phar
 composer.lock
 .DS_Store
 Thumbs.db
+duality.sublime-project
+duality.sublime-workspace
