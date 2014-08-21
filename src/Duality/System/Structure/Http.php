@@ -37,14 +37,20 @@ class Http extends Structure {
 		$this->setTimestamp($_SERVER['REQUEST_TIME']);
 		$headers = array(
 			'Http-Accept' => $_SERVER['HTTP_ACCEPT'],
-			'Http-Accept-Charset' => empty($_SERVER['HTTP_ACCEPT_CHARSET']) ? $_SERVER['HTTP_ACCEPT_ENCODING'] : $_SERVER['HTTP_ACCEPT_CHARSET'],
-			'Http-Host' => empty($_SERVER['REMOTE_HOST']) ? $_SERVER['REMOTE_ADDR'] : $_SERVER['REMOTE_HOST'],
+			'Http-Accept-Charset' => empty($_SERVER['HTTP_ACCEPT_CHARSET']) ? 
+                $_SERVER['HTTP_ACCEPT_ENCODING'] : $_SERVER['HTTP_ACCEPT_CHARSET'],
+			'Http-Host' => empty($_SERVER['REMOTE_HOST']) ? 
+                $_SERVER['REMOTE_ADDR'] : $_SERVER['REMOTE_HOST'],
 			'Referer' => empty($_SERVER['REFERER']) ? '' : $_SERVER['REFERER']
 		);
 		$this->setHeaders($headers);
-		$url = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        $url = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . 
+            "://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 		$this->setUrl($url);
-		if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+		if (
+            !empty($_SERVER['HTTP_X_REQUESTED_WITH']) 
+            && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest'
+        ) {
 			$this->isAjax = true;
 		}
 	}
@@ -112,7 +118,14 @@ class Http extends Structure {
 			if (!is_array($item)) {
 				throw new Exception("Cookie must be an associative array", 10);
 			}
-			setcookie($item['name'], $item['value'], $item['expire'], $item['path'], $item['domain'], $item['secure']);
+			setcookie(
+                $item['name'],
+                $item['value'],
+                $item['expire'],
+                $item['path'],
+                $item['domain'],
+                $item['secure']
+            );
 		}
 	}
 
