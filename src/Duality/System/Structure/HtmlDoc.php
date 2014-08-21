@@ -5,26 +5,48 @@ namespace Duality\System\Structure;
 use Duality\System\Core\Structure;
 use Duality\System\File\TextFile;
 
+/**
+ * HTML document class
+ */
 class HtmlDoc extends Structure
 {
+    /**
+     * Holds the DOM document
+     * @var \DOMDocument
+     */
 	protected $doc;
 
+    /**
+     * Creates a new HTML document
+     */
 	public function __construct()
 	{
 		$this->doc = new \DOMDocument('1.0', 'UTF-8');
 		$this->doc->loadHTML( "<!DOCTYPE html>\n<html><head><title></title></head><body></body></html>" );
 	}
 
+    /**
+     * Imports the HTML from a text file
+     * @param \Duality\System\File\TextFile $file
+     */
 	public function loadFile(TextFile $file)
 	{
 		$this->doc->loadHTML($file->getContent());
 	}
 
+    /**
+     * Gets the full document string
+     * @return string
+     */
 	public function save()
 	{
 		return $this->doc->saveHTML();
 	}
 
+    /**
+     * Sets the document title
+     * @param string $title
+     */
 	public function setTitle($title)
 	{
 		$textNode = $this->doc->createTextNode($title);
@@ -32,6 +54,11 @@ class HtmlDoc extends Structure
 		$node->appendChild($textNode);
 	}
 
+    /**
+     * Appends HTML to the queried elements
+     * @param string $query
+     * @param string $html
+     */
 	public function appendTo($query, $html)
 	{
 		$newdoc = new \DOMDocument;

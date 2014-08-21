@@ -2,17 +2,31 @@
 
 namespace Duality\System\Structure;
 
+/**
+ * Database table class
+ */
 class DbTable extends Table
 {
-
+    /**
+     * Holds the dependant database
+     * @var \Duality\System\Structure\Database
+     */
 	protected $database;
 	
+    /**
+     * Creates a new database table giving a database structure
+     * @param \Duality\System\Structure\Database $database
+     */
 	public function __construct(Database $database)
 	{
 		parent::__construct();
 		$this->database = $database;
 	}
 
+    /**
+     * Sets table properties from an entity (ORM functionality)
+     * @param \Duality\System\Structure\Entity $entity
+     */
 	public function setPropertiesFromEntity(Entity $entity)
 	{
 		foreach ($entity->getProperties() as $property) {
@@ -22,6 +36,12 @@ class DbTable extends Table
 		}
 	}
 
+    /**
+     * Loads table values from a given entity
+     * @param \Duality\System\Structure\Entity $entity
+     * @param int $offset
+     * @param int $limit
+     */
 	public function loadFromEntity(Entity $entity, $offset = 0, $limit = false)
 	{
 		$this->setPropertiesFromEntity($entity);

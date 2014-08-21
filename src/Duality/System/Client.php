@@ -4,26 +4,50 @@ namespace Duality\System;
 
 use Duality\System\Structure\Http;
 
+/**
+ * Simulates an HTTP client
+ */
 class Client
 {
 
+    /**
+     * Holds the client user agent
+     * @var string
+     */
 	protected $useragent;
 
+    /**
+     * Creates a new HTTP client
+     * @param string $useragent
+     */
 	public function __construct($useragent = 'Mozilla/5.0 (Windows NT 6.1; WOW64)')
 	{
 		$this->useragent = $useragent;
 	}
 
+    /**
+     * Sets the user agent
+     * @param string $useragent
+     */
 	public function setUserAgent($useragent)
 	{
 		$this->useragent = $useragent;	
 	}
 
+    /**
+     * Gets the useragent
+     * @return string
+     */
 	public function getUserAgent()
 	{
 		return $this->useragent;
 	}
 
+    /**
+     * Creates a client request
+     * @param string $url
+     * @return \Duality\System\Structure\Http
+     */
 	public function createRequest($url)
 	{
 		$request = new Http;
@@ -31,6 +55,11 @@ class Client
 		return $request;
 	}
 
+    /**
+     * Executes a request
+     * @param \Duality\System\Structure\Http $request
+     * @return \Duality\System\Structure\Http
+     */
 	public function execute(Http $request)
 	{
 		$ch = curl_init($request->getUrl());

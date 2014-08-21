@@ -4,39 +4,73 @@ namespace Duality\System\Structure;
 
 use Duality\System\Core\Structure;
 
+/**
+ * File structure class
+ */
 class File extends Structure {
 
+    /**
+     * Holds the file system path
+     * @var string
+     */
 	protected $path;
 
+    /**
+     * Holds the file meta attributes
+     * @var array
+     */
 	protected $attributes;
 
+    /**
+     * Holds the file content
+     * @var string
+     */
 	protected $content;
 
 	public function __construct()
 	{
-		
+		parent::__construct();
 	}
 
+    /**
+     * Sets the file path
+     * @param string $path
+     */
 	public function setPath($path)
 	{
 		$this->path = $path;
 	}
 
+    /**
+     * Gets the file path
+     * @return string
+     */
 	public function getPath()
 	{
 		return $this->path;
 	}
 
+    /**
+     * Checks whether file exists or not
+     * @return boolean
+     */
 	public function exists()
 	{
 		return file_exists($this->path);
 	}
 
+    /**
+     * Loads file meta attributes
+     */
 	public function loadAttributes()
 	{
 		$this->attributes = file($this->path);
 	}
 
+    /**
+     * Loads file contents
+     * @return string
+     */
 	public function getContent()
 	{
 		if (is_null($this->content)) {
@@ -45,11 +79,19 @@ class File extends Structure {
 		return $this->content;
 	}
 
+    /**
+     * Sets the file contents
+     * @param string $content
+     */
 	public function setContent($content)
 	{
 		$this->content = $content;
 	}
 
+    /**
+     * Saves the file to media
+     * @throws \Exception
+     */
 	public function save()
 	{
 		if ($this->exists()) {
