@@ -2,7 +2,7 @@
 
 // Configure PSR-0 autoloader
 chdir('../');
-require_once 'autoload.php';
+require_once './src/autoload.php';
 spl_autoload_extensions('.php');
 spl_autoload_register('autoload');
 
@@ -55,7 +55,7 @@ $server->addRoute('/\//i', function(&$request, &$response) use ($server) {
 
 	// Tell response what is the output
 	$response->setContent($doc->save());
-	
+
 });
 
 // Finally, start server listen
