@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="vendor/autoload.php" colors="true">
+    <testsuites>
+        <testsuite name="Duality Test Suite">
+            <directory>./tests</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <blacklist>
+            <directory suffix=".php">./src/</directory>
+            <directory suffix=".php">./vendor/</directory>
+            <directory suffix=".php">./demo/</directory>
+        </blacklist>
+    </filter>
+    <php>
+        <const name="DATA_PATH" value="./tests/data/"/>
+        <const name="DB_DRIVER"     value="sqlite" />
+        <const name="DB_DATABASE"   value="./tests/data/test.sqlite"/>
+    </php>
+</phpunit>
