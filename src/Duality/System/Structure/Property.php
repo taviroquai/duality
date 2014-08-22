@@ -2,10 +2,12 @@
 
 namespace Duality\System\Structure;
 
+use Duality\System\Core\Structure;
+
 /**
  * Property class
  */
-class Property extends \Duality\System\Core\Structure {
+class Property extends Structure {
 	
     /**
      * Creates a new property
@@ -13,7 +15,6 @@ class Property extends \Duality\System\Core\Structure {
      */
 	public function __construct($name = '')
 	{
-		parent::__construct();
 		if (!empty($name)) {
 			$this->setName($name);
 		}

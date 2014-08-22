@@ -2,11 +2,19 @@
 
 namespace Duality\System\Database;
 
+uses Duality\System\Structure\Database;
+
 /**
- * Database MySql query writer
+ * MySql database query writer
  */
-class MySql extends \Duality\System\Structure\Database
+class MySql extends Database
 {
+
+    public function __construct($dsn, $user, $pass, $options = array())
+    {
+        parent::__construct($dsn, $user, $pass, $options = array());
+    }
+
     /**
      * Returns a select query
      * @param string $fields

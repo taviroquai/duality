@@ -19,7 +19,6 @@ class DbTable extends Table
      */
 	public function __construct(Database $database)
 	{
-		parent::__construct();
 		$this->database = $database;
 	}
 
@@ -29,6 +28,7 @@ class DbTable extends Table
      */
 	public function setPropertiesFromEntity(Entity $entity)
 	{
+		$this->setName((string) $entity);
 		foreach ($entity->getProperties() as $property) {
 			if (!$this->propertyExists($property)) {
 				$this->addProperty($property);
@@ -45,14 +45,23 @@ class DbTable extends Table
 	public function loadFromEntity(Entity $entity, $offset = 0, $limit = false)
 	{
 		$this->setPropertiesFromEntity($entity);
+		$this->loadPage($offset, $limit);
+	}
 
-		$sql = $this->database->getSelect('*', $entity, $offset, $limit);
+	/**
+     * Loads table values with limit
+     * @param int $offset
+     * @param int $limit
+     */
+	public function loadPage($offset = 0, $limit = false)
+	{
+		$sql = $this->database->getSelect('*', $this->getName(), $offset, $limit);
 		$stm = $this->database->getPDO()->query($sql);
 		
 		while ($trow = $stm->fetch(\PDO::FETCH_ASSOC)) {
-			$row = new Row;
+			$row = new TableRow;
 			$row->setTable($this);
-			foreach ($entity->getProperties() as $property) {
+			foreach ($this->getProperties() as $property) {
 				$data = new \Duality\System\Core\Data;
 				$data->setValue($trow[(string) $property]);
 				$row->addData($property, $data);

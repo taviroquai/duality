@@ -7,7 +7,7 @@ use \Duality\System\Core\Structure;
 /**
  * HTTP transport class
  */
-class Http extends Structure {
+abstract class Http extends Structure {
 
     /**
      * HTTP url
@@ -56,17 +56,6 @@ class Http extends Structure {
      * @var boolean
      */
 	protected $isAjax;
-	
-    /**
-     * Creates a new HTTP transort instance
-     */
-	public function __construct()
-	{
-		parent::__construct();
-		$this->headers = array();
-		$this->cookies = array();
-		$this->isAjax = false;
-	}
 
     /**
      * Parses HTTP properties from PHP global environment
@@ -263,6 +252,15 @@ class Http extends Structure {
 	{
 		return $this->timestamp;
 	}
+
+    /**
+     * Sets whether the HTTP transport is ajax or not
+     * @param boolean $trueOrFalse
+     */
+    public function setAjax($trueOrFalse)
+    {
+        $this->isAjax = (boolean) $trueOrFalse;
+    }
 
     /**
      * Gets whether is an AJAX transport or not

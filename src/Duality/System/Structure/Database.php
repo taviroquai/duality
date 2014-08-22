@@ -2,10 +2,13 @@
 
 namespace Duality\System\Structure;
 
+use Duality\System\Core\Structure;
+use Duality\System\Structure\Entity;
+
 /**
  * Database class
  */
-class Database {
+abstract class Database extends Structure {
 
     /**
      * Holds the PDO handler
@@ -57,5 +60,13 @@ class Database {
 	{
 		return $this->pdo;
 	}
+
+    public function createTableFromEntity(Entity $entity)
+    {
+        // Get a database table and its data from an entity
+        $table = new DbTable($this);
+        $table->loadFromEntity($entity);
+        return $table;
+    }
 
 }

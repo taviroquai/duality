@@ -2,7 +2,8 @@
 
 namespace Duality\System;
 
-use Duality\System\Structure\Http;
+use Duality\System\Http\Request;
+use Duality\System\Http\Response;
 
 /**
  * Simulates an HTTP client
@@ -46,21 +47,20 @@ class Client
     /**
      * Creates a client request
      * @param string $url
-     * @return \Duality\System\Structure\Http
+     * @return \Duality\System\Http\Request
      */
-	public function createRequest($url)
+	public static function createRequest($url = '')
 	{
-		$request = new Http;
-		$request->setUrl($url);
+		$request = new Request($url);
 		return $request;
 	}
 
     /**
      * Executes a request
-     * @param \Duality\System\Structure\Http $request
-     * @return \Duality\System\Structure\Http
+     * @param \Duality\System\Http\Request $request
+     * @return \Duality\System\Http\Response
      */
-	public function execute(Http $request)
+	public function execute(Request $request)
 	{
 		$ch = curl_init($request->getUrl());
 
@@ -82,7 +82,7 @@ class Client
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_TIMEOUT, 3);
 
-		$response = new Http;
+		$response = new Response;
 		$response->setContent(curl_exec($ch));
 		curl_close($ch);
 		return $response;

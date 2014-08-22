@@ -2,10 +2,12 @@
 
 namespace Duality\System\Structure;
 
+use \Duality\System\Core\Structure;
+
 /**
  * Table class
  */
-class Table extends \Duality\System\Core\Structure
+abstract class Table extends Structure
 {
     /**
      * Holds the table properties
@@ -18,14 +20,6 @@ class Table extends \Duality\System\Core\Structure
      * @var array
      */
 	protected $rows = array();
-	
-    /**
-     * Creates a new empty table
-     */
-	public function __construct()
-	{
-		parent::__construct();
-	}
 
     /**
      * Adds a property to the table
@@ -38,10 +32,10 @@ class Table extends \Duality\System\Core\Structure
 
     /**
      * Adds a row to the table
-     * @param \Duality\System\Structure\Row $row
+     * @param \Duality\System\Structure\TableRow $row
      * @param int $position
      */
-	public function addRow(Row $row, $position = null)
+	public function addRow(TableRow $row, $position = null)
 	{
 		if (empty($position)) {
 			$position = count ($this->rows);
@@ -75,6 +69,23 @@ class Table extends \Duality\System\Core\Structure
 	public function propertyExists(Property $property)
 	{
 		return in_array($property, $this->getProperties());
+	}
+
+	/**
+     * Exports the table to array
+     * @return array
+     */
+	public function toArray()
+	{
+		$out = array();
+		$properties = $this->getProperties();
+
+		foreach ($this->getRows() as $row) {
+			foreach ($properties as $property) {
+				$out[] = array((string) $property => (string) $row->getData($property));
+			}
+		}
+		return $out;
 	}
 
     /**

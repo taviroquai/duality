@@ -5,21 +5,13 @@ namespace Duality\System\Core;
 /**
  * The structure class
  */
-class Structure {
+abstract class Structure {
 
     /**
      * Holds the structure name
      * @var string
      */
 	protected $name;
-	
-    /**
-     * Creates the structure instance
-     */
-	public function __construct()
-	{
-		
-	}
 
     /**
      * Sets the structure name

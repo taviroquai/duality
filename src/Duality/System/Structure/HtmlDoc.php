@@ -71,4 +71,16 @@ class HtmlDoc extends Structure
 			$el->appendChild($node);
 		}
 	}
+
+	/**
+	 * Creates an HTML document from file path
+	 */
+	public static function createFromFilePath($path)
+	{
+		$doc = new HtmlDoc();
+		$template = new TextFile($path);
+		$template->getContent();
+		$doc->loadFile($template);
+		return $doc;
+	}
 }

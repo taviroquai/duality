@@ -2,11 +2,19 @@
 
 namespace Duality\System\Database;
 
+use \Duality\System\Structure\Database;
+
 /**
- * Database SQLite query writer
+ * SQLite database query writer
  */
-class SQLite extends \Duality\System\Structure\Database
+class SQLite extends Database
 {
+
+    public function __construct($dsn, $options = array())
+    {
+        parent::__construct($dsn, '', '', $options = array());
+    }
+
     /**
      * Returns a select query
      * @param string $fields

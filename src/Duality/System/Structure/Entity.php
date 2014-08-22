@@ -5,7 +5,7 @@ namespace Duality\System\Structure;
 /**
  * Entity class
  */
-class Entity extends Property {
+abstract class Entity extends Property {
 	
     /**
      * Holds the entity properties
@@ -48,6 +48,21 @@ class Entity extends Property {
 	{
 		return $this->properties;
 	}
+
+    /**
+     * Adds properties from a list of properties
+     * @param array $array
+     */
+    public function addPropertiesFromArray($array)
+    {
+        if (!is_array($array) || count($array) == 0) {
+            throw new Exception("Array of properties cannot be empty", 12);
+        }
+        foreach ($array as $name) {
+            $property = new Property($name);
+            $this->addProperty($property);
+        }
+    }
 
     /**
      * Returns the entity name

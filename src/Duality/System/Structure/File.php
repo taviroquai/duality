@@ -7,7 +7,7 @@ use Duality\System\Core\Structure;
 /**
  * File structure class
  */
-class File extends Structure {
+abstract class File extends Structure {
 
     /**
      * Holds the file system path
@@ -26,11 +26,6 @@ class File extends Structure {
      * @var string
      */
 	protected $content;
-
-	public function __construct()
-	{
-		parent::__construct();
-	}
 
     /**
      * Sets the file path
