@@ -29,7 +29,7 @@ $response = $server->createResponse();
 $server->addRoute('/\/example\/json/i', function(&$request, &$response) {
 
 	// Create a default output
-	$out = array('msg' => 'Ajax!', 'items' => array());
+	$out = array('msg' => 'Example get data from database with ajax...', 'items' => array());
 
 	// Create database
 	$db = new SQLite('sqlite:./demo/data/db.sqlite');
