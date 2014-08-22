@@ -14,12 +14,12 @@ Client.routes = function (window, $) {
 	// Just call server at /example/json
 	$.getJSON('example/json', {get: 'test'}, function (data) {
 
-		// Check if there is a console
-		if (typeof console !== 'undefined') {
-
-			// Show server response in console
-			console.log(data);
-		}
+		// Add data to document
+		$('#container').append('<h4>' + data.msg + '</h4>');
+		$('#container').append('<table />');
+		$.each(data.items, function (i, item) {
+			$('#container table').append('<tr><td>' + item.id + '</td><td>' + item.email + '</td></tr>');
+		});
 	});
 }
 
