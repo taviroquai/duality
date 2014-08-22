@@ -31,7 +31,12 @@ abstract class Database extends Structure {
      */
 	public function __construct($dsn, $user, $pass, $options = array())
 	{
-		$this->pdo = new \PDO($dsn, $user, $pass, $options);
+        if (empty($options)) {
+            $options = array(
+                \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION
+            );
+        }
+        $this->pdo = new \PDO($dsn, $user, $pass, $options);
 	}
 
     /**
