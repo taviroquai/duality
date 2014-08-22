@@ -61,7 +61,7 @@ abstract class Http extends Structure {
     /**
      * Sets the HTTP url
      * @param \Duality\System\Structure\Url $url
-     * @throws \Exception
+     * @throws \Duality\System\Core\DualityException
      */
 	public function setUrl(Url $url)
 	{
@@ -83,7 +83,7 @@ abstract class Http extends Structure {
     /**
      * Sets the HTTP method
      * @param string $method
-     * @throws \Exception
+     * @throws \Duality\System\Core\DualityException
      */
 	public function setMethod($method)
 	{
@@ -123,7 +123,7 @@ abstract class Http extends Structure {
     /**
      * Sets the HTTP headers
      * @param array $headers
-     * @throws \Exception
+     * @throws \Duality\System\Core\DualityException
      */
 	public function setHeaders($headers)
 	{
@@ -155,7 +155,7 @@ abstract class Http extends Structure {
     /**
      * Sets an HTTP cookie
      * @param array $cookies
-     * @throws \Exception
+     * @throws \Duality\System\Core\DualityException
      */
 	public function setCookies($cookies)
 	{
@@ -207,7 +207,7 @@ abstract class Http extends Structure {
     /**
      * Sets the HTTP connection timestamp
      * @param int $timestamp
-     * @throws \Exception
+     * @throws \Duality\System\Core\DualityException
      */
 	public function setTimestamp($timestamp)
 	{
