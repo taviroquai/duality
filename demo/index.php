@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_erros', true);
 
 // Configure PSR-0 autoloaders
 chdir('../');
@@ -11,8 +13,6 @@ use Demo\User;
 use Duality\System\Database\SQLite;
 use Duality\System\Structure\HtmlDoc;
 use Duality\System\Structure\Url;
-use Duality\System\Structure\Request;
-use Duality\System\Structure\Response;
 use Duality\System\Server;
 
 // Create a server with hostname and base URL
@@ -27,26 +27,31 @@ $response = $server->createResponse();
 
 // Configure server with service /example/json
 $server->addRoute('/\/example\/json/i', function(&$request, &$response) {
-
+    
 	// Create a default output
 	$out = array('msg' => 'Example get data from database with ajax...', 'items' => array());
+    
+    try {
+        // Create database
+        $db = new SQLite('sqlite:./demo/data/db.sqlite');
+    
+        // Get a database table and its data from an entity
+        $table = $db->createTableFromEntity(new User());
+        $table->loadPage(0, 10);
 
-	// Create database
-	$db = new SQLite('sqlite:./demo/data/db.sqlite');
+        // Populate output with data
+        $out['items'] = $table->toArray();
 
-	// Get a database table and its data from an entity
-	$table = $db->createTableFromEntity(new \Demo\User());
-	$table->loadPage(0, 10);
-
-	// Populate output with data
-	$out['items'] = $table->toArray();
-
+    } catch (\PDOException $e) {
+        $out['msg'] = 'So bad! ' . $e->getMessage();
+    }
+    
 	// Tell response to add HTTP content type header
 	$response->addHeader('Content-type', 'application/json');
-
+    
 	// Tell response what is the output
 	$response->setContent(json_encode($out));
-
+    
 });
 
 // Configure default service
