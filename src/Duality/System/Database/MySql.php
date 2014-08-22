@@ -23,12 +23,15 @@ class MySql extends Database
      * @param string $offset
      * @return string
      */
-	public function getSelect($fields, $from, $limit, $offset)
-	{
-		$sql = "SELECT $fields FROM ".strtolower((string) $from);
-		if ($limit > 0) {
+    public function getSelect($fields, $from, $where, $limit, $offset)
+    {
+        $sql = "SELECT $fields FROM ".strtolower((string) $from);
+        if (!empty($where)) {
+            $sql .= " WHERE ".$where;
+        }
+        if ($limit > 0) {
             $sql .= ' LIMIT '.$limit.' OFFSET '.$offset;
         }
-		return $sql;
-	}
+        return $sql;
+    }
 }

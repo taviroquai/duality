@@ -23,9 +23,12 @@ class SQLite extends Database
      * @param string $offset
      * @return string
      */
-	public function getSelect($fields, $from, $limit, $offset)
+	public function getSelect($fields, $from, $where, $limit, $offset)
 	{
 		$sql = "SELECT $fields FROM ".strtolower((string) $from);
+        if (!empty($where)) {
+            $sql .= " WHERE ".$where;
+        }
 		if ($limit > 0) {
             $sql .= ' LIMIT '.$limit.' OFFSET '.$offset;
         }

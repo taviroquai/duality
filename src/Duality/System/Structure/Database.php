@@ -65,7 +65,7 @@ abstract class Database extends Structure {
     {
         // Get a database table and its data from an entity
         $table = new DbTable($this);
-        $table->loadFromEntity($entity);
+        $table->setPropertiesFromEntity($entity);
         return $table;
     }
 

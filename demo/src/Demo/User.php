@@ -11,6 +11,6 @@ class User extends Entity
 	{
 		parent::__construct(new Property('id'));
 		$this->setName('user');
-		$this->addPropertiesFromArray(array('email', 'password'));
+		$this->addPropertiesFromArray(array('email'));
 	}
 }

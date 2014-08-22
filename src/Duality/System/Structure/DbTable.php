@@ -36,28 +36,20 @@ class DbTable extends Table
 		}
 	}
 
-    /**
-     * Loads table values from a given entity
-     * @param \Duality\System\Structure\Entity $entity
-     * @param int $offset
-     * @param int $limit
-     */
-	public function loadFromEntity(Entity $entity, $offset = 0, $limit = false)
-	{
-		$this->setPropertiesFromEntity($entity);
-		$this->loadPage($offset, $limit);
-	}
-
 	/**
      * Loads table values with limit
      * @param int $offset
      * @param int $limit
+     * @param string $where
+     * @param array $values
      */
-	public function loadPage($offset = 0, $limit = false)
+	public function loadPage($offset = 0, $limit = 10, $where = '', $values = array())
 	{
-		$sql = $this->database->getSelect('*', $this->getName(), $offset, $limit);
-		$stm = $this->database->getPDO()->query($sql);
+		$sql = $this->database->getSelect('*', $this->getName(), $where, $offset, $limit);
+		$stm = $this->database->getPDO()->prepare($sql);
+		$stm->execute($values);
 		
+		$this->rows = array();
 		while ($trow = $stm->fetch(\PDO::FETCH_ASSOC)) {
 			$row = new TableRow;
 			$row->setTable($this);
