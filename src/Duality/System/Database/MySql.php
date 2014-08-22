@@ -2,7 +2,7 @@
 
 namespace Duality\System\Database;
 
-uses Duality\System\Structure\Database;
+use \Duality\System\Structure\Database;
 
 /**
  * MySql database query writer

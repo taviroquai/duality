@@ -2,6 +2,7 @@
 
 namespace Duality\System;
 
+use Duality\System\Structure\Url;
 use Duality\System\Http\Request;
 use Duality\System\Http\Response;
 
@@ -49,7 +50,7 @@ class Client
      * @param string $url
      * @return \Duality\System\Http\Request
      */
-	public static function createRequest($url = '')
+	public static function createRequest(Url $url = '')
 	{
 		$request = new Request($url);
 		return $request;

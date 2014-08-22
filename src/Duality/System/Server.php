@@ -3,6 +3,7 @@
 namespace Duality\System;
 
 use Duality\System\Structure\Http;
+use Duality\System\Structure\Url;
 use Duality\System\Http\Request;
 use Duality\System\Http\Response;
 
@@ -34,9 +35,14 @@ class Server
      * @param string $hostname
      * @param string $baseURL
      */
-	public function __construct($hostname = 'localhost', $baseURL = '/')
+	public function __construct($hostname, Url $baseURL = NULL)
 	{
 		$this->hostname = $hostname;
+        if (!empty($baseURL)) {
+            $baseURL->setHost($this->hostname);
+        } else {
+            $baseURL = new Url('/');
+        }
 		$this->baseURL = $baseURL;
 	}
 
@@ -64,7 +70,7 @@ class Server
      * @param \Duality\System\Structure\Http $request
      * @param \Duality\System\Structure\Http $response
      */
-	public function listen(Http $request, Http &$response)
+	public function listen(Request $request, Response &$response)
 	{
 		foreach ($this->routes as $ns => $cb) {
 			if (preg_match($ns, $request->getUrl())) {
@@ -99,9 +105,9 @@ class Server
      * @param string $protocol
      * @return string
      */
-	public function createUrl($uri, $protocol = 'http')
+	public function createUrl($uri, $scheme = 'http')
 	{
-		return $protocol.'://'.$this->getHostname().$uri;
+		return $scheme.'://'.$this->getHostname().$uri;
 	}
 
     /**
@@ -136,9 +142,9 @@ class Server
     public static function getRequestFromGlobals()
     {
         $url = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . 
-            "://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+            "://{$_SERVER['SERVER_NAME']}{$_SERVER['REQUEST_URI']}";
 
-        $request = new Request($url);
+        $request = new Request(new Url($url));
         $request->setMethod($_SERVER['REQUEST_METHOD']);
         $request->setContent(file_get_contents('php://input'));
         $request->setTimestamp($_SERVER['REQUEST_TIME']);

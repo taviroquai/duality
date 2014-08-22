@@ -42,12 +42,12 @@ class TableRow extends Structure {
     /**
      * Gets the dependant table
      * @return \Duality\System\Structure\Table $table
-     * @throws \Exception
+     * @throws \Duality\System\Core\DualityException
      */
 	public function getTable()
 	{
 		if (!is_subclass_of($this->table, 'Duality\System\Structure\Table')) {
-			throw new \Exception("Row is orphan", 3);
+			throw new DualityException("Row is orphan", 3);
 		}
 		return $this->table;
 	}
@@ -56,12 +56,12 @@ class TableRow extends Structure {
      * Adds data to the row
      * @param \Duality\System\Structure\Property $property
      * @param \Duality\System\Core\Data $data
-     * @throws \Exception
+     * @throws \Duality\System\Core\DualityException
      */
 	public function addData(Property $property, Data $data)
 	{
 		if (!$this->getTable()->propertyExists($property)) {
-			throw new \Exception("Row property does not exists: " . $property, 1);
+			throw new DualityException("Row property does not exists: " . $property, 1);
 		}
 		$this->data[(string) $property] = $data;
 	}
@@ -70,12 +70,12 @@ class TableRow extends Structure {
      * Gets the row property data
      * @param \Duality\System\Structure\Property $property
      * @return string|int
-     * @throws \Exception
+     * @throws \Duality\System\Core\DualityException
      */
 	public function getData(Property $property)
 	{
 		if (!$this->getTable()->propertyExists($property)) {
-			throw new \Exception("Row property does not exists: " . $property, 2);
+			throw new DualityException("Row property does not exists: " . $property, 2);
 		}
 		return $this->data[(string) $property];
 	}

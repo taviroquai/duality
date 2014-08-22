@@ -2,6 +2,8 @@
 
 namespace Duality\System\Structure;
 
+use \Duality\System\Core\DualityException;
+
 /**
  * Entity class
  */
@@ -56,7 +58,7 @@ abstract class Entity extends Property {
     public function addPropertiesFromArray($array)
     {
         if (!is_array($array) || count($array) == 0) {
-            throw new Exception("Array of properties cannot be empty", 12);
+            throw new DualityException("Array of properties cannot be empty", 12);
         }
         foreach ($array as $name) {
             $property = new Property($name);

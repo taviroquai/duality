@@ -2,6 +2,7 @@
 
 namespace Duality\System\Structure;
 
+use \Duality\System\Core\DualityException;
 use Duality\System\Core\Data;
 
 /**
@@ -46,7 +47,7 @@ class Row {
 	public function getTable()
 	{
 		if (!is_subclass_of($this->table, 'Duality\System\Structure\Table')) {
-			throw new \Exception("Row is orphan", 3);
+			throw new DualityException("Row is orphan", 3);
 		}
 		return $this->table;
 	}
@@ -60,7 +61,7 @@ class Row {
 	public function addData(Property $property, Data $data)
 	{
 		if (!$this->getTable()->propertyExists($property)) {
-			throw new \Exception("Row property does not exists: " . $property, 1);
+			throw new DualityException("Row property does not exists: " . $property, 1);
 		}
 		$this->data[(string) $property] = $data;
 	}
@@ -74,7 +75,7 @@ class Row {
 	public function getData(Property $property)
 	{
 		if (!$this->getTable()->propertyExists($property)) {
-			throw new \Exception("Row property does not exists: " . $property, 2);
+			throw new DualityException("Row property does not exists: " . $property, 2);
 		}
 		return $this->data[(string) $property];
 	}
