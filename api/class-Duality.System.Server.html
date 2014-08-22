@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="generator" content="ApiGen 2.8.0" />
+
+	<title>Class Duality\System\Server</title>
+
+	<script type="text/javascript" src="resources/combined.js?2616259068"></script>
+	<script type="text/javascript" src="elementlist.js?38136354"></script>
+	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3505392360" />
+
+</head>
+
+<body>
+<div id="left">
+	<div id="menu">
+		<a href="index.html" title="Overview"><span>Overview</span></a>
+
+
+		<div id="groups">
+			<h3>Namespaces</h3>
+			<ul>
+				<li class="active"><a href="namespace-Duality.html">Duality<span></span></a>
+						<ul>
+				<li class="active"><a href="namespace-Duality.System.html">System<span></span></a>
+						<ul>
+				<li><a href="namespace-Duality.System.Core.html">Core</a>
+						</li>
+				<li><a href="namespace-Duality.System.Database.html">Database</a>
+						</li>
+				<li><a href="namespace-Duality.System.File.html">File</a>
+						</li>
+				<li><a href="namespace-Duality.System.Http.html">Http</a>
+						</li>
+				<li><a href="namespace-Duality.System.Structure.html">Structure</a>
+						</li>
+							</ul></li></ul></li>
+				<li><a href="namespace-PHP.html">PHP</a>
+						</li>
+			</ul>
+		</div>
+
+		<hr />
+
+
+		<div id="elements">
+			<h3>Classes</h3>
+			<ul>
+				<li><a href="class-Duality.System.Client.html">Client</a></li>
+				<li class="active"><a href="class-Duality.System.Server.html">Server</a></li>
+			</ul>
+
+
+
+
+
+		</div>
+	</div>
+</div>
+
+<div id="splitter"></div>
+
+<div id="right">
+<div id="rightInner">
+	<form id="search">
+		<input type="hidden" name="cx" value="" />
+		<input type="hidden" name="ie" value="UTF-8" />
+		<input type="text" name="q" class="text" />
+		<input type="submit" value="Search" />
+	</form>
+
+	<div id="navigation">
+		<ul>
+			<li>
+				<a href="index.html" title="Overview"><span>Overview</span></a>
+			</li>
+			<li>
+				<a href="namespace-Duality.System.html" title="Summary of Duality\System"><span>Namespace</span></a>
+			</li>
+			<li class="active">
+<span>Class</span>			</li>
+		</ul>
+		<ul>
+			<li>
+				<a href="tree.html" title="Tree view of classes, interfaces, traits and exceptions"><span>Tree</span></a>
+			</li>
+		</ul>
+		<ul>
+		</ul>
+	</div>
+
+<div id="content" class="class">
+	<h1>Class Server</h1>
+
+
+	<div class="description">
+	
+<p>Simulates an HTTP server</p>
+
+	</div>
+
+
+
+
+
+
+
+
+
+	<div class="info">
+		
+		
+		<b>Namespace:</b> <a href="namespace-Duality.html">Duality</a>\<a href="namespace-Duality.System.html">System</a><br />
+		
+
+		<b>Located at</b> <a href="source-class-Duality.System.Server.html#10-169" title="Go to source code">System/Server.php</a><br />
+	</div>
+
+
+
+	<table class="summary" id="methods">
+	<caption>Methods summary</caption>
+	<tr data-order="__construct" id="___construct">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#___construct">#</a>
+		<code><a href="source-class-Duality.System.Server.html#33-47" title="Go to source code">__construct</a>( <span>string <var>$hostname</var></span>, <span><code><a href="class-Duality.System.Structure.Url.html">Duality\System\Structure\Url</a></code> <var>$baseURL</var> = <span class="php-keyword1">NULL</span></span> )</code>
+
+		<div class="description short">
+			
+<p>Creates a new server</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Creates a new server</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$hostname</var></dt>
+					<dd><code>string</code><br>$hostname</dd>
+					<dt><var>$baseURL</var></dt>
+					<dd><code>string</code><br>$baseURL</dd>
+				</dl></div>
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="addRoute" id="_addRoute">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_addRoute">#</a>
+		<code><a href="source-class-Duality.System.Server.html#49-57" title="Go to source code">addRoute</a>( <span>string <var>$uriPattern</var></span>, <span>Clousure <var>$cb</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Adds a service route to the server</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Adds a service route to the server</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$uriPattern</var></dt>
+					<dd><code>string</code><br>$uriPattern</dd>
+					<dt><var>$cb</var></dt>
+					<dd><code>Clousure</code><br>$cb</dd>
+				</dl></div>
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="addDefaultRoute" id="_addDefaultRoute">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_addDefaultRoute">#</a>
+		<code><a href="source-class-Duality.System.Server.html#59-66" title="Go to source code">addDefaultRoute</a>( <span>Clousure <var>$cb</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Adds a default service route to the server</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Adds a default service route to the server</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$cb</var></dt>
+					<dd><code>Clousure</code><br>$cb</dd>
+				</dl></div>
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="listen" id="_listen">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_listen">#</a>
+		<code><a href="source-class-Duality.System.Server.html#68-82" title="Go to source code">listen</a>( <span><code><a href="class-Duality.System.Http.Request.html">Duality\System\Http\Request</a></code> <var>$request</var></span>, <span><code><a href="class-Duality.System.Http.Response.html">Duality\System\Http\Response</a></code> <var>&amp; $response</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Starts server and run routes callbacks</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Starts server and run routes callbacks</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$request</var></dt>
+					<dd><code><code><a href="class-Duality.System.Structure.Http.html">Duality\System\Structure\Http</a></code></code><br>$request</dd>
+					<dt><var>$response</var></dt>
+					<dd><code><code><a href="class-Duality.System.Structure.Http.html">Duality\System\Structure\Http</a></code></code><br>$response</dd>
+				</dl></div>
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setHostname" id="_setHostname">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setHostname">#</a>
+		<code><a href="source-class-Duality.System.Server.html#84-91" title="Go to source code">setHostname</a>( <span>string <var>$hostname</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Sets the server host name</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Sets the server host name</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$hostname</var></dt>
+					<dd><code>string</code><br>$hostname</dd>
+				</dl></div>
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getHostname" id="_getHostname">
+
+		<td class="attributes"><code>
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getHostname">#</a>
+		<code><a href="source-class-Duality.System.Server.html#93-100" title="Go to source code">getHostname</a>( )</code>
+
+		<div class="description short">
+			
+<p>Gets the server host name</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Gets the server host name</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string</code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="createUrl" id="_createUrl">
+
+		<td class="attributes"><code>
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_createUrl">#</a>
+		<code><a href="source-class-Duality.System.Server.html#102-111" title="Go to source code">createUrl</a>( <span>string <var>$uri</var></span>, <span>string <var>$scheme</var> = <span class="php-quote">'http'</span></span> )</code>
+
+		<div class="description short">
+			
+<p>Creates a service URL</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Creates a service URL</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$uri</var></dt>
+					<dd><code>string</code><br>$uri</dd>
+					<dt><var>$scheme</var></dt>
+					<dd><code>string</code><br>$protocol</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string</code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="createResponse" id="_createResponse">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Duality.System.Structure.Http.html">Duality\System\Structure\Http</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_createResponse">#</a>
+		<code><a href="source-class-Duality.System.Server.html#113-121" title="Go to source code">createResponse</a>( )</code>
+
+		<div class="description short">
+			
+<p>Creates an HTTP response</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Creates an HTTP response</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Duality.System.Structure.Http.html">Duality\System\Structure\Http</a></code></code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="send" id="_send">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_send">#</a>
+		<code><a href="source-class-Duality.System.Server.html#123-136" title="Go to source code">send</a>( <span><code><a href="class-Duality.System.Http.Response.html">Duality\System\Http\Response</a></code> <var>$response</var></span>, <span>boolean <var>$withHeaders</var> = <span class="php-keyword1">true</span></span> )</code>
+
+		<div class="description short">
+			
+<p>Echos HTTP response</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Echos HTTP response</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$response</var></dt>
+					<dd><code><code><a href="class-Duality.System.Structure.Http.html">Duality\System\Structure\Http</a></code></code><br>$response</dd>
+					<dt><var>$withHeaders</var></dt>
+					<dd><code>boolean</code><br>$withHeaders</dd>
+				</dl></div>
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getRequestFromGlobals" id="_getRequestFromGlobals">
+
+		<td class="attributes"><code>
+			 public static
+			<code><a href="class-Duality.System.Http.Request.html">Duality\System\Http\Request</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getRequestFromGlobals">#</a>
+		<code><a href="source-class-Duality.System.Server.html#138-168" title="Go to source code">getRequestFromGlobals</a>( )</code>
+
+		<div class="description short">
+			
+<p>Parses HTTP properties from PHP global environment</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Parses HTTP properties from PHP global environment</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Duality.System.Http.Request.html">Duality\System\Http\Request</a></code></code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	</table>
+
+
+
+
+
+
+
+
+
+
+
+
+	<table class="summary" id="properties">
+	<caption>Properties summary</caption>
+	<tr data-order="hostname" id="$hostname">
+		<td class="attributes"><code>
+			protected  
+			string
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-Duality.System.Server.html#15-19" title="Go to source code"><var>$hostname</var></a>
+		</td>
+		<td class="value"><code></code></td>
+		<td class="description"><div>
+			<a href="#$hostname" class="anchor">#</a>
+
+			<div class="description short">
+				
+<p>Server host name</p>
+
+			</div>
+
+			<div class="description detailed hidden">
+				
+<p>Server host name</p>
+
+
+			</div>
+		</div></td>
+	</tr>
+	<tr data-order="baseURL" id="$baseURL">
+		<td class="attributes"><code>
+			protected  
+			string
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-Duality.System.Server.html#21-25" title="Go to source code"><var>$baseURL</var></a>
+		</td>
+		<td class="value"><code></code></td>
+		<td class="description"><div>
+			<a href="#$baseURL" class="anchor">#</a>
+
+			<div class="description short">
+				
+<p>Server base URL</p>
+
+			</div>
+
+			<div class="description detailed hidden">
+				
+<p>Server base URL</p>
+
+
+			</div>
+		</div></td>
+	</tr>
+	<tr data-order="routes" id="$routes">
+		<td class="attributes"><code>
+			protected  
+			array
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-Duality.System.Server.html#27-31" title="Go to source code"><var>$routes</var></a>
+		</td>
+		<td class="value"><code></code></td>
+		<td class="description"><div>
+			<a href="#$routes" class="anchor">#</a>
+
+			<div class="description short">
+				
+<p>Server services routes</p>
+
+			</div>
+
+			<div class="description detailed hidden">
+				
+<p>Server services routes</p>
+
+
+			</div>
+		</div></td>
+	</tr>
+	</table>
+
+
+
+
+
+
+</div>
+
+	<div id="footer">
+		 API documentation generated by <a href="http://apigen.org">ApiGen 2.8.0</a>
+	</div>
+</div>
+</div>
+</body>
+</html>

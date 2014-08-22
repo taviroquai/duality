@@ -81,9 +81,11 @@ abstract class Table extends Structure
 		$properties = $this->getProperties();
 
 		foreach ($this->getRows() as $row) {
+			$trow = array();
 			foreach ($properties as $property) {
-				$out[] = array((string) $property => (string) $row->getData($property));
+				$trow[(string) $property] = (string) $row->getData($property);
 			}
+			$out[] = $trow;
 		}
 		return $out;
 	}

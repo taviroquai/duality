@@ -2,6 +2,7 @@
 
 namespace Duality\System\Structure;
 
+use Duality\System\Core\DualityException;
 use Duality\System\Core\Structure;
 
 /**
@@ -85,17 +86,17 @@ abstract class File extends Structure {
 
     /**
      * Saves the file to media
-     * @throws \Exception
+     * @throws \\Duality\System\Core\DualityException
      */
 	public function save()
 	{
 		if ($this->exists()) {
 			if (!is_writable(dirname($this->path)) || !is_writable($this->path)) {
-				throw new \Exception("Could not save file: ".$this->getPath(), 4);
+				throw new DualityException("Could not save file: ".$this->getPath(), 4);
 			}
 		} else {
 			if (!is_writable(dirname($this->path))) {
-				throw new \Exception("Could not save file: ".$this->getPath(), 4);
+				throw new DualityException("Could not save file: ".$this->getPath(), 4);
 			}
 		}
 		file_put_contents($this->getPath(), $this->getContent());

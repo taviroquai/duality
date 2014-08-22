@@ -10,12 +10,14 @@ require_once './demo/src/autoload.php';
 use Demo\User;
 use Duality\System\Database\SQLite;
 use Duality\System\Structure\HtmlDoc;
+use Duality\System\Structure\Url;
 use Duality\System\Structure\Request;
 use Duality\System\Structure\Response;
 use Duality\System\Server;
 
 // Create a server with hostname and base URL
-$server = new Server('localhost', '/duality/demo');
+$baseURL = new Url('/duality/demo');
+$server = new Server('localhost', $baseURL);
 
 // Get request from globals
 $request = $server->getRequestFromGlobals();

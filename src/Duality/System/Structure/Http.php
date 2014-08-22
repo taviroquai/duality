@@ -2,6 +2,7 @@
 
 namespace Duality\System\Structure;
 
+use \Duality\System\Core\DualityException;
 use \Duality\System\Core\Structure;
 
 /**
@@ -58,49 +59,21 @@ abstract class Http extends Structure {
 	protected $isAjax;
 
     /**
-     * Parses HTTP properties from PHP global environment
-     */
-	public function parseFromGlobals()
-	{
-		$this->setMethod($_SERVER['REQUEST_METHOD']);
-		$this->setContent(file_get_contents('php://input'));
-		$this->setTimestamp($_SERVER['REQUEST_TIME']);
-		$headers = array(
-			'Http-Accept' => $_SERVER['HTTP_ACCEPT'],
-			'Http-Accept-Charset' => empty($_SERVER['HTTP_ACCEPT_CHARSET']) ? 
-                $_SERVER['HTTP_ACCEPT_ENCODING'] : $_SERVER['HTTP_ACCEPT_CHARSET'],
-			'Http-Host' => empty($_SERVER['REMOTE_HOST']) ? 
-                $_SERVER['REMOTE_ADDR'] : $_SERVER['REMOTE_HOST'],
-			'Referer' => empty($_SERVER['REFERER']) ? '' : $_SERVER['REFERER']
-		);
-		$this->setHeaders($headers);
-        $url = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . 
-            "://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
-		$this->setUrl($url);
-		if (
-            !empty($_SERVER['HTTP_X_REQUESTED_WITH']) 
-            && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest'
-        ) {
-			$this->isAjax = true;
-		}
-	}
-
-    /**
      * Sets the HTTP url
-     * @param string $url
+     * @param \Duality\System\Structure\Url $url
      * @throws \Exception
      */
-	public function setUrl($url)
+	public function setUrl(Url $url)
 	{
-		if(!filter_var($url, FILTER_VALIDATE_URL)) {
-			throw new \Exception("Invalid url", 11);
+		if (!filter_var((string) $url, FILTER_VALIDATE_URL)) {
+			throw new DualityException("Invalid url", 11);
 		}
 		$this->url = $url;
 	}
 
     /**
      * Gets the HTTP url 
-     * @return string
+     * @return \Duality\System\Structure\Url
      */
 	public function getUrl()
 	{
@@ -115,7 +88,7 @@ abstract class Http extends Structure {
 	public function setMethod($method)
 	{
 		if (!in_array($method, array('GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'))) {
-			throw new Exception("Invalid HTTP method", 7);
+			throw new DualityException("Invalid HTTP method", 7);
 		}
 		$this->method = $method;
 	}
@@ -155,7 +128,7 @@ abstract class Http extends Structure {
 	public function setHeaders($headers)
 	{
 		if (!is_array($headers)) {
-			throw new Exception("Headers must be an associative array", 8);
+			throw new DualityException("Headers must be an associative array", 8);
 		}
 		$this->headers = $headers;
 	}
@@ -191,7 +164,7 @@ abstract class Http extends Structure {
 		}
 		foreach ($cookies as $item) {
 			if (!is_array($item)) {
-				throw new Exception("Cookie must be an associative array", 10);
+				throw new DualityException("Cookie must be an associative array", 10);
 			}
 			setcookie(
                 $item['name'],
