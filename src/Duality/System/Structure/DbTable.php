@@ -2,6 +2,8 @@
 
 namespace Duality\System\Structure;
 
+use Duality\System\Core\Container;
+
 /**
  * Database table class
  */
@@ -42,6 +44,7 @@ class DbTable extends Table
      * @param int $limit
      * @param string $where
      * @param array $values
+     * @return DbTable
      */
 	public function loadPage($offset = 0, $limit = 10, $where = '', $values = array())
 	{
@@ -60,5 +63,6 @@ class DbTable extends Table
 			}
 			$this->addRow($row);
 		}
+		return $this;
 	}
 }

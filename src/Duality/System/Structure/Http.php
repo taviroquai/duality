@@ -61,7 +61,8 @@ abstract class Http extends Structure {
     /**
      * Sets the HTTP url
      * @param \Duality\System\Structure\Url $url
-     * @throws \Exception
+     * @throws DualityException
+     * @return Http;
      */
 	public function setUrl(Url $url)
 	{
@@ -69,6 +70,7 @@ abstract class Http extends Structure {
 			throw new DualityException("Invalid url", 11);
 		}
 		$this->url = $url;
+        return $this;
 	}
 
     /**
@@ -84,6 +86,7 @@ abstract class Http extends Structure {
      * Sets the HTTP method
      * @param string $method
      * @throws \Exception
+     * @return Http;
      */
 	public function setMethod($method)
 	{
@@ -91,6 +94,7 @@ abstract class Http extends Structure {
 			throw new DualityException("Invalid HTTP method", 7);
 		}
 		$this->method = $method;
+        return $this;
 	}
 
     /**
@@ -105,10 +109,12 @@ abstract class Http extends Structure {
     /**
      * Sets the HTTP connection status code
      * @param int $code
+     * @return Http;
      */
 	public function setStatus($code)
 	{
 		$this->status = $code;
+        return $this;
 	}
 
     /**
@@ -124,6 +130,7 @@ abstract class Http extends Structure {
      * Sets the HTTP headers
      * @param array $headers
      * @throws \Exception
+     * @return Http;
      */
 	public function setHeaders($headers)
 	{
@@ -131,6 +138,7 @@ abstract class Http extends Structure {
 			throw new DualityException("Headers must be an associative array", 8);
 		}
 		$this->headers = $headers;
+        return $this;
 	}
 
     /**
@@ -146,16 +154,19 @@ abstract class Http extends Structure {
      * Adds an HTTP header
      * @param string $key
      * @param string $value
+     * @return Http;
      */
 	public function addheader($key, $value)
 	{
 		$this->headers[$key] = $value;
+        return $this;
 	}
 
     /**
      * Sets an HTTP cookie
      * @param array $cookies
-     * @throws \Exception
+     * @throws DualityException
+     * @return Http;
      */
 	public function setCookies($cookies)
 	{
@@ -175,6 +186,7 @@ abstract class Http extends Structure {
                 $item['secure']
             );
 		}
+        return $this;
 	}
 
     /**
@@ -189,10 +201,12 @@ abstract class Http extends Structure {
     /**
      * Sets the HTTP content
      * @param string $content
+     * @return Http;
      */
 	public function setContent($content)
 	{
 		$this->content = (string) $content;
+        return $this;
 	}
 
     /**
@@ -208,6 +222,7 @@ abstract class Http extends Structure {
      * Sets the HTTP connection timestamp
      * @param int $timestamp
      * @throws \Exception
+     * @return Http;
      */
 	public function setTimestamp($timestamp)
 	{
@@ -215,6 +230,7 @@ abstract class Http extends Structure {
 			throw new Exception("Invalid connection timestamp", 12);
 		}
 		$this->timestamp = $timestamp;
+        return $this;
 	}
 
     /**
@@ -229,10 +245,12 @@ abstract class Http extends Structure {
     /**
      * Sets whether the HTTP transport is ajax or not
      * @param boolean $trueOrFalse
+     * @return Http;
      */
     public function setAjax($trueOrFalse)
     {
         $this->isAjax = (boolean) $trueOrFalse;
+        return $this;
     }
 
     /**
