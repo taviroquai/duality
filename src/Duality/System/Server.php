@@ -70,7 +70,7 @@ class Server
      * @param \Duality\System\Structure\Http $request
      * @param \Duality\System\Structure\Http $response
      */
-	public function listen(Request $request, Response &$response)
+	public function listen(Request $request, Response $response)
 	{
 		foreach ($this->routes as $ns => $cb) {
 			if (preg_match($ns, $request->getUrl())) {
