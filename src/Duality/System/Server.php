@@ -62,7 +62,7 @@ class Server
      */
     public function addDefaultRoute($cb)
     {
-        $this->addRoute('/\//i', $cb);
+        $this->addRoute('/^\/$/i', $cb);
     }
 
     /**
