@@ -38,9 +38,7 @@ class Server
 	public function __construct($hostname, Url $baseURL = NULL)
 	{
 		$this->hostname = $hostname;
-        if (!empty($baseURL)) {
-            $baseURL->setHost($this->hostname);
-        } else {
+        if (empty($baseURL)) {
             $baseURL = new Url('/');
         }
 		$this->baseURL = $baseURL;
@@ -62,7 +60,7 @@ class Server
      */
     public function addDefaultRoute($cb)
     {
-        $this->addRoute('/\//i', $cb);
+        $this->addRoute('/^\/$/i', $cb);
     }
 
     /**
@@ -70,15 +68,15 @@ class Server
      * @param \Duality\System\Structure\Http $request
      * @param \Duality\System\Structure\Http $response
      */
-	public function listen(Request $request, Response &$response)
+	public function listen(Request $request, Response $response)
 	{
 		foreach ($this->routes as $ns => $cb) {
-			if (preg_match($ns, $request->getUrl())) {
-				$cb($request, $response);
-				$this->send($response);
-				die();
+            $uri = str_replace((string) $this->baseURL, '', $request->getUrl()->getUri());
+			if ($result = preg_match($ns, $uri, $matches)) {
+				$cb($request, $response, $matches);
 			}
 		}
+        echo $this->send($response);
 	}
 
     /**
@@ -142,7 +140,7 @@ class Server
     public static function getRequestFromGlobals()
     {
         $url = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . 
-            "://{$_SERVER['SERVER_NAME']}{$_SERVER['REQUEST_URI']}";
+            "://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 
         $request = new Request(new Url($url));
         $request->setMethod($_SERVER['REQUEST_METHOD']);
