@@ -13,6 +13,18 @@ use Duality\System\Http\Response;
 class Server
 {
     /**
+     * Default request
+     * @var string
+     */
+    protected $request;
+
+    /**
+     * Default response
+     * @var string
+     */
+    protected $response;
+
+    /**
      * Server host name
      * @var string
      */
@@ -42,6 +54,10 @@ class Server
             $baseURL = new Url('/');
         }
 		$this->baseURL = $baseURL;
+
+        // Create default request and response
+        $this->setRequest($this->getRequestFromGlobals());
+        $this->setResponse($this->createResponse());
 	}
 
     /**
@@ -65,19 +81,53 @@ class Server
 
     /**
      * Starts server and run routes callbacks
-     * @param \Duality\System\Structure\Http $request
-     * @param \Duality\System\Structure\Http $response
      */
-	public function listen(Request $request, Response $response)
+	public function listen()
 	{
 		foreach ($this->routes as $ns => $cb) {
-            $uri = str_replace((string) $this->baseURL, '', $request->getUrl()->getUri());
+            $uri = str_replace((string) $this->baseURL, '', $this->request->getUrl()->getUri());
 			if ($result = preg_match($ns, $uri, $matches)) {
-				$cb($request, $response, $matches);
+				$cb($this->request, $this->response, $matches);
 			}
 		}
-        echo $this->send($response);
+        echo $this->send($this->response);
 	}
+
+    /**
+     * Sets the request
+     * @param Request $request
+     */
+    public function setRequest(Request $request)
+    {
+        $this->request = $request;
+    }
+
+    /**
+     * Gets the request
+     * @return Request
+     */
+    public function getRequest()
+    {
+        return $this->request;
+    }
+
+    /**
+     * Sets the response
+     * @param Response $response
+     */
+    public function setResponse(Response $response)
+    {
+        $this->response = $response;
+    }
+
+    /**
+     * Gets the response
+     * @return Request
+     */
+    public function getResponse()
+    {
+        return $this->response;
+    }
 
     /**
      * Sets the server host name
