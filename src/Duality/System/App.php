@@ -4,7 +4,6 @@ namespace Duality\System;
 
 use Duality\System\Core\DualityException;
 use Duality\System\Core\Container;
-use Duality\System\File\StreamFile;
 use Duality\System\Service\Logger;
 use Duality\System\Service\Session;
 use Duality\System\Service\Cache;
@@ -53,7 +52,7 @@ class App extends Container
 		// Set script end hook
 		ob_start();
 		register_shutdown_function(function() use ($me) {
-			foreach($me->services as $name => $service) {
+			foreach($me->getServices() as $name => $service) {
 				if (method_exists($service, 'terminate')) {
 					$me->call($name)->terminate();	
 				}

@@ -24,5 +24,14 @@ abstract class Container
 	 * @param string $name
 	 */
 	public abstract function call($name);
+    
+    /**
+     * Return registered services
+     * @return array
+     */
+    public function getServices()
+    {
+        return $this->services;
+    }
 
 }
