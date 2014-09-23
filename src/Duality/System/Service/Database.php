@@ -132,7 +132,8 @@ implements InterfaceService
         foreach ($config['create'] as $name => $fields) {
             $table = new DbTable($this);
             $table->setName($name);
-            foreach ($fields as $name => $attributes) {
+            $props = array_keys($fields);
+            foreach ($props as $name) {
                 $table->addProperty(new Property($name));
             }
             $this->addTable($table);

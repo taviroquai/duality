@@ -47,13 +47,13 @@ class Commander implements InterfaceCommander, InterfaceService
 
 		// Register default responders
 		$app = $this->app;
-		$this->addResponder('/^db:create$/i', function($matches) use ($app) {
+		$this->addResponder('/^db:create$/i', function() use ($app) {
 			return $app->call('db')->createFromConfig($app->getConfig());
 		});
-		$this->addResponder('/^db:update$/i', function($matches) use ($app) {
+		$this->addResponder('/^db:update$/i', function() use ($app) {
 			return $app->call('db')->updateFromConfig($app->getConfig());
 		});
-		$this->addResponder('/^db:seed$/i', function($matches) use ($app) {
+		$this->addResponder('/^db:seed$/i', function() use ($app) {
 			return $app->call('db')->seedFromConfig($app->getConfig());
 		});
 	}
@@ -63,7 +63,7 @@ class Commander implements InterfaceCommander, InterfaceService
 	 */
 	public function terminate()
 	{
-		$this->$argv = array();
+		$this->argsv = array();
 	}
 
 	/**

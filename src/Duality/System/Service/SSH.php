@@ -4,9 +4,11 @@ namespace Duality\System\Service;
 
 use Duality\System\Core\DualityException;
 use Duality\System\Core\InterfaceService;
+use Duality\System\Core\InterfaceRemote;
 use Duality\System\App;
 
-class SSH implements InterfaceService
+class SSH
+implements InterfaceService, InterfaceRemote
 {
     /**
      * The dependent application container
@@ -18,25 +20,31 @@ class SSH implements InterfaceService
      * Own public key
      * @var string
      */
-    private $ssh_auth_pub = '/home/%s/.ssh/id_rsa.pub';
+    protected $ssh_auth_pub = '/home/%s/.ssh/id_rsa.pub';
     
     /**
      * Own private key
      * @var string
      */
-    private $ssh_auth_priv = '/home/%s/.ssh/id_rsa';
+    protected $ssh_auth_priv = '/home/%s/.ssh/id_rsa';
 
     /**
      * Paraphrase (empty == null)
      * @var string
      */
-    private $ssh_auth_pass;
+    protected $ssh_auth_pass;
+    
+    /**
+     * Remote fingerprint (empty == null)
+     * @var string
+     */
+    protected $ssh_fingerprint;
 
     /**
      * SSH Connection
      * @var \resource
      */
-    private $connection;
+    protected $connection;
 
     /**
      * Creates a new error handler
@@ -62,16 +70,31 @@ class SSH implements InterfaceService
     {
         $this->disconnect();
     }
+    
+    /**
+     * Starts a new connection
+     * @param string $host
+     * @param string $username
+     * @param string $password
+     * @param string $port
+     * @param string $paraphrase
+     * @param string $remote_fp
+     */
+    public function connectSSH($host, $username, $password = '', $port = 22, $paraphrase = NULL, $remote_fp = '')
+    {
+        $this->ssh_auth_pass = $paraphrase;
+        $this->ssh_fingerprint = $remote_fp;
+        $this->connect($host, $username, $password, $port);
+    }
 
     /**
      * Starts a new connection
      * @param string $host
      * @param string $username
+     * @param string $password
      * @param string $port
-     * @param string $paraphrase
-     * @param string $remote_fp
      */
-    public function connect($host, $username, $password = '', $port = 22, $paraphrase = NULL, $remote_fp = '') {
+    public function connect($host, $username, $password = '', $port = 22) {
 
         // Start connection
         if (!($this->connection = ssh2_connect($host, $port))) {
@@ -79,9 +102,9 @@ class SSH implements InterfaceService
         }
         
         // Verify fingerprint
-        if (!empty($remote_fp)) {
+        if (!empty($this->ssh_fingerprint)) {
             $fingerprint = ssh2_fingerprint($this->connection, SSH2_FINGERPRINT_MD5 | SSH2_FINGERPRINT_HEX);
-            if (strcmp($this->ssh_server_fp, $fingerprint) !== 0) {
+            if (strcmp($this->ssh_fingerprint, $fingerprint) !== 0) {
                 throw new DualityException('Unable to verify server identity!');
             }
         }
@@ -94,7 +117,7 @@ class SSH implements InterfaceService
         } else {
             $public_key_path = sprintf($this->ssh_auth_pub, $username);
             $private_key_path = sprintf($this->ssh_auth_priv, $username);
-            if (!ssh2_auth_pubkey_file($this->connection, $username, $public_key_path, $private_key_path, $paraphrase)) {
+            if (!ssh2_auth_pubkey_file($this->connection, $username, $public_key_path, $private_key_path, $this->ssh_auth_pass)) {
                 throw new DualityException('Autentication rejected by server');
             }    
         }

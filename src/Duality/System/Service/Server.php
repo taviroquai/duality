@@ -172,7 +172,7 @@ implements InterfaceService
     /**
      * Creates a service URL
      * @param string $uri
-     * @param string $protocol
+     * @param string $scheme
      * @return string
      */
 	public function createUrl($uri, $scheme = 'http')
@@ -219,12 +219,12 @@ implements InterfaceService
         $request->setContent(file_get_contents('php://input'));
         $request->setTimestamp($_SERVER['REQUEST_TIME']);
         $headers = array(
-            'Http-Accept' => $_SERVER['HTTP_ACCEPT'],
-            'Http-Accept-Charset' => empty($_SERVER['HTTP_ACCEPT_CHARSET']) ? 
+            'Http-Accept'           => $_SERVER['HTTP_ACCEPT'],
+            'Http-Accept-Charset'   => empty($_SERVER['HTTP_ACCEPT_CHARSET']) ? 
                 $_SERVER['HTTP_ACCEPT_ENCODING'] : $_SERVER['HTTP_ACCEPT_CHARSET'],
-            'Http-Host' => empty($_SERVER['REMOTE_HOST']) ? 
+            'Http-Host'             => empty($_SERVER['REMOTE_HOST']) ? 
                 $_SERVER['REMOTE_ADDR'] : $_SERVER['REMOTE_HOST'],
-            'Referer' => empty($_SERVER['REFERER']) ? '' : $_SERVER['REFERER']
+            'Referer'               => empty($_SERVER['REFERER']) ? '' : $_SERVER['REFERER']
         );
         $request->setHeaders($headers);
         $request->setParams($_REQUEST);

@@ -9,7 +9,7 @@ interface InterfaceMailer
 {
 	/**
 	 * Send mail
-	 * @param \Closure $storageCallback
+	 * @param \Closure $callback
 	 */
 	public function send(\Closure $callback);
 
@@ -40,7 +40,7 @@ interface InterfaceMailer
 
 	/**
 	 * Set attachments
-	 * @param array $attachments
+	 * @param array $list
 	 */
 	public function attach($list);
 

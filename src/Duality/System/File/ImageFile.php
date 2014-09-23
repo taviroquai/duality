@@ -89,12 +89,11 @@ class ImageFile extends File {
             $biggestSide = $width;
             $cropPercent = $width > 560 ? 0.5 : $height / $width;
         }
-        $cropWidth   = $biggestSide*$cropPercent; 
-        $cropHeight  = $biggestSide*$cropPercent; 
+        $cropW = $cropH = $biggestSide*$cropPercent;
 
         // Getting the top left coordinate
-        $x = ($width-$cropWidth)/2;
-        $y = ($height-$cropHeight)/2;
+        $x = ($width-$cropW)/2;
+        $y = ($height-$cropH)/2;
         
         // Create new image
         $thumb = imagecreatetruecolor($size, $size);
@@ -104,18 +103,7 @@ class ImageFile extends File {
         imagefilledrectangle($thumb, 0, 0, $size, $size, $white);
 
         // Copy into new image
-        imagecopyresampled(
-            $thumb, 
-            $original, 
-            0, 
-            0, 
-            $x, 
-            $y, 
-            $size, 
-            $size, 
-            $cropWidth, 
-            $cropHeight
-        );
+        imagecopyresampled($thumb, $original, 0, 0, $x, $y, $size, $size, $cropW, $cropH);
         
         return $thumb;
     }

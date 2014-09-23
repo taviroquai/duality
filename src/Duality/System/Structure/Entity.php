@@ -23,9 +23,8 @@ abstract class Entity extends Property {
 
     /**
      * Creates a new entity
-     * @param \Duality\System\Structure\Property $id
      */
-	public function __construct(Property $id)
+	public function __construct()
 	{
 		parent::__construct();
 

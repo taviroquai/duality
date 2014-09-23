@@ -65,7 +65,7 @@ class Url extends Structure
 	{
 		$this->setName('url');
 		if (!empty($url)) {
-			$parts = @parse_url($url);
+			$parts = parse_url($url);
 			if (empty($parts)) {
 				throw new DualityException("Error parsing URL: " . $url, 13);
 			}

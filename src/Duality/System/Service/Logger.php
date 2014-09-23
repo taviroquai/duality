@@ -73,7 +73,7 @@ class Logger implements InterfaceErrorHandler, InterfaceService
 
 	/**
 	 * Log action
-	 * @param string $errstr
+	 * @param string $msg
 	 */
 	public function log($msg)
 	{
@@ -98,9 +98,8 @@ class Logger implements InterfaceErrorHandler, InterfaceService
 
 	    switch ($errno) {
 	    case E_USER_ERROR:
-	        $msg  = "<b>My ERROR</b> [$errno] $errstr<br />\n";
-	        $msg .= "  Fatal error on line $errline in file $errfile";
-	        $msg .= ", PHP " . PHP_VERSION . " (" . PHP_OS . ")<br />\n";
+	        $msg  = "<b>My FATAR error</b> [$errno] $errstr<br />\n";
+	        $msg .= "  on line $errline in file $errfile, PHP ". PHP_VERSION . " (" . PHP_OS . ")<br />\n";
 	        $msg .= "Aborting...<br />\n";
 	        break;
 

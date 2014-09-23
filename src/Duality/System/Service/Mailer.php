@@ -126,7 +126,7 @@ class Mailer implements InterfaceMailer, InterfaceService
 
 	/**
 	 * Set mail attachments
-	 * @param array $attachments
+	 * @param array $list
 	 * @return Duality\System\Service\Mailer
 	 */
 	public function attach($list)
@@ -146,24 +146,24 @@ class Mailer implements InterfaceMailer, InterfaceService
 		// TODO: choose driver
 		$mail = new \PHPMailer;
 
-		//$mail->SMTPDebug = 3;                               // Enable verbose debug output
+		//$mail->SMTPDebug = 3;
 
 		// TODO: SMTP as optional
-		$mail->isSMTP();                                      // Set mailer to use SMTP
-		$mail->Host = $this->smtp['host'];  				  // Specify main and backup SMTP servers
-		$mail->SMTPAuth = !empty($this->smtp['user']);        // Enable SMTP authentication
-		$mail->Username = $this->smtp['user'];                // SMTP username
-		$mail->Password = $this->smtp['pass'];                // SMTP password
-		$mail->SMTPSecure = $this->smtp['encr'];              // Enable TLS encryption, `ssl` also accepted
-		$mail->Port = $this->smtp['port'];                    // TCP port to connect to
+		$mail->isSMTP();
+		$mail->Host = $this->smtp['host'];
+		$mail->SMTPAuth = !empty($this->smtp['user']);
+		$mail->Username = $this->smtp['user'];
+		$mail->Password = $this->smtp['pass'];
+		$mail->SMTPSecure = $this->smtp['encr'];
+		$mail->Port = $this->smtp['port'];
 
 		// Set params
 		$mail->From = $this->current['from']['email'];
 		$mail->FromName = $this->current['from']['name'];
-		$mail->addAddress($this->current['to']); 			  // Add a recipient
-		$mail->WordWrap = 50;                                 // Set word wrap to 50 characters
+		$mail->addAddress($this->current['to']);
+		$mail->WordWrap = 50;
 		// TODO as optional
-		$mail->isHTML(true);                                  // Set email format to HTML
+		$mail->isHTML(true);
 		$mail->Subject = $this->current['subject'];
 		$mail->Body    = $this->current['message'];
 		// TODO as optional
@@ -171,7 +171,7 @@ class Mailer implements InterfaceMailer, InterfaceService
 
 		// TODO
 		/*
-		$mail->addAddress('ellen@example.com');               // Name is optional
+		$mail->addAddress('ellen@example.com');
 		$mail->addReplyTo('info@example.com', 'Information');
 		$mail->addCC('cc@example.com');
 		$mail->addBCC('bcc@example.com');
@@ -179,7 +179,7 @@ class Mailer implements InterfaceMailer, InterfaceService
 
 		// Set attachments		
 		foreach ($this->current['attachments'] as $item) {
-			$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments	
+			$mail->addAttachment($item);
 			// TODO as optional
 			// $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
 		}

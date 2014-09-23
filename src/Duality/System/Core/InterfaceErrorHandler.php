@@ -18,7 +18,7 @@ interface InterfaceErrorHandler
 
 	/**
 	 * Log action
-	 * @param string $errstr
+	 * @param string $msg Default notice message
 	 */
 	public function log($msg);
 

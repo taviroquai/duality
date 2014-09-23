@@ -4,15 +4,6 @@ namespace Duality\System;
 
 use Duality\System\Core\DualityException;
 use Duality\System\Core\Container;
-use Duality\System\Service\Logger;
-use Duality\System\Service\Session;
-use Duality\System\Service\Cache;
-use Duality\System\Service\Mailer;
-use Duality\System\Service\Auth;
-use Duality\System\Service\Localization;
-use Duality\System\Service\Paginator;
-use Duality\System\Service\SSH;
-use Duality\System\Service\Server;
 use Duality\System\Database\SQLite;
 use Duality\System\Database\MySql;
 
@@ -62,70 +53,51 @@ class App extends Container
 		});
 	}
 
-	public function initDefaultServices()
+    /**
+     * Add common services
+     */
+	public function addDefaultServices()
 	{
 		$me =& $this;
 		$config = $this->getConfig();
-
-		// Register default logger
-		$this->register('logging', function() use ($me) {
-			return new Logger($me);
-		});
 
 		// Register database
 		if (isset($config['db_dsn'])) {
 			$me->register('db', function () use ($me) {
 				$config = $me->getConfig();
-			    if (strpos($config['db_dsn'], 'sqlite') === 0) {
-			    	$db = new SQLite($me);
-			    } else {
+			    if (strpos($config['db_dsn'], 'mysql') === 0) {
 			    	$db = new MySql($me);
+			    } else {
+			    	$db = new SQLite($me);
 			    }
 			    return $db;
 			});	
 		}
+        
+        $default = array(
+            'logging'   => 'Duality\System\Service\Logger',
+            'session'   => 'Duality\System\Service\Session',
+            'auth'      => 'Duality\System\Service\Auth',
+            'cache'     => 'Duality\System\Service\Cache',
+            'i18n'      => 'Duality\System\Service\Mailer',
+            'paginator' => 'Duality\System\Service\Paginator',
+            'ssh'       => 'Duality\System\Service\SSH',
+            'server'    => 'Duality\System\Service\Server'
+        );
 
-		// Register default session handler
-		$this->register('session', function() use ($me) {
-			return new Session($me);
-		});
-
-		// Register default authentication storage
-		$this->register('auth', function() use ($me) {
-			return new Auth($me);
-		});
-
-		// Register default cache storage
-		$this->register('cache', function() use ($me) {
-			return new Cache($me);
-		});
-
-		// Register default localization storage
-		$this->register('i18n', function() use ($me) {
-			return new Localization($me);
-		});
-
-		// Register default mailer
-		$this->register('mailer', function() use ($me) {
-			return new Mailer($me);
-		});
-
-		// Register default paginator
-		$this->register('paginator', function() use ($me) {
-			return new Paginator($me);
-		});
-
-		// Register default ssh service
-		$this->register('ssh', function() use ($me) {
-			return new SSH($me);
-		});
-
-		// Register default http server
-		$this->register('server', function() use ($me) {
-			return new Server($me);
-		});
-
-		// init services
+		// register defaults
+		foreach($default as $name => $class) {
+            $this->register($name, function() use ($class, $me) {
+                return new $class($me);
+            });
+		}
+	}
+    
+    /**
+     * Initiate all registered services
+     */
+	public function initServices()
+	{
 		foreach($this->services as $name => $service) {
 			$fn = array($service, 'init');
 			if (is_callable($fn, true)) {
@@ -207,7 +179,7 @@ class App extends Container
 
 	/**
 	 * Security Helper
-	 * @param string $value
+	 * @param string $data
 	 * @return string
 	 */
 	public function encrypt($data)

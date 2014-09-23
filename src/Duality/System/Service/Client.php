@@ -10,6 +10,7 @@ use Duality\System\App;
  * Simulates an HTTP client
  */
 class Client
+implements InterfaceService
 {
 	/**
      * Holds application container
@@ -101,7 +102,6 @@ class Client
 		curl_setopt($ch, CURLOPT_REFERER, 'http://localhost');
 		curl_setopt($ch, CURLOPT_ENCODING, 'gzip,deflate,sdch'); 
 		curl_setopt($ch, CURLOPT_AUTOREFERER, true);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_TIMEOUT, 3);
 
 		$response = new Response;
