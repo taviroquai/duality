@@ -1,31 +1,52 @@
 <?php
 
-namespace Duality\System;
+namespace Duality\System\Http;
 
+use Duality\System\Core\InterfaceService;
 use Duality\System\Structure\Url;
-use Duality\System\Http\Request;
-use Duality\System\Http\Response;
+use Duality\System\App;
 
 /**
  * Simulates an HTTP client
  */
 class Client
 {
+	/**
+     * Holds application container
+     * @var Duality\System\App
+     */
+    protected $app;
 
     /**
      * Holds the client user agent
      * @var string
      */
-	protected $useragent;
+	protected $useragent = 'Mozilla/5.0 (Windows NT 6.1; WOW64)';
 
     /**
      * Creates a new HTTP client
      * @param string $useragent
      */
-	public function __construct($useragent = 'Mozilla/5.0 (Windows NT 6.1; WOW64)')
+	public function __construct(App $app)
 	{
-		$this->useragent = $useragent;
+		$this->app = $app;
 	}
+
+	/**
+     * Creates a new HTTP client
+     */
+	public function init()
+	{
+		
+	}
+
+	/**
+     * Terminates service
+     */
+    public function terminate()
+    {
+
+    }
 
     /**
      * Sets the user agent

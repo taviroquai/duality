@@ -2,7 +2,7 @@
 
 namespace Duality\System\Structure;
 
-use Duality\System\Core\Container;
+use Duality\System\Service\Database;
 
 /**
  * Database table class
@@ -46,7 +46,7 @@ class DbTable extends Table
      * @param array $values
      * @return DbTable
      */
-	public function loadPage($offset = 0, $limit = 10, $where = '', $values = array())
+	public function find($offset = 0, $limit = 10, $where = '', $values = array())
 	{
 		$sql = $this->database->getSelect('*', $this->getName(), $where, $offset, $limit);
 		$stm = $this->database->getPDO()->prepare($sql);

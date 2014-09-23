@@ -52,10 +52,10 @@ class StreamFile extends File {
 
     /**
      * Sets up the load callback
-     * @param \Clousure $callback
+     * @param \Closure $callback
      * @throws \\Duality\System\Core\DualityException
      */
-	public function load(\Clousure $callback = null)
+	public function load(\Closure $callback = null)
 	{
 		if (!is_resource($this->handler)) {
 			throw new DualityException("Stream not opened: ".$this->getPath(), 6);
