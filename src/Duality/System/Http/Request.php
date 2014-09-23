@@ -11,6 +11,12 @@ use \Duality\System\Structure\Url;
 class Request extends Http {
 
 	/**
+	 * Holds the request params
+	 * @var array
+	 */
+	protected $params = array();
+
+	/**
      * Creates a new HTTP request
      */
 	public function __construct(Url $url = NULL)
@@ -19,5 +25,23 @@ class Request extends Http {
 		$this->headers = array();
 		$this->cookies = array();
 		$this->isAjax = false;
+	}
+
+	/**
+	 * Sets the request params
+	 * @param array $params
+	 */
+	public function setParams($params)
+	{
+		$this->params = $params;
+	}	
+
+	/**
+	 * Gets the request params
+	 * @return array
+	 */
+	public function getParams()
+	{
+		return $this->params;
 	}
 }

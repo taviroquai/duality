@@ -1,17 +1,26 @@
 <?php
 
-namespace Duality\System;
+namespace Duality\System\Service;
 
+use Duality\System\Core\InterfaceService;
 use Duality\System\Structure\Http;
 use Duality\System\Structure\Url;
 use Duality\System\Http\Request;
 use Duality\System\Http\Response;
+use Duality\System\App;
 
 /**
  * Simulates an HTTP server
  */
 class Server
+implements InterfaceService
 {
+    /**
+     * Holds application container
+     * @var Duality\System\App
+     */
+    protected $app;
+
     /**
      * Default request
      * @var string
@@ -44,26 +53,40 @@ class Server
 
     /**
      * Creates a new server
-     * @param string $hostname
-     * @param string $baseURL
+     * @param App $app
      */
-	public function __construct($hostname, Url $baseURL = NULL)
+	public function __construct(App $app)
 	{
-		$this->hostname = $hostname;
-        if (empty($baseURL)) {
-            $baseURL = new Url('/');
-        }
-		$this->baseURL = $baseURL;
+		$this->app = $app;
+	}
+
+    /**
+     * Initates service
+     */
+    public function init()
+    {
+        $config = $this->app->getConfig();
+        $this->hostname = empty($config['hostname']) ? gethostname() : $config['hostname'];
+        $url = isset($config['base_url']) ? $config['base_url'] : '/';
+        $this->baseURL = new Url($url);
 
         // Create default request and response
         $this->setRequest($this->getRequestFromGlobals());
         $this->setResponse($this->createResponse());
-	}
+    }
+
+    /**
+     * Terminates service
+     */
+    public function terminate()
+    {
+
+    }
 
     /**
      * Adds a service route to the server
      * @param string $uriPattern
-     * @param \Clousure $cb
+     * @param \Closure $cb
      */
 	public function addRoute($uriPattern, $cb)
 	{
@@ -72,7 +95,7 @@ class Server
 
     /**
      * Adds a default service route to the server
-     * @param \Clousure $cb
+     * @param \Closure $cb
      */
     public function addDefaultRoute($cb)
     {
@@ -205,7 +228,8 @@ class Server
             'Referer' => empty($_SERVER['REFERER']) ? '' : $_SERVER['REFERER']
         );
         $request->setHeaders($headers);
-        
+        $request->setParams($_REQUEST);
+
         if (
             !empty($_SERVER['HTTP_X_REQUESTED_WITH']) 
             && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest'

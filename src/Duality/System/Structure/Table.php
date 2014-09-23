@@ -27,7 +27,7 @@ abstract class Table extends Structure
      */
 	public function addProperty(Property $property)
 	{
-		$this->properties[] = $property;
+		$this->properties[(string) $property] = $property;
 	}
 
     /**

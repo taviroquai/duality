@@ -10,12 +10,14 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "php": ">=5.3.0"
+        "php": ">=5.3.0",
+        "phpmailer/phpmailer": ">=5.2.8"
     },
     "autoload": {
         "psr-0": {
             "Duality": "src/"
-        }
+        },
+        "files": ["vendor/phpmailer/phpmailer/PHPMailerAutoload.php"]
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.32"
