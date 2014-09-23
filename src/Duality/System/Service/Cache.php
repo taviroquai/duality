@@ -32,7 +32,7 @@ class Cache implements InterfaceStorage, InterfaceService
 	 */
 	public function init()
 	{
-		if (!extension_loaded('apcu')) {
+		if (!extension_loaded('apcu') && !extension_loaded('apc')) {
 			throw new DualityException("Error: apc extension not loaded", 1);
 		}
 	}
