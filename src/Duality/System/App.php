@@ -46,6 +46,7 @@ class App extends Container
 	{
 		$this->path = $path;
 		$this->config = $config;
+        $this->services = array();
 
 		$me =& $this;
 

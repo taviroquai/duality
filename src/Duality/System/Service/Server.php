@@ -3,7 +3,6 @@
 namespace Duality\System\Service;
 
 use Duality\System\Core\InterfaceService;
-use Duality\System\Structure\Http;
 use Duality\System\Structure\Url;
 use Duality\System\Http\Request;
 use Duality\System\Http\Response;
