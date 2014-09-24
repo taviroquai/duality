@@ -44,4 +44,13 @@ class Request extends Http {
 	{
 		return $this->params;
 	}
+
+	/**
+	 * Get one request param by key
+	 * @return array
+	 */
+	public function getParam($key)
+	{
+		return isset($this->params[$key]) ? $this->params[$key] : NULL;
+	}
 }
