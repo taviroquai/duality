@@ -45,6 +45,14 @@ class Logger implements InterfaceErrorHandler, InterfaceService
 	}
 
 	/**
+	 * Call terminate logger
+	 */
+	public function __destruct()
+	{
+		$this->terminate();
+	}
+
+	/**
 	 * Initiates the service
 	 */
 	public function init()
@@ -70,6 +78,7 @@ class Logger implements InterfaceErrorHandler, InterfaceService
 		if ($this->error) {
 			echo 'Ops! Something went wrong...';
 		}
+		$this->file->close();
 	}
 
 	/**
@@ -118,8 +127,7 @@ class Logger implements InterfaceErrorHandler, InterfaceService
 	    }
 
 	    // write log
-	    $this->file->setContent($this->file->getContent() . $msg);
-	    $this->file->save();
+	    $this->file->write($msg);
 
 	    // Set error
 	    $this->error = true;

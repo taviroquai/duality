@@ -82,4 +82,17 @@ class StreamFile extends File {
 		rewind($this->handler);
 		return fwrite($this->handler, $this->content);
 	}
+
+	/**
+     * Quick write content to file
+     * @return boolean
+     * @throws \Duality\System\Core\DualityException
+     */
+	public function write($data)
+	{
+		if (!is_resource($this->handler)) {
+			throw new DualityException("Stream not opened: ".$this->getPath(), 6);
+		}
+		return fwrite($this->handler, $data);
+	}
 }
