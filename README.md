@@ -8,6 +8,10 @@ Why?
 -----
 Because PHP is powerful - whether you like it or not! :)
 
+Demo
+----
+Usage demo repository at [Duality Demo](http://github.com/taviroquai/duality-demo)
+
 
 Features
 --------
