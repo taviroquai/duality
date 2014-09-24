@@ -2,6 +2,7 @@
 
 namespace Duality\System\Service;
 
+use Duality\System\Core\DualityException;
 use Duality\System\Core\InterfaceService;
 use Duality\System\Core\InterfaceErrorHandler;
 use Duality\System\File\StreamFile;
@@ -50,11 +51,11 @@ class Logger implements InterfaceErrorHandler, InterfaceService
 	{
 		$config = $this->app->getConfig();
 		if (!isset($config['log_file'])) {
-			throw new Exception("Error Config: log_file configuration not found", 1);
+			throw new DualityException("Error Config: log_file configuration not found", 1);
 		}
 		$this->logFilePath = $this->app->getPath().DIRECTORY_SEPARATOR.$config['log_file'];
 		if (!file_exists($this->logFilePath) || !is_writable($this->logFilePath)) {
-			throw new Exception("Error Logging: could not write to: ".$this->logFilePath, 1);
+			throw new DualityException("Error Logging: could not write to: ".$this->logFilePath, 1);
 		}
 		$this->file = new StreamFile($this->logFilePath);
 		$this->file->open('a+b');
