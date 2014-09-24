@@ -220,8 +220,9 @@ implements InterfaceService
         $request->setTimestamp($_SERVER['REQUEST_TIME']);
         $headers = array(
             'Http-Accept'           => $_SERVER['HTTP_ACCEPT'],
-            'Http-Accept-Charset'   => empty($_SERVER['HTTP_ACCEPT_CHARSET']) ? 
-                $_SERVER['HTTP_ACCEPT_ENCODING'] : $_SERVER['HTTP_ACCEPT_CHARSET'],
+            'Http-Accept-Charset'   => !empty($_SERVER['HTTP_ACCEPT_CHARSET']) ? 
+                $_SERVER['HTTP_ACCEPT_CHARSET'] : !empty($_SERVER['HTTP_ACCEPT_ENCODING']) ? 
+                $_SERVER['HTTP_ACCEPT_ENCODING'] : '',
             'Http-Host'             => empty($_SERVER['REMOTE_HOST']) ? 
                 $_SERVER['REMOTE_ADDR'] : $_SERVER['REMOTE_HOST'],
             'Referer'               => empty($_SERVER['REFERER']) ? '' : $_SERVER['REFERER']
