@@ -92,6 +92,7 @@ extends Structure
 
 	/**
 	 * Sets the URL hostname
+	 * @param string $host
 	 */
 	public function setHost($host)
 	{
@@ -100,6 +101,7 @@ extends Structure
 
 	/**
 	 * Gets the requested uri path
+	 * @return string
 	 */
 	public function getUri()
 	{
@@ -108,6 +110,7 @@ extends Structure
 
 	/**
 	 * Gets the full URL string
+	 * @return string
 	 */
 	public function __toString()
 	{

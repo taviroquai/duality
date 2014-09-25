@@ -93,6 +93,7 @@ class StreamFile extends File {
 
 	/**
      * Quick write content to file
+     * @param string $data
      * @return boolean
      * @throws \Duality\System\Core\DualityException
      */

@@ -20,7 +20,16 @@ use \Duality\System\App;
  */
 class MySql extends Database
 {
+    /**
+     * The dependent application container
+     * @var Duality\System\App
+     */
+    protected $app;
 
+    /**
+     * Creates a new error handler
+     * @param Duality\System\App $app
+     */
     public function __construct(App $app)
     {
         parent::__construct($app);
@@ -30,6 +39,7 @@ class MySql extends Database
      * Returns a select query
      * @param string $fields
      * @param string $from
+     * @param string $where
      * @param string $limit
      * @param string $offset
      * @return string
@@ -49,6 +59,7 @@ class MySql extends Database
     /**
      * Returns a create table statement
      * @param Duality\System\Structure\DbTable $table
+     * @param array $config
      * @return string
      */
     public function getCreateTable(DbTable $table, $config = array())
@@ -69,6 +80,7 @@ class MySql extends Database
     /**
      * Returns a drop table statement
      * @param Duality\System\Structure\DbTable $table
+     * @param boolean $ifExists
      * @return string
      */
     public function getDropTable(DbTable $table, $ifExists = true)
@@ -117,6 +129,7 @@ class MySql extends Database
     /**
      * Returns a insert table statement
      * @param Duality\System\Structure\DbTable $table
+     * @param array $item
      * @return string
      */
     public function getInsert(DbTable $table, $item = array())
@@ -145,6 +158,7 @@ class MySql extends Database
     /**
      * Returns an update table statement
      * @param Duality\System\Structure\DbTable $table
+     * @param array $item
      * @return string
      */
     public function getUpdate(DbTable $table, $item = array())

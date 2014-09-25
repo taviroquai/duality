@@ -74,7 +74,11 @@ implements InterfaceMailer, InterfaceService
 
 	/**
 	 * Set mail smtp
-	 * @param string $smtp
+	 * @param string $host
+	 * @param string $user
+	 * @param string $pass
+	 * @param string $encr
+	 * @param string $port
 	 * @return Duality\System\Service\Mailer
 	 */
 	public function setSMTP($host, $user = '', $pass = '', $encr = 'tls', $port = 587)
@@ -103,6 +107,7 @@ implements InterfaceMailer, InterfaceService
 	/**
 	 * Set mail from
 	 * @param string $from
+	 * @param string $name
 	 * @return Duality\System\Service\Mailer
 	 */
 	public function from($from, $name)

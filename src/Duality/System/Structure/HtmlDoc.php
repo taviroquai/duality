@@ -83,6 +83,8 @@ extends Structure
 
 	/**
 	 * Creates an HTML document from file path
+	 * @param string $path
+	 * @return \DOMDocument
 	 */
 	public static function createFromFilePath($path)
 	{

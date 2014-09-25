@@ -15,6 +15,9 @@ use Duality\System\Core\InterfaceService;
 use Duality\System\Core\InterfaceRemote;
 use Duality\System\App;
 
+/**
+ * Class SSH for remote operations
+ */
 class SSH
 implements InterfaceService, InterfaceRemote
 {

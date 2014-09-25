@@ -78,7 +78,7 @@ implements InterfaceStorage, InterfaceService
 
 	/**
 	 * Creates a new error handler
-	 * @var Duality\System\App
+	 * @param Duality\System\App
 	 */
 	public function __construct(App &$app)
 	{
@@ -136,7 +136,6 @@ implements InterfaceStorage, InterfaceService
 	 * Save item
 	 * @param string $key
 	 * @param string $value
-	 * @return boolean
 	 */
 	public function set($key, $value)
 	{

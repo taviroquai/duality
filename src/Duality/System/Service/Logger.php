@@ -102,7 +102,7 @@ implements InterfaceErrorHandler, InterfaceService
 
 	/**
 	 * Handles exceptions
-	 * @var \Exception
+	 * @param \Exception
 	 */
 	public function myException($e)
 	{

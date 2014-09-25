@@ -50,6 +50,8 @@ extends Container
 
 	/**
 	 * Create a new application
+	 * @param string $path
+	 * @param array $config
 	 */
 	public function __construct($path, $config)
 	{
@@ -141,7 +143,7 @@ extends Container
 	/**
 	 * Register service
 	 * @param string $name
-	 * @param \Closure
+	 * @param \Closure $service
 	 * @return Duality\System\App
 	 */
 	public function register($name, \Closure $service)

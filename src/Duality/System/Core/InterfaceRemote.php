@@ -19,6 +19,7 @@ interface InterfaceRemote
      * Starts a new connection
      * @param string $host
      * @param string $username
+     * @param string $password
      * @param string $port
      */
     public function connect($host, $username, $password = '', $port = 22);

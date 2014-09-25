@@ -44,9 +44,9 @@ implements InterfaceService
 
     /**
      * Creates a new database service
-     * @param Duality\System\App
+     * @param Duality\System\App $app
      */
-	public function __construct(App $app)
+	public function __construct(App &$app)
 	{
         $this->app = $app;
 	}

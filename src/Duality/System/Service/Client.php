@@ -34,9 +34,9 @@ implements InterfaceService
 
     /**
      * Creates a new HTTP client
-     * @param string $useragent
+     * @param \Duality\System|App $app
      */
-	public function __construct(App $app)
+	public function __construct(App &$app)
 	{
 		$this->app = $app;
 	}

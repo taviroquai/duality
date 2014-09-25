@@ -61,7 +61,7 @@ implements InterfaceStorage, InterfaceService, InterfaceValidator
 
 	/**
 	 * Process Form Assist validation
-	 * @param Duality\System\Http\Request
+	 * @param Duality\System\Http\Request $req
 	 * @param array $rules
 	 * @param array $outputJson
 	 */
@@ -153,7 +153,6 @@ implements InterfaceStorage, InterfaceService, InterfaceValidator
 	 * Save item
 	 * @param string $key
 	 * @param string $value
-	 * @return boolean
 	 */
 	public function set($key, $value)
 	{
@@ -162,6 +161,7 @@ implements InterfaceStorage, InterfaceService, InterfaceValidator
 
 	/**
 	 * Return item
+	 * @param string $key
 	 * @return mixed
 	 */
 	public function get($key)
@@ -247,6 +247,7 @@ implements InterfaceStorage, InterfaceService, InterfaceValidator
 	/**
 	 * Validate lenght
 	 * @param string $value
+	 * @param array $params
 	 * @return boolean
 	 */
 	public function isLength($value, $params)
@@ -257,6 +258,7 @@ implements InterfaceStorage, InterfaceService, InterfaceValidator
 	/**
 	 * Validate value between
 	 * @param string $value
+	 * @param array $params
 	 * @return boolean
 	 */
 	public function isBetween($value, $params)

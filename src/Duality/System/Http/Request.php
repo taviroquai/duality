@@ -26,6 +26,7 @@ class Request extends Http {
 
 	/**
      * Creates a new HTTP request
+     * @param Duality\System\Structure\Url $url
      */
 	public function __construct(Url $url = NULL)
 	{
@@ -55,6 +56,7 @@ class Request extends Http {
 
 	/**
 	 * Get one request param by key
+	 * @param string $key
 	 * @return array
 	 */
 	public function getParam($key)
@@ -64,6 +66,7 @@ class Request extends Http {
 
 	/**
 	 * Checks whether has a param or not
+	 * @param string $key
 	 * @return boolean
 	 */
 	public function hasParam($key)

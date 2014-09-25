@@ -33,6 +33,7 @@ implements InterfaceStorage, InterfaceService
 
 	/**
 	 * Creates a new error handler
+	 * @param Duality\System\App
 	 */
 	public function __construct(App &$app)
 	{
@@ -62,7 +63,6 @@ implements InterfaceStorage, InterfaceService
 	 * Save item
 	 * @param string $key
 	 * @param string $value
-	 * @return boolean
 	 */
 	public function set($key, $value)
 	{
@@ -71,6 +71,7 @@ implements InterfaceStorage, InterfaceService
 
 	/**
 	 * Return item
+	 * @param string $key
 	 * @return mixed
 	 */
 	public function get($key)

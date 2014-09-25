@@ -30,5 +30,5 @@ interface InterfaceCommander
      * @param string $uriPattern
      * @param \Closure $cb
      */
-	public function addResponder($uriPattern, $cb)
+	public function addResponder($uriPattern, $cb);
 }
