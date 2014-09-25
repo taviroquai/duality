@@ -6,6 +6,15 @@ use Duality\System\Core\DualityException;
 use Duality\System\Core\Container;
 use Duality\System\Database\SQLite;
 use Duality\System\Database\MySql;
+use Duality\System\Service\Logger;
+use Duality\System\Service\Validator;
+use Duality\System\Service\Session;
+use Duality\System\Service\Auth;
+use Duality\System\Service\Cache;
+use Duality\System\Service\Mailer;
+use Duality\System\Service\Paginator;
+use Duality\System\Service\SSH;
+use Duality\System\Service\Server;
 
 /**
  * Default application container
@@ -76,6 +85,7 @@ class App extends Container
         
         $default = array(
             'logging'   => 'Duality\System\Service\Logger',
+            'validator' => 'Duality\System\Service\Validator',
             'session'   => 'Duality\System\Service\Session',
             'auth'      => 'Duality\System\Service\Auth',
             'cache'     => 'Duality\System\Service\Cache',

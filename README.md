@@ -30,7 +30,8 @@ Features
 13. SSH service
 14. HTTP Server service
 15. Session service
-16. No imposition on templating library
+16. Validation service
+17. No imposition on templating library
 
 OOP, Composer and phpunit
 -------------------------
@@ -59,7 +60,7 @@ App DI Container
 ----------------
 App is an high level DI container that gives flexibility to the user to register their services.
 It also can provide a variety of common services used in web development, as:
-auth, cache, http client, db, i18n, mailer, paginator, http server and session
+auth, cache, http client, db, i18n, mailer, paginator, http server, session and validator
 
 Usage example:
 ```
@@ -80,7 +81,7 @@ Cache Service
 -------------
 Example:
 ```
-    $app->call('cache')->set('key', 'value', '');
+    $app->call('cache')->set('key', 'value', 'timestamp');
 ```
 
 HTTP Client
@@ -170,6 +171,28 @@ Example:
 ```
     $app->call('session')
         ->set('__lastError', 'Invalid input');
+```
+
+Validation Service
+---------------
+Example:
+```
+    $rules = array(
+        'email' => array(
+            'value' => $req->getParam('email'),
+            'rules' => 'required|email',
+            'fail'  => 'Invalid email address',
+            'info'  => 'Email is valid'
+        ),
+        'pass'  => array(
+            'value' => $req->getParam('pass'),
+            'rules' => 'required|password',
+            'fail'  => 'Invalid password: minimum 6 characters, with numbers, small and capital letters.',
+            'info'  => 'Password is valid'  
+        )
+    );
+    $app->call('validator')->validateAll($rules);
+    $messages = $app->call('validator')->getMessages();
 ```
 
 No Templating Library

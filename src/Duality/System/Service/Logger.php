@@ -68,6 +68,7 @@ class Logger implements InterfaceErrorHandler, InterfaceService
 		$this->file = new StreamFile($this->logFilePath);
 		$this->file->open('a+b');
 		set_error_handler(array($this, 'error'));
+		set_exception_handler(array($this, 'myException'));
 	}
 
 	/**
@@ -91,6 +92,15 @@ class Logger implements InterfaceErrorHandler, InterfaceService
 	}
 
 	/**
+	 * Handles exceptions
+	 * @var \Exception
+	 */
+	public function myException($e)
+	{
+		$this->error(E_USER_ERROR, $e->getMessage(), $e->getFile(), $e->getLine());
+	}
+
+	/**
 	 * Default error handler
 	 * @param int $errno
 	 * @param string $errstr
@@ -108,21 +118,21 @@ class Logger implements InterfaceErrorHandler, InterfaceService
 
 	    switch ($errno) {
 	    case E_USER_ERROR:
-	        $msg  = "<b>My FATAR error</b> [$errno] $errstr<br />\n";
-	        $msg .= "  on line $errline in file $errfile, PHP ". PHP_VERSION . " (" . PHP_OS . ")<br />\n";
-	        $msg .= "Aborting...<br />\n";
+	        $msg  = "My FATAL error [$errno] $errstr\n";
+	        $msg .= "on line $errline in file $errfile, PHP ". PHP_VERSION . " (" . PHP_OS . ")\n";
+	        $msg .= "Aborting...\n";
 	        break;
 
 	    case E_USER_WARNING:
-	        $msg = "<b>My WARNING</b> [$errno] $errstr<br />\n";
+	        $msg  = "My Warning error [$errno] $errstr on line $errline in file $errfile\n";
 	        break;
 
 	    case E_USER_NOTICE:
-	        $msg = "<b>My NOTICE</b> [$errno] $errstr<br />\n";
+	        $msg  = "My Notice error [$errno] $errstr on line $errline in file $errfile\n";
 	        break;
 
 	    default:
-	        $msg = "Unknown error type: [$errno] $errstr<br />\n";
+	        $msg  = "My Notice error [$errno] $errstr on line $errline in file $errfile\n";
 	        break;
 	    }
 

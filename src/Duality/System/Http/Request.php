@@ -34,7 +34,7 @@ class Request extends Http {
 	public function setParams($params)
 	{
 		$this->params = $params;
-	}	
+	}
 
 	/**
 	 * Gets the request params
@@ -51,6 +51,15 @@ class Request extends Http {
 	 */
 	public function getParam($key)
 	{
-		return isset($this->params[$key]) ? $this->params[$key] : NULL;
+		return $this->hasParam($key) ? $this->params[$key] : NULL;
+	}
+
+	/**
+	 * Checks whether has a param or not
+	 * @return boolean
+	 */
+	public function hasParam($key)
+	{
+		return isset($this->params[$key]);
 	}
 }
