@@ -70,20 +70,8 @@ class App extends Container
 		$me =& $this;
 		$config = $this->getConfig();
 
-		// Register database
-		if (isset($config['db_dsn'])) {
-			$me->register('db', function () use ($me) {
-				$config = $me->getConfig();
-			    if (strpos($config['db_dsn'], 'mysql') === 0) {
-			    	$db = new MySql($me);
-			    } else {
-			    	$db = new SQLite($me);
-			    }
-			    return $db;
-			});	
-		}
-        
-        $default = array(
+		// Setup default services
+		$defaults = array(
             'logging'   => 'Duality\System\Service\Logger',
             'validator' => 'Duality\System\Service\Validator',
             'session'   => 'Duality\System\Service\Session',
@@ -92,11 +80,18 @@ class App extends Container
             'i18n'      => 'Duality\System\Service\Mailer',
             'paginator' => 'Duality\System\Service\Paginator',
             'ssh'       => 'Duality\System\Service\SSH',
-            'server'    => 'Duality\System\Service\Server'
+            'server'    => 'Duality\System\Service\Server',
         );
 
+		// Register database
+		if (isset($config['db_dsn'])) {
+			$defaults['db'] = (strpos($config['db_dsn'], 'mysql') === 0) ?
+				'Duality\System\Database\MySql' : 
+				'Duality\System\Database\SQLite';
+		}
+
 		// register defaults
-		foreach($default as $name => $class) {
+		foreach($defaults as $name => $class) {
             $this->register($name, function() use ($class, $me) {
                 return new $class($me);
             });
