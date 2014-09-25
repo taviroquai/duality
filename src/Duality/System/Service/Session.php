@@ -27,13 +27,14 @@ implements InterfaceStorage, InterfaceService
 	protected $app;
 
 	/**
-	 * Set 
+	 * Holds the session storage
+	 * @var array
 	 */
 	protected $storage;
 
 	/**
 	 * Creates a new error handler
-	 * @param Duality\System\App
+	 * @param Duality\System\App $app
 	 */
 	public function __construct(App &$app)
 	{
