@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Abstract file structure
+ *
+ * @since       0.7.0
+ * @author      Marco Afonso <mafonso333@gmail.com>
+ * @license     MIT
+ */
+
 namespace Duality\System\Structure;
 
 use Duality\System\Core\DualityException;
@@ -8,8 +16,9 @@ use Duality\System\Core\Structure;
 /**
  * File structure class
  */
-abstract class File extends Structure {
-
+abstract class File 
+extends Structure
+{
     /**
      * Holds the file system path
      * @var string

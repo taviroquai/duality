@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * HTML document structure
+ *
+ * @since       0.7.0
+ * @author      Marco Afonso <mafonso333@gmail.com>
+ * @license     MIT
+ */
+
 namespace Duality\System\Structure;
 
 use Duality\System\Core\Structure;
@@ -8,7 +16,8 @@ use Duality\System\File\TextFile;
 /**
  * HTML document class
  */
-class HtmlDoc extends Structure
+class HtmlDoc 
+extends Structure
 {
     /**
      * Holds the DOM document

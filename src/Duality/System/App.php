@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * High level application container (DIC)
+ *
+ * @since       0.7.0
+ * @author      Marco Afonso <mafonso333@gmail.com>
+ * @license     MIT
+ */
+
 namespace Duality\System;
 
 use Duality\System\Core\DualityException;
@@ -19,7 +27,8 @@ use Duality\System\Service\Server;
 /**
  * Default application container
  */
-class App extends Container
+class App 
+extends Container
 {
 	/**
 	 * Holds application working directory
@@ -132,6 +141,7 @@ class App extends Container
 	/**
 	 * Register service
 	 * @param string $name
+	 * @param \Closure
 	 * @return Duality\System\App
 	 */
 	public function register($name, \Closure $service)

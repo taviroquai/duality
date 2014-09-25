@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Database service
+ *
+ * @since       0.7.0
+ * @author      Marco Afonso <mafonso333@gmail.com>
+ * @license     MIT
+ */
+
 namespace Duality\System\Service;
 
 use Duality\System\Core\InterfaceService;
@@ -145,7 +153,7 @@ implements InterfaceService
      */
     public function createFromConfig()
     {
-        $config = $this->getSchemaConfig(); 
+        $config = $this->getSchemaConfig();
         
         // Begin transation
         $this->pdo->beginTransaction();

@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Logger service (file)
+ *
+ * @since       0.7.0
+ * @author      Marco Afonso <mafonso333@gmail.com>
+ * @license     MIT
+ */
+
 namespace Duality\System\Service;
 
 use Duality\System\Core\DualityException;
@@ -11,7 +19,8 @@ use Duality\System\App;
 /**
  * Default logger service
  */
-class Logger implements InterfaceErrorHandler, InterfaceService
+class Logger 
+implements InterfaceErrorHandler, InterfaceService
 {
 	/**
 	 * The dependent application container

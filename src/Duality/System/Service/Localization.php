@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Localization service
+ *
+ * @since       0.7.0
+ * @author      Marco Afonso <mafonso333@gmail.com>
+ * @license     MIT
+ */
+
 namespace Duality\System\Service;
 
 use Duality\System\Core\DualityException;
@@ -12,7 +20,8 @@ use Duality\System\App;
  * 
  * TODO: Add timezone to list
  */
-class Localization implements InterfaceStorage, InterfaceService
+class Localization 
+implements InterfaceStorage, InterfaceService
 {
 	/**
 	 * The dependent application container

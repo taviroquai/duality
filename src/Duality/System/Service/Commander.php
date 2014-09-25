@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Commander service for non-web tasks
+ *
+ * @since       0.7.0
+ * @author      Marco Afonso <mafonso333@gmail.com>
+ * @license     MIT
+ */
+
 namespace Duality\System\Service;
 
 use Duality\System\Core\InterfaceService;
@@ -9,7 +17,8 @@ use Duality\System\App;
 /**
  * Commander service
  */
-class Commander implements InterfaceCommander, InterfaceService
+class Commander 
+implements InterfaceCommander, InterfaceService
 {
 	/**
 	 * The dependent application container

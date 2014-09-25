@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Abstract entity structure
+ *
+ * @since       0.7.0
+ * @author      Marco Afonso <mafonso333@gmail.com>
+ * @license     MIT
+ */
+
 namespace Duality\System\Structure;
 
 use \Duality\System\Core\DualityException;
@@ -7,8 +15,9 @@ use \Duality\System\Core\DualityException;
 /**
  * Entity class
  */
-abstract class Entity extends Property {
-	
+abstract class Entity 
+extends Property
+{	
     /**
      * Holds the entity properties
      * @var array

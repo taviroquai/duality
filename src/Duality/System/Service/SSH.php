@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * SSH service for remote operations
+ *
+ * @since       0.7.0
+ * @author      Marco Afonso <mafonso333@gmail.com>
+ * @license     MIT
+ */
+
 namespace Duality\System\Service;
 
 use Duality\System\Core\DualityException;

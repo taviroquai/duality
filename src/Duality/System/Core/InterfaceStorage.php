@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Interface for generic storage
+ *
+ * @since 		0.7.0
+ * @author 		Marco Afonso <mafonso333@gmail.com>
+ * @license 	MIT
+ */
+
 namespace Duality\System\Core;
 
 /**
@@ -23,7 +31,7 @@ interface InterfaceStorage
 	public function get($key);
 
 	/**
-	 * Restart a session
+	 * Clear storage
 	 * @return boolean
 	 */
 	public function reset();

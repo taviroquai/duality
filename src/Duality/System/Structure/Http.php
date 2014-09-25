@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Abstract HTTP transport structure
+ *
+ * @since       0.7.0
+ * @author      Marco Afonso <mafonso333@gmail.com>
+ * @license     MIT
+ */
+
 namespace Duality\System\Structure;
 
 use \Duality\System\Core\DualityException;
@@ -8,8 +16,9 @@ use \Duality\System\Core\Structure;
 /**
  * HTTP transport class
  */
-abstract class Http extends Structure {
-
+abstract class Http 
+extends Structure
+{
     /**
      * HTTP url
      * @var string 

@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Table row structure
+ *
+ * @since       0.7.0
+ * @author      Marco Afonso <mafonso333@gmail.com>
+ * @license     MIT
+ */
+
 namespace Duality\System\Structure;
 
 use Duality\System\Core\Structure;
@@ -8,8 +16,9 @@ use Duality\System\Core\Data;
 /**
  * Table row class
  */
-class TableRow extends Structure {
-	
+class TableRow 
+extends Structure
+{	
     /**
      * The dependant table
      * @var \Duality\System\Structure\Table

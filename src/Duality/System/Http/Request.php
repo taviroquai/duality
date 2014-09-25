@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * HTTP request structure
+ *
+ * @since       0.7.0
+ * @author      Marco Afonso <mafonso333@gmail.com>
+ * @license     MIT
+ */
+
 namespace Duality\System\Http;
 
 use \Duality\System\Structure\Http;

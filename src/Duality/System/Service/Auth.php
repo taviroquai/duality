@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Authentication service
+ *
+ * @since       0.7.0
+ * @author      Marco Afonso <mafonso333@gmail.com>
+ * @license     MIT
+ */
+
 namespace Duality\System\Service;
 
 use Duality\System\Core\InterfaceService;
@@ -9,7 +17,8 @@ use Duality\System\App;
 /**
  * Default authentication service
  */
-class Auth implements InterfaceAuth, InterfaceService
+class Auth 
+implements InterfaceAuth, InterfaceService
 {
 	/**
 	 * The dependent application container

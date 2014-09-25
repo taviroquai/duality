@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Mailer service
+ *
+ * @since       0.7.0
+ * @author      Marco Afonso <mafonso333@gmail.com>
+ * @license     MIT
+ */
+
 namespace Duality\System\Service;
 
 use Duality\System\Core\InterfaceService;
@@ -9,7 +17,8 @@ use Duality\System\App;
 /**
  * Default mailer service
  */
-class Mailer implements InterfaceMailer, InterfaceService
+class Mailer 
+implements InterfaceMailer, InterfaceService
 {
 	/**
 	 * The dependent application container

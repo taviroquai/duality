@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Database table structure
+ *
+ * @since       0.7.0
+ * @author      Marco Afonso <mafonso333@gmail.com>
+ * @license     MIT
+ */
+
 namespace Duality\System\Structure;
 
 use Duality\System\Service\Database;
@@ -7,7 +15,8 @@ use Duality\System\Service\Database;
 /**
  * Database table class
  */
-class DbTable extends Table
+class DbTable 
+extends Table
 {
     /**
      * Holds the dependant database

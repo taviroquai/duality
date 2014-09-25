@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * User session service (native php sessions)
+ *
+ * @since       0.7.0
+ * @author      Marco Afonso <mafonso333@gmail.com>
+ * @license     MIT
+ */
+
 namespace Duality\System\Service;
 
 use Duality\System\Core\InterfaceService;
@@ -9,7 +17,8 @@ use Duality\System\App;
 /**
  * Default session service
  */
-class Session implements InterfaceStorage, InterfaceService
+class Session 
+implements InterfaceStorage, InterfaceService
 {
 	/**
 	 * The dependent application container

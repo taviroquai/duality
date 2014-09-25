@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * HTTP URL structure
+ *
+ * @since       0.7.0
+ * @author      Marco Afonso <mafonso333@gmail.com>
+ * @license     MIT
+ */
+
 namespace Duality\System\Structure;
 
 use Duality\System\Core\DualityException;
@@ -8,7 +16,8 @@ use Duality\System\Core\Structure;
 /**
  * Url class
  */
-class Url extends Structure
+class Url 
+extends Structure
 {
 	/**
 	 * Url scheme or protocol

@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Container class
+ *
+ * @since 		0.7.0
+ * @author 		Marco Afonso <mafonso333@gmail.com>
+ * @license 	MIT
+ */
+
 namespace Duality\System\Core;
 
 /**
@@ -16,6 +24,7 @@ abstract class Container
 	/**
 	 * Register service
 	 * @param string $name
+	 * @param \Closure $service
 	 */
 	public abstract function register($name, \Closure $service);
 
