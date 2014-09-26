@@ -10,6 +10,7 @@
 
 namespace Duality\System\Service;
 
+use Duality\System\Core\DualityException;
 use Duality\System\Core\InterfaceService;
 use Duality\System\Structure\Url;
 use Duality\System\Http\Request;
@@ -83,6 +84,23 @@ implements InterfaceService
         // Create default request and response
         $this->setRequest($this->getRequestFromGlobals());
         $this->setResponse($this->createResponse());
+
+        // Create default 404 route
+        $this->add404Route(function(&$req, &$res) {
+
+            $html = <<<EOF
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>404 Page - Replace me!</title>
+    </head>
+    <body><h1>404 Page... Replace me!</h1></body>
+</html>
+EOF;
+            $req->setContent($html);
+        });
     }
 
     /**
@@ -113,18 +131,60 @@ implements InterfaceService
     }
 
     /**
+     * Adds a default 404 route
+     * @param \Closure $cb
+     */
+    public function add404Route($cb)
+    {
+        $this->addRoute('/^\/404$/i', $cb);
+    }
+
+    /**
+     * Get default 404 route
+     * @return mixed
+     */
+    public function get404Route()
+    {
+        return $this->routes['/^\/404$/i'];
+    }    
+
+    /**
      * Starts server and run routes callbacks
      */
 	public function listen()
 	{
 		foreach ($this->routes as $ns => $cb) {
-            $uri = str_replace((string) $this->baseURL, '', $this->request->getUrl()->getUri());
-			if ($result = preg_match($ns, $uri, $matches)) {
-				$cb($this->request, $this->response, $matches);
-			}
+
+            try {
+                if (is_string($cb)) {
+                    $action = explode('@', $cb);
+                    
+                        $controller = new $action[0]($this->app);
+                        if (is_subclass_of($controller, 'Duality\System\Service\UserController')) {
+                            $controller->init();   
+                        }
+                        $cb = array($controller, $action[1]);
+                    
+                }
+                if (!is_callable($cb)) {
+                    throw new DualityException("Error Route: action not callable: " . $ns, 2);
+                }
+                $uri = str_replace((string) $this->baseURL, '', $this->request->getUrl()->getUri());
+                if (!$result = preg_match($ns, $uri, $matches)) {
+                    $cb = $this->get404Route();
+                }
+            } catch (\Exception $e) {
+                throw new DualityException("Error Route: action not callable: " . $ns, 1);
+            }
+            call_user_func_array($cb, array(&$this->request, &$this->response, $matches));
 		}
         echo $this->send($this->response);
 	}
+
+    public function dispatch($ns, $cb)
+    {
+        
+    }
 
     /**
      * Sets the request
