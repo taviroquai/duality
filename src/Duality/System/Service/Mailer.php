@@ -91,6 +91,7 @@ implements InterfaceMailer, InterfaceService
 	 * @param string $pass
 	 * @param string $encr
 	 * @param string $port
+	 * @param int $debugLevel
 	 * @return Duality\System\Service\Mailer
 	 */
 	public function setSMTP($host, $user = '', $pass = '', $encr = 'tls', $port = 587, $debugLevel = 0)
