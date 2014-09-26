@@ -218,7 +218,9 @@ implements InterfaceMailer, InterfaceService
 
 		// Setup SMTP
 		if (!empty($this->smtp['host'])) {
-			$mail->SMTPDebug 	= $this->smtp['debugLevel'];
+			if ($this->smtp['dbgl']) {
+				$mail->SMTPDebug 	= $this->smtp['dbgl'];
+			}
 			$mail->isSMTP();
 			$mail->Host 		= $this->smtp['host'];
 			$mail->SMTPAuth 	= !empty($this->smtp['user']);
