@@ -66,11 +66,12 @@ implements InterfaceErrorHandler, InterfaceService
 	 */
 	public function init()
 	{
-		$config = $this->app->getConfig();
-		if (!isset($config['log_file'])) {
+		if (!$this->app->getConfigItem('logger.file')) {
 			throw new DualityException("Error Config: log_file configuration not found", 1);
 		}
-		$this->logFilePath = $this->app->getPath().DIRECTORY_SEPARATOR.$config['log_file'];
+		$this->logFilePath = $this->app->getPath()
+			.DIRECTORY_SEPARATOR
+			.$this->app->getConfigItem('logger.file');
 		if (!file_exists($this->logFilePath) || !is_writable($this->logFilePath)) {
 			throw new DualityException("Error Logging: could not write to: ".$this->logFilePath, 1);
 		}

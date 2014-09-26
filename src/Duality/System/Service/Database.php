@@ -56,11 +56,10 @@ implements InterfaceService
      */
     public function init()
     {
-        $config = $this->app->getConfig();
-        $dsn = isset($config['db_dsn']) ? $config['db_dsn'] : '';
-        $user = isset($config['db_user']) ? $config['db_user'] : '';
-        $pass = isset($config['db_pass']) ? $config['db_pass'] : '';
-        $options = isset($config['db_options']) ? $config['db_options'] : array();
+        $dsn = $this->app->getConfigItem('db.dsn') ? $this->app->getConfigItem('db.dsn') : '';
+        $user = $this->app->getConfigItem('db.user') ? $this->app->getConfigItem('db.user') : '';
+        $pass = $this->app->getConfigItem('db.pass') ? $this->app->getConfigItem('db.pass') : '';
+        $options = $this->app->getConfigItem('db.options') ? $this->app->getConfigItem('db.options') : array();
 
         if (empty($options)) {
             $options = array(
@@ -122,11 +121,13 @@ implements InterfaceService
      */
     public function getSchemaConfig()
     {
-        $config = $this->app->getConfig();
-        if (!isset($config['db_schema']) || !file_exists($config['db_schema'])) {
+        if (
+            !$this->app->getConfigItem('db.schema') 
+            || !file_exists($this->app->getConfigItem('db.schema'))
+        ) {
             throw new Exception("Missing schema configuration", 1);
         }
-        return include($config['db_schema']);
+        return include($this->app->getConfigItem('db.schema'));
     }
 
     /**

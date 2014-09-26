@@ -114,7 +114,7 @@ implements InterfaceMailer, InterfaceService
 	 */
 	public function to($to)
 	{
-		$this->current['to'] = $to;
+		$this->current['to'][] = $to;
 		return $this;
 	}
 

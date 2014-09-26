@@ -79,7 +79,6 @@ extends Container
 	public function addDefaultServices()
 	{
 		$me =& $this;
-		$config = $this->getConfig();
 
 		// Setup default services
 		$defaults = array(
@@ -95,8 +94,8 @@ extends Container
         );
 
 		// Register database
-		if (isset($config['db_dsn'])) {
-			$defaults['db'] = (strpos($config['db_dsn'], 'mysql') === 0) ?
+		if ($this->getConfigItem('db.dsn')) {
+			$defaults['db'] = (strpos($this->getConfigItem('db.dsn'), 'mysql') === 0) ?
 				'Duality\System\Database\MySql' : 
 				'Duality\System\Database\SQLite';
 		}
@@ -138,6 +137,24 @@ extends Container
 	public function getConfig()
 	{
 		return $this->config;
+	}
+
+	/**
+	 * Returns environment configuration
+	 * @param string $path
+	 * @return string|int
+	 */
+	public function getConfigItem($path)
+	{
+		$parts = explode('.', $path);
+		$result = $this->config;
+		foreach ($parts as $item) {
+			if (!isset($result[$item])) {
+				return false;
+			}
+			$result = $result[$item];
+		}
+		return $result;
 	}
 
 	/**
@@ -206,13 +223,15 @@ extends Container
 		$salt = '';
 
 		// Apply user configuration if exists
-		$config = $this->getConfig();
-		if (isset($config['security'])) {
-			if (isset($config['security']['salt'])) {
-				$salt = $config['security']['salt'];
+		if ($this->getConfigItem('security')) {
+			if ($this->getConfigItem('security.salt')) {
+				$salt = $this->getConfigItem('security.salt');
 			}
-			if (isset($config['security']['algo']) && in_array($config['security']['algo'], hash_algos())) {
-				$algo = $config['security']['algo'];
+			if (
+				$this->getConfigItem('security.algo') 
+				&& in_array($this->getConfigItem('security.algo'), hash_algos())
+			) {
+				$algo = $this->getConfigItem('security.algo');
 			}
 		}
 		return hash($algo, $data . $salt);

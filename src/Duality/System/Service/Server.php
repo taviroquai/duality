@@ -72,9 +72,12 @@ implements InterfaceService
      */
     public function init()
     {
-        $config = $this->app->getConfig();
-        $this->hostname = empty($config['hostname']) ? gethostname() : $config['hostname'];
-        $url = isset($config['base_url']) ? $config['base_url'] : '/';
+        $this->hostname = $this->app->getConfigItem('server.hostname') ? 
+            gethostname() : 
+            $this->app->getConfigItem('server.hostname');
+        $url = $this->app->getConfigItem('server.url') ? 
+            $this->app->getConfigItem('server.url') : 
+            '/';
         $this->baseURL = new Url($url);
 
         // Create default request and response
