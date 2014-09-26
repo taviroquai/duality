@@ -64,6 +64,7 @@ implements InterfaceMailer, InterfaceService
 			'altBody'		=> '',
 			'attachments'	=> array()
 		);
+		
 		$this->smtp = array(
 			'host' => '',
 			'user' => '',
@@ -72,6 +73,17 @@ implements InterfaceMailer, InterfaceService
 			'port' => '',
 			'dbgl' => 0
 		);
+
+		// Load SMTP from configuration
+		if ($this->app->getConfigItem('mailer.smtp')) {
+			$this->smtp = $this->app->getConfigItem('mailer.smtp');
+		}
+
+		// Load sender address from configuration
+		if ($this->app->getConfigItem('mailer.from')) {
+			$this->current['from'] = $this->app->getConfigItem('mailer.from');
+		}
+
 		return $this;
 	}
 
