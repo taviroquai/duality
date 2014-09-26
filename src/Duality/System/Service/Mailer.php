@@ -55,10 +55,22 @@ implements InterfaceMailer, InterfaceService
 	{
 		$this->current = array(
 			'from'			=> array('email' => '', 'name' => ''),
-			'to' 			=> '',
+			'to' 			=> array(),
+			'cc'			=> '',
+			'bcc'			=> '',
+			'reply'			=> array('email' => '', 'name' => ''),
 			'subject'		=> '',
 			'body'			=> '',
+			'altBody'		=> '',
 			'attachments'	=> array()
+		);
+		$this->smtp = array(
+			'host' => '',
+			'user' => '',
+			'pass' => '',
+			'encr' => '',
+			'port' => '',
+			'dbgl' => 0
 		);
 		return $this;
 	}
@@ -81,14 +93,15 @@ implements InterfaceMailer, InterfaceService
 	 * @param string $port
 	 * @return Duality\System\Service\Mailer
 	 */
-	public function setSMTP($host, $user = '', $pass = '', $encr = 'tls', $port = 587)
+	public function setSMTP($host, $user = '', $pass = '', $encr = 'tls', $port = 587, $debugLevel = 0)
 	{
 		$this->smtp = array(
 			'host' => $host,
 			'user' => $user,
 			'pass' => $pass,
 			'encr' => $encr,
-			'port' => $port
+			'port' => $port,
+			'dbgl' => $debugLevel
 		);
 		return $this;
 	}	
@@ -105,6 +118,46 @@ implements InterfaceMailer, InterfaceService
 	}
 
 	/**
+	 * Add address
+	 * @param string $address
+	 * @return Duality\System\Service\Mailer
+	 */
+	public function addAdress($address)
+	{
+		$this->current['to'][] = $address;
+		return $this;
+	}
+
+	/**
+	 * Add copy
+	 * @param string $address
+	 * @param boolean $bcc
+	 * @return Duality\System\Service\Mailer
+	 */
+	public function copy($address, $bcc = true)
+	{
+		if ($bcc) {
+			$this->current['bcc'] = $address;	
+		} else {
+			$this->current['cc'] = $address;
+		}
+		return $this;
+	}
+
+	/**
+	 * Set reply address
+	 * @param string $address
+	 * @param string $name
+	 * @return Duality\System\Service\Mailer
+	 */
+	public function reply($address, $name)
+	{
+		$this->current['reply']['email'] = $address;
+		$this->current['reply']['name'] = $name;
+		return $this;
+	}
+
+	/**
 	 * Set mail from
 	 * @param string $from
 	 * @param string $name
@@ -112,7 +165,7 @@ implements InterfaceMailer, InterfaceService
 	 */
 	public function from($from, $name)
 	{
-		$this->current['from'] = array('email' => $from, 'name' => $name);
+		$this->current['from'] = array('email' => $from, 'name' => $name);	
 		return $this;
 	}
 
@@ -128,13 +181,15 @@ implements InterfaceMailer, InterfaceService
 	}
 
 	/**
-	 * Set body
-	 * @param string $body
+	 * Set body and alternate text body
+	 * @param string $html
+	 * @param string $altBody
 	 * @return Duality\System\Service\Mailer
 	 */
-	public function body($body)
+	public function body($html, $altBody = 'Message in plain text for non-HTML mail clients')
 	{
-		$this->current['message'] = $body;
+		$this->current['body'] = $html;
+		$this->current['altbody'] = $altBody;
 		return $this;
 	}
 
@@ -160,42 +215,48 @@ implements InterfaceMailer, InterfaceService
 		// TODO: choose driver
 		$mail = new \PHPMailer;
 
-		//$mail->SMTPDebug = 3;
-
-		// TODO: SMTP as optional
-		$mail->isSMTP();
-		$mail->Host = $this->smtp['host'];
-		$mail->SMTPAuth = !empty($this->smtp['user']);
-		$mail->Username = $this->smtp['user'];
-		$mail->Password = $this->smtp['pass'];
-		$mail->SMTPSecure = $this->smtp['encr'];
-		$mail->Port = $this->smtp['port'];
-
+		// Setup SMTP
+		if (!empty($this->smtp['host']) {
+			$mail->SMTPDebug 	= $this->smtp['debugLevel'];
+			$mail->isSMTP();
+			$mail->Host 		= $this->smtp['host'];
+			$mail->SMTPAuth 	= !empty($this->smtp['user']);
+			$mail->Username 	= $this->smtp['user'];
+			$mail->Password 	= $this->smtp['pass'];
+			$mail->SMTPSecure	= $this->smtp['encr'];
+			$mail->Port 		= $this->smtp['port'];	
+		}
+		
 		// Set params
 		$mail->From = $this->current['from']['email'];
 		$mail->FromName = $this->current['from']['name'];
-		$mail->addAddress($this->current['to']);
-		$mail->WordWrap = 50;
-		// TODO as optional
+		foreach ($this->current['to'] as $item) {
+			$mail->addAddress($item);
+		}
+		
+		// Set message body options
 		$mail->isHTML(true);
-		$mail->Subject = $this->current['subject'];
-		$mail->Body    = $this->current['message'];
-		// TODO as optional
-		// $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+		$mail->Subject 		= $this->current['subject'];
+		$mail->Body    		= $this->current['body'];
+		$mail->AltBody 		= $this->current['altBody'];
+		$mail->WordWrap 	= 50;
 
-		// TODO
-		/*
-		$mail->addAddress('ellen@example.com');
-		$mail->addReplyTo('info@example.com', 'Information');
-		$mail->addCC('cc@example.com');
-		$mail->addBCC('bcc@example.com');
-		*/
+		// Set extra options: reply, cc and bcc
+		if (!empty($this->current['rely']['email'])) {
+			$replyEmail 	= $this->current['rely']['email'];
+			$replyName 		= $this->current['rely']['name'];
+			$mail->addReplyTo($replyEmail, $replyName);
+		}
+		if (!empty($this->current['cc'])) {
+			$mail->addCC($this->current['cc']);	
+		}
+		if (!empty($this->current['bcc'])) {
+			$mail->addBCC($this->current['bcc']);
+		}
 
 		// Set attachments		
 		foreach ($this->current['attachments'] as $item) {
 			$mail->addAttachment($item);
-			// TODO as optional
-			// $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
 		}
 		
 		// Finally, sent mail
