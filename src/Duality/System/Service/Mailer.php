@@ -216,7 +216,7 @@ implements InterfaceMailer, InterfaceService
 		$mail = new \PHPMailer;
 
 		// Setup SMTP
-		if (!empty($this->smtp['host']) {
+		if (!empty($this->smtp['host'])) {
 			$mail->SMTPDebug 	= $this->smtp['debugLevel'];
 			$mail->isSMTP();
 			$mail->Host 		= $this->smtp['host'];
