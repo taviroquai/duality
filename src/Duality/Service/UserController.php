@@ -50,7 +50,12 @@ implements InterfaceService
 
 	}
     
-    
+    /**
+     * Default application action
+     * @param \Duality\Http\Request $req
+     * @param \Duality\Http\Response $res
+     * @param array $params
+     */
     public function doIndex(
         \Duality\Http\Request &$req,
         \Duality\Http\Response &$res,
