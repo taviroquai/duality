@@ -6,13 +6,15 @@ ini_set('display_errors', true);
 require_once './vendor/autoload.php';
 
 // Tell what our application uses
-use Duality\System\Service\Server;
-use Duality\System\App;
+use Duality\Service\Server;
+use Duality\App;
 
 // Setup configuration
 $config = array(
-    'base_url' => '/duality',
-    'hostname' => 'localhost'
+    'server' => array(
+        'url' => '/duality',
+        'hostname' => 'localhost'
+    )
 );
 
 // Create a new application container
@@ -23,7 +25,7 @@ $server = new Server($app);
 $server->init();
 
 // Define default route
-$server->addDefaultRoute(function(&$req, &$res) {
+$server->setHome(function(&$req, &$res, $matches) {
 
 	// Tell response what is the output
 	$res->setContent('Hello World!');
