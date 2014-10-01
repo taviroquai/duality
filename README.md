@@ -33,6 +33,35 @@ Features
 16. Validation service
 17. No imposition on templating library
 
+
+Some Performance Stats (using demo repository)
+----------------
+
+VM HOST: CPU Intel Core i3 3.2Ghz    
+VM RAM: 1.5 Gb    
+VM OS: Ubuntu 14.04 64 Bit    
+
+```
+Server Software:        Apache/2.4.7    
+Server Hostname:        localhost    
+Server Port:            80    
+
+Document Path:          /duality-demo/json    
+Document Length:        139 bytes    
+
+Concurrency Level:      20    
+Time taken for tests:   0.780 seconds    
+Complete requests:      500    
+Failed requests:        0    
+Total transferred:      264500 bytes    
+HTML transferred:       69500 bytes    
+Requests per second:    641.38 #/sec (mean)    
+Time per request:       31.183 ms (mean)    
+Time per request:       1.559 ms (mean, across all concurrent requests)    
+Transfer rate:          331.34 [Kbytes/sec] received    
+ 
+```
+
 OOP, Composer and phpunit
 -------------------------
 Duality micro framework is developed using the most recent technologies
