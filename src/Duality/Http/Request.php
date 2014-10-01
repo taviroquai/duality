@@ -73,4 +73,33 @@ class Request extends Http {
 	{
 		return isset($this->params[$key]);
 	}
+
+	/**
+	 * Gets the request headers
+	 * @return array
+	 */
+	public function getHeaders()
+	{
+		return $this->headers;
+	}
+
+	/**
+	 * Get one request header by key
+	 * @param string $key
+	 * @return array
+	 */
+	public function getHeaderItem($key)
+	{
+		return $this->hasHeader($key) ? $this->headers[$key] : NULL;
+	}
+
+	/**
+	 * Checks whether has a header item or not
+	 * @param string $key
+	 * @return boolean
+	 */
+	public function hasHeader($key)
+	{
+		return isset($this->headers[$key]);
+	}
 }

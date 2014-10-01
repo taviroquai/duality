@@ -35,7 +35,7 @@ Features
 
 
 Some Performance Stats (using demo repository)
-----------------
+----------------------------------------------
 
 VM HOST: CPU Intel Core i3 3.2Ghz    
 VM RAM: 1.5 Gb    
@@ -50,17 +50,19 @@ Document Path:          /duality-demo/json
 Document Length:        139 bytes    
 
 Concurrency Level:      20    
-Time taken for tests:   0.780 seconds    
+Time taken for tests:   0.725 seconds    
 Complete requests:      500    
 Failed requests:        0    
-Total transferred:      264500 bytes    
+Total transferred:      167000 bytes    
 HTML transferred:       69500 bytes    
-Requests per second:    641.38 #/sec (mean)    
-Time per request:       31.183 ms (mean)    
-Time per request:       1.559 ms (mean, across all concurrent requests)    
-Transfer rate:          331.34 [Kbytes/sec] received    
+Requests per second:    689.25 #/sec (mean)    
+Time per request:       29.017 ms (mean)    
+Time per request:       1.451 ms (mean, across all concurrent requests)    
+Transfer rate:          224.81 Kbytes/sec received    
  
 ```
+*Note: includes access to database*    
+
 
 OOP, Composer and phpunit
 -------------------------

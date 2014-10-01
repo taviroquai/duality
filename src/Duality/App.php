@@ -15,6 +15,7 @@ use Duality\Core\Container;
 use Duality\Database\SQLite;
 use Duality\Database\MySql;
 use Duality\File\StreamFile;
+use Duality\Service\Localization;
 use Duality\Service\Logger;
 use Duality\Service\Validator;
 use Duality\Service\Session;
@@ -55,6 +56,24 @@ extends Container
      */
     protected $buffer;
 
+    /**
+     * Setup default services
+     * @var array
+     */
+	protected $defaults = array(
+        'logging'   => 'Duality\Service\Logger',
+        'validator' => 'Duality\Service\Validator',
+        'session'   => 'Duality\Service\Session',
+        'auth'      => 'Duality\Service\Auth',
+        'cache'     => 'Duality\Service\Cache',
+        'mailer'    => 'Duality\Service\Mailer',
+        'paginator' => 'Duality\Service\Paginator',
+        'ssh'       => 'Duality\Service\SSH',
+        'server'    => 'Duality\Service\Server',
+        'i18n' 		=> 'Duality\Service\Localization',
+        'cmd' 		=> 'Duality\Service\Commander'
+    );
+
 	/**
 	 * Create a new application
 	 * @param string $path
@@ -86,49 +105,30 @@ extends Container
     /**
      * Add common services
      */
-	public function addDefaultServices()
+	public function loadService($name)
 	{
 		$me =& $this;
 
-		// Setup default services
-		$defaults = array(
-            'logging'   => 'Duality\Service\Logger',
-            'validator' => 'Duality\Service\Validator',
-            'session'   => 'Duality\Service\Session',
-            'auth'      => 'Duality\Service\Auth',
-            'cache'     => 'Duality\Service\Cache',
-            'i18n'      => 'Duality\Service\Mailer',
-            'paginator' => 'Duality\Service\Paginator',
-            'ssh'       => 'Duality\Service\SSH',
-            'server'    => 'Duality\Service\Server',
-        );
-
 		// Register database
-		if ($this->getConfigItem('db.dsn')) {
-			$defaults['db'] = (strpos($this->getConfigItem('db.dsn'), 'mysql') === 0) ?
-				'Duality\Database\MySql' : 
-				'Duality\Database\SQLite';
+		if ($name === 'db') {
+			if ($this->getConfigItem('db.dsn')) {
+				$this->defaults['db'] = (strpos($this->getConfigItem('db.dsn'), 'mysql') === 0) ?
+					'Duality\Database\MySql' : 
+					'Duality\Database\SQLite';
+			}	
 		}
 
-		// register defaults
-		foreach($defaults as $name => $class) {
-            $this->register($name, function() use ($class, $me) {
-                return new $class($me);
-            });
+		// Verify if default service exists
+		if (!isset($this->defaults[$name])) {
+			throw new DualityException("Default service not found: " . $name, 15);
 		}
-	}
-    
-    /**
-     * Initiate all registered services
-     */
-	public function initServices()
-	{
-		foreach($this->services as $name => $service) {
-			$fn = array($service, 'init');
-			if (is_callable($fn, true)) {
-				$this->call($name)->init();
-			}
-		}
+
+		// Finally, register and init service
+		$class = $this->defaults[$name];
+		$this->register($name, function() use ($class, $me) {
+            return new $class($me);
+        });
+        $this->call($name)->init();
 	}
 
 	/**
@@ -208,7 +208,7 @@ extends Container
 	public function call($name, $params = array(), $cache = true)
 	{
 		if (!isset($this->services[$name])) {
-			throw new DualityException("Service undefined: " . $name, 15);
+			$this->loadService($name);
 		}
 		if ($cache) {
 			if (!isset($this->cache[$name])) {

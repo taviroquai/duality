@@ -70,12 +70,8 @@ extends Structure
     /**
      * Sets the HTTP url
      * @param \Duality\Structure\Url $url
-<<<<<<< HEAD
-     * @throws \Duality\Core\DualityException
-=======
      * @throws DualityException
      * @return Http;
->>>>>>> f32fdd56577d161ec5416768e2794349e590b835
      */
 	public function setUrl(Url $url)
 	{
@@ -98,12 +94,8 @@ extends Structure
     /**
      * Sets the HTTP method
      * @param string $method
-<<<<<<< HEAD
-     * @throws \Duality\Core\DualityException
-=======
-     * @throws \Exception
+     * @throws DualityException
      * @return Http;
->>>>>>> f32fdd56577d161ec5416768e2794349e590b835
      */
 	public function setMethod($method)
 	{
@@ -146,12 +138,8 @@ extends Structure
     /**
      * Sets the HTTP headers
      * @param array $headers
-<<<<<<< HEAD
-     * @throws \Duality\Core\DualityException
-=======
-     * @throws \Exception
+     * @throws DualityException
      * @return Http;
->>>>>>> f32fdd56577d161ec5416768e2794349e590b835
      */
 	public function setHeaders($headers)
 	{
@@ -186,12 +174,8 @@ extends Structure
     /**
      * Sets an HTTP cookie
      * @param array $cookies
-<<<<<<< HEAD
-     * @throws \Duality\Core\DualityException
-=======
      * @throws DualityException
      * @return Http;
->>>>>>> f32fdd56577d161ec5416768e2794349e590b835
      */
 	public function setCookies($cookies)
 	{
@@ -246,12 +230,8 @@ extends Structure
     /**
      * Sets the HTTP connection timestamp
      * @param int $timestamp
-<<<<<<< HEAD
-     * @throws \Duality\Core\DualityException
-=======
-     * @throws \Exception
+     * @throws DualityException
      * @return Http;
->>>>>>> f32fdd56577d161ec5416768e2794349e590b835
      */
 	public function setTimestamp($timestamp)
 	{

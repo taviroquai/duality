@@ -48,35 +48,6 @@ implements InterfaceStorage, InterfaceService
 	protected $current;
 
 	/**
-	 * Holds the localization options
-	 * @var array
-	 */
-	protected $list = array(
-		'en' => array('639-1' => 'en', 'label' => 'English', 	'native' => 'English'),
-		'pt' => array('639-1' => 'pt', 'label' => 'Portuguese',	'native' => 'Português'),
-		'ab' => array('639-1' => 'ab', 'label' => 'Abkhaz',		'native' => 'аҧсуа бызшәа, аҧсшәа'),
-		'aa' => array('639-1' => 'aa', 'label' => 'Afar',		'native' => 'Afaraf'),
-		'af' => array('639-1' => 'af', 'label' => 'Afrikaans',	'native' => 'Afrikaans'),
-		'sq' => array('639-1' => 'sq', 'label' => 'Albanian',	'native' => 'Shqip'),
-		'am' => array('639-1' => 'am', 'label' => 'Amharic',	'native' => 'አማርኛ'),
-		'ar' => array('639-1' => 'ar', 'label' => 'Arabic',		'native' => 'العربية'),
-		'an' => array('639-1' => 'an', 'label' => 'Aragonese',	'native' => 'Aragonés'),
-		'hy' => array('639-1' => 'hy', 'label' => 'Armenian',	'native' => 'Հայերեն'),
-		'as' => array('639-1' => 'as', 'label' => 'Assamese',	'native' => 'অসমীয়া'),
-		'av' => array('639-1' => 'av', 'label' => 'Avaric',		'native' => 'авар мацӀ'),
-		'ae' => array('639-1' => 'ae', 'label' => 'Avestan',	'native' => 'avesta'),
-		'ay' => array('639-1' => 'ay', 'label' => 'Aymara',		'native' => 'aymar aru'),
-		'az' => array('639-1' => 'az', 'label' => 'Azerbaijani', 'native' => 'azərbaycan dili'),
-		'bm' => array('639-1' => 'bm', 'label' => 'Bambara',	'native' => 'bamanankan'),
-		'ba' => array('639-1' => 'ba', 'label' => 'Bashkir',	'native' => 'башҡорт теле'),
-		'eu' => array('639-1' => 'eu', 'label' => 'Basque',		'native' => 'euskara'),
-		'be' => array('639-1' => 'be', 'label' => 'Belarusian',	'native' => 'беларуская мова'),
-		'bn' => array('639-1' => 'bn', 'label' => 'Bengali',	'native' => 'বাংলা'),
-		'bh' => array('639-1' => 'bh', 'label' => 'Bihari',		'native' => 'भोजपुरी'),
-		'bi' => array('639-1' => 'bi', 'label' => 'Bislama',	'native' => 'Bislama')
-	);
-
-	/**
 	 * Creates a new error handler
 	 * @param Duality\App $app
 	 */
@@ -94,6 +65,23 @@ implements InterfaceStorage, InterfaceService
 		if (!extension_loaded('intl')) {
 			throw new DualityException("Error: intl extension not loaded", 1);
 		}
+		if ($this->app->getConfigItem('i18n.default') == NULL) {
+			throw new DualityException("Error: i18n configuration missing", 2);
+		}
+		if ($this->app->getConfigItem('i18n.dir')) {
+			$this->directory = $this->app->getConfigItem('i18n.dir');
+		}
+		if (!is_dir($this->directory) || !is_readable($this->directory)) {
+			throw new DualityException("Error: directory not readable: " . $this->directory, 3);
+		}
+		$request = $this->app->call('server')->getRequest();
+		$this->current = \Locale::acceptFromHttp(
+			$request->getHeaderItem('Http-Accept-Language')
+		);
+		if (is_null($this->current)) {
+			$this->current = $this->app->getConfigItem('i18n.default');
+		}
+		$this->setLocale($this->current);
 	}
 
 	/**
@@ -110,14 +98,27 @@ implements InterfaceStorage, InterfaceService
 	 */
 	public function setLocale($code)
 	{
-		if (!array_key_exists($code, $this->list)) {
-			throw new DualityException("Language code does not exists", 2);
+		$code = \Locale::canonicalize($code);
+		$this->current = $code;
+		if (
+			\Locale::acceptFromHttp($code) === NULL
+			|| !is_dir($this->directory.DIRECTORY_SEPARATOR.$code)
+		) {
+			$this->current = \Locale::canonicalize(
+				$this->app->getConfigItem('i18n.default')
+			);
 		}
-		$directory = $this->directory.DIRECTORY_SEPARATOR.$code;
-		if (!is_dir($directory)) {
-			throw new DualityException("Translation directory does not exists", 3);
-		}
+		\Locale::setDefault($this->current);
+		$directory = $this->directory.DIRECTORY_SEPARATOR.$this->current;
 		$this->storage = include($directory.DIRECTORY_SEPARATOR.'messages.php');
+	}
+
+	/**
+	 * Returns the current language display name
+	 */
+	public function getDisplayLabel()
+	{
+		return \Locale::getDisplayLanguage($this->current, $this->current);
 	}
 
 	/**
