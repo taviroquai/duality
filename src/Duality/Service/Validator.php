@@ -104,21 +104,21 @@ implements InterfaceStorage, InterfaceService, InterfaceValidator
 	public function validate($key, $params)
 	{
 		$result = true;
-		if (!isset($params['rules'])) {
+		if (empty($params['rules'])) {
 			throw new DualityException("Error Validation: rules required", 1);
 		}
-		if (!isset($params['value'])) {
-			throw new DualityException("Error Validation: value required", 1);
+		if (!array_key_exists('value', $params)) {
+			throw new DualityException("Error Validation: value required", 2);
 		}
-		if (!isset($params['fail']) || !isset($params['info'])) {
-			throw new DualityException("Error Validation: fail and info messages are required", 2);
+		if (empty($params['fail']) || empty($params['info'])) {
+			throw new DualityException("Error Validation: fail and info messages are required", 3);
 		}
 		$rules = explode('|', $params['rules']);
 		foreach ($rules as $item) {
 			$values = explode(':', $item);
 			$method = 'is'.ucfirst(array_shift($values));
 			if (!method_exists($this, $method)) {
-				throw new DualityException("Error Validation: invalid rule name: ".$method, 3);
+				throw new DualityException("Error Validation: invalid rule name: ".$method, 4);
 			}
 			$tresult = call_user_func_array(array($this, $method), array($params['value'], $values));
 			if (!$tresult) {
