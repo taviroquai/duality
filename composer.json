@@ -11,7 +11,8 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.4.0",
-        "phpmailer/phpmailer": ">=5.2.8"
+        "ext-intl": "*",
+        "phpmailer/phpmailer": "5.2.*"
     },
     "autoload": {
         "psr-0": {
