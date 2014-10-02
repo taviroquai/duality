@@ -70,7 +70,7 @@ extends Container
         'paginator' => 'Duality\Service\Paginator',
         'ssh'       => 'Duality\Service\SSH',
         'server'    => 'Duality\Service\Server',
-        'i18n' 		=> 'Duality\Service\Localization',
+        'locale' 	=> 'Duality\Service\Localization',
         'cmd' 		=> 'Duality\Service\Commander'
     );
 
@@ -223,11 +223,12 @@ extends Container
 	 * Translate Helper
 	 * @param string $key
 	 * @param array $params
+	 * @param string $target
 	 * @return string
 	 */
-	public function t($key, $params = array())
+	public function t($key, $params = array(), $target = NULL)
 	{
-		return $this->call('i18n')->translate($key, $params);
+		return $this->call('locale')->translate($key, $params, $target);
 	}
 
 	/**

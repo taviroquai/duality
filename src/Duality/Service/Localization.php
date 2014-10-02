@@ -48,6 +48,30 @@ implements InterfaceStorage, InterfaceService
 	protected $current;
 
 	/**
+	 * Holds the number formatter
+	 * @var \NumberFormatter
+	 */
+	protected $numberFormatter;
+
+	/**
+	 * Holds the date/time formatter
+	 * @var \IntlDateFormatter
+	 */
+	protected $datetimeFormatter;
+
+	/**
+	 * Holds the calendar
+	 * @var \IntlCalendar
+	 */
+	protected $calendar;
+
+	/**
+	 * Holds the time zone
+	 * @var \IntlTimeZone
+	 */
+	protected $timezone;
+
+	/**
 	 * Creates a new error handler
 	 * @param Duality\App $app
 	 */
@@ -65,23 +89,24 @@ implements InterfaceStorage, InterfaceService
 		if (!extension_loaded('intl')) {
 			throw new DualityException("Error: intl extension not loaded", 1);
 		}
-		if ($this->app->getConfigItem('i18n.default') == NULL) {
-			throw new DualityException("Error: i18n configuration missing", 2);
+		if ($this->app->getConfigItem('locale.default') == NULL) {
+			throw new DualityException("Error: locale configuration missing", 2);
 		}
-		if ($this->app->getConfigItem('i18n.dir')) {
-			$this->directory = $this->app->getConfigItem('i18n.dir');
+		if ($this->app->getConfigItem('locale.dir')) {
+			$this->directory = $this->app->getConfigItem('locale.dir');
 		}
 		if (!is_dir($this->directory) || !is_readable($this->directory)) {
 			throw new DualityException("Error: directory not readable: " . $this->directory, 3);
 		}
 		$request = $this->app->call('server')->getRequest();
-		$this->current = \Locale::acceptFromHttp(
-			$request->getHeaderItem('Http-Accept-Language')
-		);
 		if (is_null($this->current)) {
-			$this->current = $this->app->getConfigItem('i18n.default');
+			$this->current = $this->app->getConfigItem('locale.default');
 		}
-		$this->setLocale($this->current);
+		$timezone = NULL;
+		if ($this->app->getConfigItem('locale.timezone')) {
+			$timezone = $this->app->getConfigItem('locale.timezone');
+		}
+		$this->setLocale($this->current, $timezone);
 	}
 
 	/**
@@ -95,30 +120,137 @@ implements InterfaceStorage, InterfaceService
 	/**
 	 * Loads localizations params
 	 * @param string $code
+	 * @param string $timezone
 	 */
-	public function setLocale($code)
+	public function setLocale($code, $timezone = 'Europe/Lisbon')
 	{
 		$code = \Locale::canonicalize($code);
 		$this->current = $code;
+
+		// Validate locale and translations directory
 		if (
 			\Locale::acceptFromHttp($code) === NULL
-			|| !is_dir($this->directory.DIRECTORY_SEPARATOR.$code)
+			|| !is_dir($this->directory.DIRECTORY_SEPARATOR.$this->current)
 		) {
 			$this->current = \Locale::canonicalize(
-				$this->app->getConfigItem('i18n.default')
+				$this->app->getConfigItem('locale.default')
 			);
 		}
+
+		// Define default locale
 		\Locale::setDefault($this->current);
 		$directory = $this->directory.DIRECTORY_SEPARATOR.$this->current;
 		$this->storage = include($directory.DIRECTORY_SEPARATOR.'messages.php');
+
+		// Create a number formater
+		$this->numberFormatter = \NumberFormatter::create(
+			$this->current, \NumberFormatter::DECIMAL
+		);
+
+		// Create a time zone
+		$this->timezone = \IntlTimeZone::createTimeZone($timezone);
+
+		// Create a calendar
+		$this->calendar = \IntlCalendar::createInstance(
+			$this->timezone, $this->current
+		);
+
+		// Create a DateTimeFormater
+		$this->datetimeFormatter = new \IntlDateFormatter( 
+			$this->current,
+			\IntlDateFormatter::FULL,
+			\IntlDateFormatter::FULL,
+    		$timezone,
+    		\IntlDateFormatter::GREGORIAN
+    	);
 	}
 
 	/**
 	 * Returns the current language display name
+	 * @return string
 	 */
-	public function getDisplayLabel()
+	public function getDisplayLanguage()
 	{
 		return \Locale::getDisplayLanguage($this->current, $this->current);
+	}
+
+	/**
+	 * Returns a formated number
+	 * @param int $value
+	 * @param int $style
+	 * @param string
+	 * @return string
+	 */
+	public function getNumber(
+		$value,
+		$style = \NumberFormatter::DECIMAL,
+		$pattern = NULL
+	) {
+		$this->numberFormatter = \NumberFormatter::create(
+			$this->current, $style, $pattern
+		);
+		return $this->getNumberFormatter()->format($value);
+	}
+
+	/**
+	 * Returns a real number
+	 * @param string $value
+	 * @param int $type
+	 * @return int
+	 */
+	public function parseNumber(
+		$value,
+		$type = \NumberFormatter::TYPE_DOUBLE
+	) {
+		return $this->getNumberFormatter()->parse($value, $type);
+	}
+
+	/**
+	 * Returns a formated currency
+	 * @param float $value
+	 * @return string
+	 */
+	public function getCurrency($value, $currency = 'EUR') {
+		$this->numberFormatter = \NumberFormatter::create(
+			$this->current, \NumberFormatter::CURRENCY
+		);
+		return $this->getNumberFormatter()->formatCurrency($value, $currency);
+	}
+
+	/**
+	 * Returns the number formatter
+	 * @return \NumberFormatter
+	 */
+	public function getNumberFormatter()
+	{
+		return $this->numberFormatter;
+	}
+
+	/**
+	 * Returns the date/time formatter
+	 * @return \IntlDateFormatter
+	 */
+	public function getDateFormatter()
+	{
+		return $this->datetimeFormatter;
+	}
+
+	/**
+	 * Returns the calendar
+	 * @return \IntlCalendar
+	 */
+	public function getCalendar()
+	{
+		return $this->calendar;
+	}
+
+	/**
+	 * Returns the time zone
+	 * @return \IntlTimeZone
+	 */
+	public function getTimeZone()
+	{
+		return $this->timezone;
 	}
 
 	/**
@@ -127,10 +259,32 @@ implements InterfaceStorage, InterfaceService
 	 * @param array $params
 	 * @return string
 	 */
-	public function translate($key, $params = array())
+	public function translate($key, $params = array(), $target = NULL)
 	{
-		$string = $this->get($key);
-		return vsprintf($string, $params);
+		// Load defauts
+		$current = $this->current;
+		$directory = $this->directory.DIRECTORY_SEPARATOR.$current;
+		$params = (array) $params;
+
+		// Validate and load different $target
+		if (!empty($target) && $target != $current) {
+			$current = $target;
+			$directory = $this->directory.DIRECTORY_SEPARATOR.$current;
+
+			// Validate locale and translations directory
+			if (
+				\Locale::canonicalize($current) === NULL
+				|| !is_dir($this->directory.DIRECTORY_SEPARATOR.$current)
+			) {
+				throw new Exception("Error Locale: target code ", 2);
+			}
+		}
+
+		// Finally, return result
+		$storage = include($directory.DIRECTORY_SEPARATOR.'messages.php');
+		return \MessageFormatter::formatMessage(
+			$current, $storage[$key], $params
+		);
 	}
 
 	/**
