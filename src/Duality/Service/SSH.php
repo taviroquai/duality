@@ -3,9 +3,12 @@
 /**
  * SSH service for remote operations
  *
- * @since       0.7.0
- * @author      Marco Afonso <mafonso333@gmail.com>
- * @license     MIT
+ * PHP Version 5.3.3
+ *
+ * @author  Marco Afonso <mafonso333@gmail.com>
+ * @license http://opensource.org/licenses/MIT MIT
+ * @link    http://github.com/taviroquai/duality
+ * @since   0.7.0
  */
 
 namespace Duality\Service;
@@ -17,57 +20,83 @@ use Duality\App;
 
 /**
  * Class SSH for remote operations
+ * 
+ * PHP Version 5.3.3
+ *
+ * @author  Marco Afonso <mafonso333@gmail.com>
+ * @license http://opensource.org/licenses/MIT MIT
+ * @link    http://github.com/taviroquai/duality
+ * @since   0.7.0
  */
 class SSH
 implements InterfaceService, InterfaceRemote
 {
     /**
      * The dependent application container
-     * @var Duality\App
+     * 
+     * @var Duality\App The application container
      */
     protected $app;
 
     /**
      * Own public key
-     * @var string
+     * 
+     * @var string Holds the public key to authenticate
      */
     protected $ssh_auth_pub = '/home/%s/.ssh/id_rsa.pub';
     
     /**
      * Own private key
-     * @var string
+     * 
+     * @var string Holds the private key to authenticate
      */
     protected $ssh_auth_priv = '/home/%s/.ssh/id_rsa';
 
     /**
      * Paraphrase (empty == null)
-     * @var string
+     * 
+     * @var string Holds the authentication paraphrase
      */
     protected $ssh_auth_pass;
     
     /**
      * Remote fingerprint (empty == null)
-     * @var string
+     * 
+     * @var string Holds the remote server fingerprint
      */
     protected $ssh_fingerprint;
 
     /**
      * SSH Connection
-     * @var \resource
+     * 
+     * @var \resource Holds the connection resource
      */
     protected $connection;
 
     /**
      * Creates a new error handler
-     * @param Duality\App $app
+     * 
+     * @param Duality\App &$app Give the application container
      */
-    public function __construct(App $app)
+    public function __construct(App &$app)
     {
         $this->app = $app;
     }
 
     /**
+     * On end disconnect
+     * 
+     * @return void
+     */
+    public function __destruct()
+    {
+        $this->disconnect();
+    }
+
+    /**
      * Initiates the service
+     * 
+     * @return void
      */
     public function init()
     {
@@ -76,6 +105,8 @@ implements InterfaceService, InterfaceRemote
 
     /**
      * Terminates the service
+     * 
+     * @return void
      */
     public function terminate()
     {
@@ -84,15 +115,24 @@ implements InterfaceService, InterfaceRemote
     
     /**
      * Starts a new connection
-     * @param string $host
-     * @param string $username
-     * @param string $password
-     * @param string $port
-     * @param string $paraphrase
-     * @param string $remote_fp
+     * 
+     * @param string $host       Give the remote hostname or IP
+     * @param string $username   Give the authentication username
+     * @param string $password   Give the authentication password
+     * @param string $port       Give the network port
+     * @param string $paraphrase Give the authentication paraphrase
+     * @param string $remote_fp  Give the remote server fingerprint
+     * 
+     * @return void
      */
-    public function connectSSH($host, $username, $password = '', $port = 22, $paraphrase = NULL, $remote_fp = '')
-    {
+    public function connectSSH(
+        $host,
+        $username,
+        $password = '',
+        $port = 22,
+        $paraphrase = null,
+        $remote_fp = ''
+    ) {
         $this->ssh_auth_pass = $paraphrase;
         $this->ssh_fingerprint = $remote_fp;
         $this->connect($host, $username, $password, $port);
@@ -100,13 +140,16 @@ implements InterfaceService, InterfaceRemote
 
     /**
      * Starts a new connection
-     * @param string $host
-     * @param string $username
-     * @param string $password
-     * @param string $port
+     * 
+     * @param string $host     Give the remote hostname or IP address
+     * @param string $username Give the authentication username
+     * @param string $password Give the authentication password
+     * @param string $port     Give the network port
+     * 
+     * @return void
      */
-    public function connect($host, $username, $password = '', $port = 22) {
-
+    public function connect($host, $username, $password = '', $port = 22)
+    {
         // Start connection
         if (!($this->connection = ssh2_connect($host, $port))) {
             throw new DualityException('Cannot connect to server');
@@ -114,7 +157,9 @@ implements InterfaceService, InterfaceRemote
         
         // Verify fingerprint
         if (!empty($this->ssh_fingerprint)) {
-            $fingerprint = ssh2_fingerprint($this->connection, SSH2_FINGERPRINT_MD5 | SSH2_FINGERPRINT_HEX);
+            $fingerprint = ssh2_fingerprint(
+                $this->connection, SSH2_FINGERPRINT_MD5 | SSH2_FINGERPRINT_HEX
+            );
             if (strcmp($this->ssh_fingerprint, $fingerprint) !== 0) {
                 throw new DualityException('Unable to verify server identity!');
             }
@@ -128,7 +173,13 @@ implements InterfaceService, InterfaceRemote
         } else {
             $public_key_path = sprintf($this->ssh_auth_pub, $username);
             $private_key_path = sprintf($this->ssh_auth_priv, $username);
-            if (!ssh2_auth_pubkey_file($this->connection, $username, $public_key_path, $private_key_path, $this->ssh_auth_pass)) {
+            if (!ssh2_auth_pubkey_file(
+                $this->connection,
+                $username,
+                $public_key_path,
+                $private_key_path,
+                $this->ssh_auth_pass
+            )) {
                 throw new DualityException('Autentication rejected by server');
             }    
         }
@@ -136,10 +187,13 @@ implements InterfaceService, InterfaceRemote
 
     /**
      * Runs a command on remote server
-     * @param string $cmd
-     * @return string
+     * 
+     * @param string $cmd Give the user command to execute
+     * 
+     * @return string The resulting output
      */
-    public function execute($cmd) {
+    public function execute($cmd)
+    {
         if (!$this->connection) {
             return '';
         }
@@ -157,16 +211,13 @@ implements InterfaceService, InterfaceRemote
 
     /**
      * Disconnect from server
+     * 
+     * @return void
      */
-    public function disconnect() {
+    public function disconnect()
+    {
         $this->execute('echo "EXITING" && exit;');
         $this->connection = null;
     }
 
-    /**
-     * On end disconnect
-     */
-    public function __destruct() {
-        $this->disconnect();
-    }
 }

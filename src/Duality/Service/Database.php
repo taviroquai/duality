@@ -3,9 +3,12 @@
 /**
  * Database service
  *
- * @since       0.7.0
- * @author      Marco Afonso <mafonso333@gmail.com>
- * @license     MIT
+ * PHP Version 5.3.3
+ *
+ * @author  Marco Afonso <mafonso333@gmail.com>
+ * @license http://opensource.org/licenses/MIT MIT
+ * @link    http://github.com/taviroquai/duality
+ * @since   0.7.0
  */
 
 namespace Duality\Service;
@@ -13,20 +16,27 @@ namespace Duality\Service;
 use Duality\Core\InterfaceService;
 use Duality\Core\Structure;
 use Duality\Structure\Property;
-use Duality\Structure\DbTable;
+use Duality\Structure\Database\Table;
 use Duality\Structure\Entity;
 use Duality\App;
 
 /**
  * Database class
+ * 
+ * PHP Version 5.3.3
+ *
+ * @author  Marco Afonso <mafonso333@gmail.com>
+ * @license http://opensource.org/licenses/MIT MIT
+ * @link    http://github.com/taviroquai/duality
+ * @since   0.7.0
  */
-abstract class Database 
-extends Structure 
+abstract class Database
 implements InterfaceService
 {
     /**
-     * Holds application container
-     * @var Duality\App
+     * The dependent application container
+     * 
+     * @var \Duality\App The application container
      */
     protected $app;
 
@@ -34,32 +44,39 @@ implements InterfaceService
      * Holds the PDO handler
      * @var \PDO
      */
-	protected $pdo;
+    protected $pdo;
 
     /**
      * Holds the database tables structures
      * @var array
      */
-	protected $tables = array();
+    protected $tables = array();
 
     /**
-     * Creates a new database service
-     * @param Duality\App $app
+     * Creates a new error handler
+     * 
+     * @param \Duality\App &$app The application container
      */
-	public function __construct(App &$app)
-	{
+    public function __construct(App &$app)
+    {
         $this->app = $app;
-	}
+    }
 
     /**
      * Initiates connection
+     * 
+     * @return void
      */
     public function init()
     {
-        $dsn = $this->app->getConfigItem('db.dsn') ? $this->app->getConfigItem('db.dsn') : '';
-        $user = $this->app->getConfigItem('db.user') ? $this->app->getConfigItem('db.user') : '';
-        $pass = $this->app->getConfigItem('db.pass') ? $this->app->getConfigItem('db.pass') : '';
-        $options = $this->app->getConfigItem('db.options') ? $this->app->getConfigItem('db.options') : array();
+        $dsn = $this->app->getConfigItem('db.dsn') ? 
+            $this->app->getConfigItem('db.dsn') : '';
+        $user = $this->app->getConfigItem('db.user') ? 
+            $this->app->getConfigItem('db.user') : '';
+        $pass = $this->app->getConfigItem('db.pass') ? 
+            $this->app->getConfigItem('db.pass') : '';
+        $options = $this->app->getConfigItem('db.options') ? 
+            $this->app->getConfigItem('db.options') : array();
 
         if (empty($options)) {
             $options = array(
@@ -71,58 +88,69 @@ implements InterfaceService
 
     /**
      * Temrinates connection
+     * 
+     * @return void
      */
     public function terminate()
     {
-        $this->pdo = NULL;
+        $this->pdo = null;
     }
 
     /**
      * Adds a table to the database
-     * @param \Duality\Structure\DbTable $table
+     * 
+     * @param \Duality\Structure\Database\Table $table The database table
+     * 
+     * @return void
      */
-	public function addTable(DbTable $table)
-	{
-		$this->tables[(string) $table] = $table;
-	}
+    public function addTable(Table $table)
+    {
+        $this->tables[(string) $table] = $table;
+    }
 
     /**
      * Gets all database tables
-     * @return array
+     * 
+     * @return array The list of database tables
      */
-	public function getTables()
-	{
-		return $this->tables;
-	}
+    public function getTables()
+    {
+        return $this->tables;
+    }
 
     /**
      * Gets the database connection
-     * @return \PDO
+     * 
+     * @return \PDO Returns the PDO instance
      */
-	public function getPDO()
-	{
-		return $this->pdo;
-	}
+    public function getPDO()
+    {
+        return $this->pdo;
+    }
 
     /**
      * Creates a table from an Entity
-     * @param Duality\Structure\Entity $entity
+     * 
+     * @param \Duality\Structure\Entity $entity The entity structure
+     * 
+     * @return \Duality\Structure\Database\Table The database table
      */
     public function createTableFromEntity(Entity $entity)
     {
         // Get a database table and its data from an entity
-        $table = new DbTable($this);
+        $table = new Table($this);
         $table->setPropertiesFromEntity($entity);
         return $table;
     }
 
     /**
      * Validate schema configuration
+     * 
+     * @return array The database schema configuration
      */
     public function getSchemaConfig()
     {
-        if (
-            !$this->app->getConfigItem('db.schema') 
+        if (!$this->app->getConfigItem('db.schema') 
             || !file_exists($this->app->getConfigItem('db.schema'))
         ) {
             throw new Exception("Missing schema configuration", 1);
@@ -132,7 +160,10 @@ implements InterfaceService
 
     /**
      * Reload tables from configuration
-     * @param array $config
+     * 
+     * @param array $config The schema configuration
+     * 
+     * @return void
      */
     public function reloadFromConfig($config)
     {
@@ -151,6 +182,8 @@ implements InterfaceService
 
     /**
      * Create schema definition from user config
+     * 
+     * @return void
      */
     public function createFromConfig()
     {
@@ -175,7 +208,9 @@ implements InterfaceService
     }
 
     /**
-     * Update schema definition from user config
+     * Update schema definition from user configuration
+     * 
+     * @return void
      */
     public function updateFromConfig()
     {
@@ -193,9 +228,17 @@ implements InterfaceService
                 $table = $this->tables[$item['table']];
                 $props = $table->getProperties();
                 if (isset($item['add'])) {
-                    $this->pdo->exec($this->getAddColumn($table, $item['add'], $item['type']));
-                } elseif (isset($item['modify']) && isset($props[$item['modify']])) {
-                    $this->pdo->exec($this->getModifyColumn($table, $props[$item['modify']], $item['type']));
+                    $this->pdo->exec(
+                        $this->getAddColumn($table, $item['add'], $item['type'])
+                    );
+                } elseif (isset($item['modify']) 
+                    && isset($props[$item['modify']])
+                ) {
+                    $this->pdo->exec(
+                        $this->getModifyColumn(
+                            $table, $props[$item['modify']], $item['type']
+                        )
+                    );
                 }
             }
         }
@@ -205,7 +248,9 @@ implements InterfaceService
     }
 
     /**
-     * Seed from user config
+     * Seed database from configuration
+     * 
+     * @return void
      */
     public function seedFromConfig()
     {
@@ -221,8 +266,8 @@ implements InterfaceService
         foreach ($config['seed'] as $item) {
             if (isset($this->tables[$item['table']])) {
                 $table = $this->tables[$item['table']];
-                if (isset($item['delete']) && $item['delete']) {
-                    $this->pdo->exec($this->getDelete($table));
+                if (isset($item['truncate']) && $item['truncate']) {
+                    $this->pdo->exec($this->getTruncate($table));
                 }
                 if (isset($item['values'])) {
                     $sql = $this->getInsert($table, $item['values']);
@@ -242,17 +287,28 @@ implements InterfaceService
 
     /**
      * Parse input value
-     * @param string|int $value
-     * @return string|int
+     * Database seed configuration can specify a value in the form: value::fn
+     * fn options:
+     * 1. int - Casts value to integer
+     * 2. hash - Uses application encrypt to hash the value
+     * 3. others (TODO)
+     * 
+     * @param string|int $value The value to be parsed
+     * 
+     * @return string|int The applied value by fn
      */
     protected function parseValue($value)
     {
         $catchFn = explode('::', $value);
         if (isset($catchFn[1])) {
             $fn = $catchFn[1];
-            switch($fn) {
-            case 'hash': $value = $this->app->encrypt($value); break;
-            case 'int': $value = (int) $value; break;
+
+            switch ($fn)
+            {
+            case 'hash': $value = $this->app->encrypt($value); 
+                break;
+            case 'int': $value = (int) $value;
+                break;
             default: $value = $catchFn[1];
             }
         }

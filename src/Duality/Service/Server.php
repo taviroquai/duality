@@ -3,9 +3,12 @@
 /**
  * HTTP server
  *
- * @since       0.7.0
- * @author      Marco Afonso <mafonso333@gmail.com>
- * @license     MIT
+ * PHP Version 5.3.3
+ *
+ * @author  Marco Afonso <mafonso333@gmail.com>
+ * @license http://opensource.org/licenses/MIT MIT
+ * @link    http://github.com/taviroquai/duality
+ * @since   0.7.0
  */
 
 namespace Duality\Service;
@@ -19,63 +22,80 @@ use Duality\App;
 
 /**
  * Simulates an HTTP server
+ * 
+ * PHP Version 5.3.3
+ *
+ * @author  Marco Afonso <mafonso333@gmail.com>
+ * @license http://opensource.org/licenses/MIT MIT
+ * @link    http://github.com/taviroquai/duality
+ * @since   0.7.0
  */
 class Server
 implements InterfaceService
 {
     /**
      * Holds application container
-     * @var Duality\App
+     * 
+     * @var Duality\App Holds the application container
      */
     protected $app;
 
     /**
      * Default request
-     * @var string
+     * 
+     * @var string Holds the current request
      */
     protected $request;
 
     /**
      * Default response
-     * @var string
+     * 
+     * @var string Holds the current response
      */
     protected $response;
 
     /**
      * Server host name
-     * @var string
+     * 
+     * @var string Holds the server hostname
      */
-	protected $hostname;
+    protected $hostname;
 
     /**
      * Server base URL
-     * @var string
+     * 
+     * @var string Holds the base URL used to parse routes
      */
-	protected $baseURL;
+    protected $baseURL;
 
     /**
      * Server services routes
-     * @var array
+     * 
+     * @var array Holds the available URL routes
      */
-	protected $routes;
+    protected $routes;
     
     /**
-     * Holds the default controller
-     * @var \Duality\Service\UserController
+     * Holds the default controller when no route is matched
+     * 
+     * @var \Duality\Service\UserController Holds the default controller
      */
     protected $defaultController;
 
     /**
      * Creates a new server
-     * @param App $app
+     * 
+     * @param \Duality\App &$app Give the application container
      */
-	public function __construct(App $app)
-	{
-		$this->app = $app;
-	}
+    public function __construct(App &$app)
+    {
+        $this->app = $app;
+    }
 
     /**
-     * Initates service
+     * Initiates the service
+     * 
+     * @return void
      */
     public function init()
     {
@@ -97,7 +117,9 @@ implements InterfaceService
     }
 
     /**
-     * Terminates service
+     * Terminates the service
+     * 
+     * @return void
      */
     public function terminate()
     {
@@ -106,17 +128,23 @@ implements InterfaceService
 
     /**
      * Adds a service route to the server
-     * @param string $uriPattern
-     * @param \Closure $cb
+     * 
+     * @param string   $uriPattern Give the URI pattern as route identifier
+     * @param \Closure $cb         The route callback
+     * 
+     * @return void
      */
-	public function addRoute($uriPattern, $cb)
-	{
-		$this->routes[$uriPattern] = $cb;
-	}
+    public function addRoute($uriPattern, $cb)
+    {
+        $this->routes[$uriPattern] = $cb;
+    }
 
     /**
-     * Adds a default service route to the server
-     * @param \Closure $cb
+     * Sets a default callback to the server when no route is matched
+     * 
+     * @param \Closure $cb Sets the default callback
+     * 
+     * @return void
      */
     public function setDefault($cb)
     {
@@ -124,8 +152,11 @@ implements InterfaceService
     }
     
     /**
-     * Adds a default service route to the server
-     * @param \Closure $cb
+     * Sets the home callback
+     * 
+     * @param \Closure $cb Give the home callback
+     * 
+     * @return void
      */
     public function setHome($cb)
     {
@@ -134,15 +165,17 @@ implements InterfaceService
 
     /**
      * Starts server and run routes callbacks
+     * 
+     * @return void
      */
-	public function listen()
-	{
+    public function listen()
+    {
         // Set default values
         $result = false;
         $matches = array();
         
         // Start looking for matching routes patterns
-		foreach ($this->routes as $ns => $cb) {
+        foreach ($this->routes as $ns => $cb) {
             
             // Check if route matches and stop looking
             $uri = str_replace(
@@ -153,7 +186,7 @@ implements InterfaceService
                 $cb = is_string($cb) ? $this->validateStringAction($cb) : $cb;
                 break;
             }
-		}
+        }
         
         // No route matches. Call default controller
         if (!$result) {
@@ -163,21 +196,28 @@ implements InterfaceService
         }
         
         // Finally, call controller
-        call_user_func_array($cb, array(&$this->request, &$this->response, $matches));
+        call_user_func_array(
+            $cb, array(&$this->request, &$this->response, $matches)
+        );
         $this->send($this->response);
-	}
+    }
     
     /**
      * Translates route callback to callable
-     * @param string $cb
-     * @throws DualityException
-     * @return array
+     * 
+     * @param string $cb Give the callback to validate
+     * 
+     * @throws DualityException If fails, throws exception
+     * 
+     * @return array The valid and callable callback
      */
     protected function validateStringAction($cb)
     {
         // Validate string controller@action
         if (!is_string($cb)) {
-            throw new DualityException("Error Route: can only translate from string: ".$cb, 1);
+            throw new DualityException(
+                "Error Route: can only translate from string: ".$cb, 1
+            );
         }
         
         // Translate
@@ -185,7 +225,9 @@ implements InterfaceService
         
         // Validate class name
         if (!class_exists($controllerClass)) {
-            throw new DualityException("Error Route: controller not found: ".$controllerClass, 2);
+            throw new DualityException(
+                "Error Route: controller not found: ".$controllerClass, 2
+            );
         }
         $controller = new $controllerClass($this->app);
         $controller->init();
@@ -193,14 +235,19 @@ implements InterfaceService
 
         // Validate callable
         if (!is_callable($action)) {
-            throw new DualityException("Error Route: action not callable: ".$cb, 3);
+            throw new DualityException(
+                "Error Route: action not callable: ".$cb, 3
+            );
         }
         return $action;
     }
 
     /**
      * Sets the request
-     * @param Request $request
+     * 
+     * @param Request $request Give the current request
+     * 
+     * @return void
      */
     public function setRequest(Request $request)
     {
@@ -209,7 +256,8 @@ implements InterfaceService
 
     /**
      * Gets the request
-     * @return Request
+     * 
+     * @return Request The current request
      */
     public function getRequest()
     {
@@ -218,7 +266,10 @@ implements InterfaceService
 
     /**
      * Sets the response
-     * @param Response $response
+     * 
+     * @param Response $response Give the current response
+     * 
+     * @return void
      */
     public function setResponse(Response $response)
     {
@@ -227,7 +278,8 @@ implements InterfaceService
 
     /**
      * Gets the response
-     * @return Request
+     * 
+     * @return Request The current request
      */
     public function getResponse()
     {
@@ -235,63 +287,73 @@ implements InterfaceService
     }
 
     /**
-     * Sets the server host name
-     * @param string $hostname
+     * Sets the server host name, used to parse request route
+     * 
+     * @param string $hostname Give the server a name
+     * 
+     * @return void
      */
-	public function setHostname($hostname)
-	{
-		$this->hostname = $hostname;
-	}
+    public function setHostname($hostname)
+    {
+        $this->hostname = $hostname;
+    }
 
     /**
-     * Gets the server host name
-     * @return string
+     * Gets the server host name, used to parse request route
+     * 
+     * @return string The server hostname
      */
-	public function getHostname()
-	{
-		return $this->hostname;
-	}
+    public function getHostname()
+    {
+        return $this->hostname;
+    }
 
     /**
-     * Creates a service URL
-     * @param string $uri
-     * @param string $scheme
-     * @return string
+     * Creates a valid server URL
+     * 
+     * @param string $uri    Give the URI
+     * @param string $scheme Give the HTTP scheme/protocol
+     * 
+     * @return string The resulting URL
      */
-	public function createUrl($uri, $scheme = 'http')
-	{
-		return $scheme.'://'.$this->getHostname().$uri;
-	}
+    public function createUrl($uri, $scheme = 'http')
+    {
+        return new URL($scheme.'://'.$this->getHostname().$uri);
+    }
 
     /**
      * Creates an HTTP response
-     * @return \Duality\Structure\Http
+     * 
+     * @return \Duality\Structure\Http A default response instance
      */
-	public function createResponse()
-	{
-		$response = new Response;
-		return $response;
-	}
+    public function createResponse()
+    {
+        return new Response;
+    }
 
     /**
      * Echos HTTP response
-     * @param \Duality\Structure\Http $response
-     * @param boolean $withHeaders
+     * 
+     * @param \Duality\Structure\Http $response    Give the server response
+     * @param boolean                 $withHeaders Send headers or not
+     * 
+     * @return void
      */
-	public function send(Response $response, $withHeaders = true)
-	{
-		if ($withHeaders) {
-			foreach ($response->getHeaders() as $k => $v) {
-				header($k.': '.$v);
-			}
-		}
+    public function send(Response $response, $withHeaders = true)
+    {
+        if ($withHeaders) {
+            foreach ($response->getHeaders() as $k => $v) {
+                header($k.': '.$v);
+            }
+        }
         http_response_code($response->getStatus());
         $this->app->getBuffer()->write($response->getContent());
-	}
+    }
 
     /**
      * Parses HTTP properties from PHP global environment
-     * @return Request
+     * 
+     * @return Request The resulting request instance
      */
     public static function getRequestFromGlobals()
     {
@@ -307,17 +369,18 @@ implements InterfaceService
             'Http-Accept-Language'  => !empty($_SERVER['HTTP_ACCEPT_LANGUAGE']) ?
                 $_SERVER['HTTP_ACCEPT_LANGUAGE'] : 'en-US',
             'Http-Accept-Charset'   => !empty($_SERVER['HTTP_ACCEPT_CHARSET']) ? 
-                $_SERVER['HTTP_ACCEPT_CHARSET'] : !empty($_SERVER['HTTP_ACCEPT_ENCODING']) ? 
+                $_SERVER['HTTP_ACCEPT_CHARSET'] : 
+                !empty($_SERVER['HTTP_ACCEPT_ENCODING']) ? 
                 $_SERVER['HTTP_ACCEPT_ENCODING'] : 'utf-8',
             'Http-Host'             => empty($_SERVER['REMOTE_HOST']) ? 
                 $_SERVER['REMOTE_ADDR'] : $_SERVER['REMOTE_HOST'],
-            'Referer'               => empty($_SERVER['REFERER']) ? '' : $_SERVER['REFERER']
+            'Referer'               => empty($_SERVER['REFERER']) ? '' : 
+                $_SERVER['REFERER']
         );
         $request->setHeaders($headers);
         $request->setParams($_REQUEST);
 
-        if (
-            !empty($_SERVER['HTTP_X_REQUESTED_WITH']) 
+        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) 
             && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest'
         ) {
             $request->setAjax(true);

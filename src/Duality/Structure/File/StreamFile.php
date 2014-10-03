@@ -1,0 +1,136 @@
+<?php
+
+/**
+ * Stream file structure
+ *
+ * PHP Version 5.3.3
+ *
+ * @author  Marco Afonso <mafonso333@gmail.com>
+ * @license http://opensource.org/licenses/MIT MIT
+ * @link    http://github.com/taviroquai/duality
+ * @since   0.7.0
+ */
+
+namespace Duality\File;
+
+use \Duality\Core\DualityException;
+use \Duality\Structure\File;
+
+/**
+ * The stream class
+ * 
+ * PHP Version 5.3.3
+ *
+ * @author  Marco Afonso <mafonso333@gmail.com>
+ * @license http://opensource.org/licenses/MIT MIT
+ * @link    http://github.com/taviroquai/duality
+ * @since   0.7.0
+ */
+class StreamFile extends File
+{
+    /**
+     * Stream resource handler
+     * 
+     * @var resource The stream resource handler
+     */
+    protected $handler;
+
+    /**
+     * Holds the stream file path
+     * 
+     * @param string $path The file path
+     */
+    public function __construct($path)
+    {
+        $this->setPath($path);
+    }
+
+    /**
+     * Opens the stream
+     * 
+     * @param string $options Give the stream open options, ie. 'w+b'
+     * 
+     * @throws \Duality\Core\DualityException When cannot open file
+     * 
+     * @return void
+     */
+    public function open($options = 'w+b')
+    {
+        if (!is_resource($this->handler)) {
+            $this->handler = @fopen($this->path, $options);
+            if (!is_resource($this->handler)) {
+                throw new DualityException(
+                    "Could not open stream: ".$this->getPath(), 5
+                );
+            }
+        }
+    }
+
+    /**
+     * Closes the stream
+     * 
+     * @return void
+     */
+    public function close()
+    {
+        if (is_resource($this->handler)) {
+            fclose($this->handler);
+        }
+    }
+
+    /**
+     * Sets up the load callback
+     * 
+     * @param \Closure $callback Give the after load callback
+     * 
+     * @throws \Duality\Core\DualityException When the stream is not opened
+     * 
+     * @return void
+     */
+    public function load(\Closure $callback = null)
+    {
+        if (!is_resource($this->handler)) {
+            throw new DualityException("Stream not opened: ".$this->getPath(), 6);
+        }
+        rewind($this->handler);
+        while ($chunck = fread($this->handler, 4096)) {
+            $this->content .= $chunck;
+            if (!is_null($callback)) {
+                $callback($chunck);
+            }
+        }
+    }
+
+    /**
+     * Saves the full file stream
+     * 
+     * @throws \Duality\Core\DualityException When the stream is not opened
+     * 
+     * @return boolean The save result
+     */
+    public function save()
+    {
+        if (!is_resource($this->handler)) {
+            $this->open();
+        }
+        rewind($this->handler);
+        return fwrite($this->handler, $this->content);
+    }
+
+    /**
+     * Quick write content to file
+     * 
+     * @param string $data Give the date to be written to stream
+     * 
+     * @throws \Duality\Core\DualityException When the stream is not opened
+     * 
+     * @return boolean The write result
+     */
+    public function write($data)
+    {
+        if (!is_resource($this->handler)) {
+            $this->open();
+        }
+        return fwrite($this->handler, $data);
+    }
+}

@@ -3,280 +3,336 @@
 /**
  * Mailer service
  *
- * @since       0.7.0
- * @author      Marco Afonso <mafonso333@gmail.com>
- * @license     MIT
+ * PHP Version 5.3.3
+ *
+ * @author  Marco Afonso <mafonso333@gmail.com>
+ * @license http://opensource.org/licenses/MIT MIT
+ * @link    http://github.com/taviroquai/duality
+ * @since   0.7.0
  */
 
 namespace Duality\Service;
 
-use Duality\Core\InterfaceService;
-use Duality\Core\InterfaceMailer;
-use Duality\App;
+use \Duality\Core\InterfaceService;
+use \Duality\Core\InterfaceMailer;
+use \Duality\Structure\Storage
+use \Duality\App;
 
 /**
  * Default mailer service
+ * 
+ * PHP Version 5.3.3
+ *
+ * @author  Marco Afonso <mafonso333@gmail.com>
+ * @license http://opensource.org/licenses/MIT MIT
+ * @link    http://github.com/taviroquai/duality
+ * @since   0.7.0
  */
 class Mailer 
 implements InterfaceMailer, InterfaceService
 {
-	/**
-	 * The dependent application container
-	 * @var Duality\App
-	 */
-	protected $app;
+    /**
+     * The dependent application container
+     * 
+     * @var Duality\App The application container
+     */
+    protected $app;
 
-	/**
-	 * Holds the current mail params
-	 * @var array
-	 */
-	protected $current;
+    /**
+     * Holds the current mail params
+     * 
+     * @var \Duality\Core\InterfaceStorage The mail params
+     */
+    protected $current;
 
-	/**
-	 * Holds smtp configuration
-	 * @var array
-	 */
-	protected $smtp;
+    /**
+     * Holds smtp configuration
+     * 
+     * @var \Duality\Core\InterfaceStorage The current smtp configuration
+     */
+    protected $smtp;
 
-	/**
-	 * Creates a new error handler
-	 * @param Duality\App $app
-	 */
-	public function __construct(App $app)
-	{
-		$this->app = $app;
-	}
+    /**
+     * Creates a new error handler
+     * 
+     * @param Duality\App &$app The application container
+     */
+    public function __construct(App &$app)
+    {
+        $this->app = $app;
+    }
 
-	/**
-	 * Initiates the service
-	 * @return Duality\Service\Mailer
-	 */
-	public function init()
-	{
-		$this->current = array(
-			'from'			=> array('email' => '', 'name' => ''),
-			'to' 			=> array(),
-			'cc'			=> '',
-			'bcc'			=> '',
-			'reply'			=> array('email' => '', 'name' => ''),
-			'subject'		=> '',
-			'body'			=> '',
-			'altBody'		=> '',
-			'attachments'	=> array()
-		);
-		
-		$this->smtp = array(
-			'host' => '',
-			'user' => '',
-			'pass' => '',
-			'encr' => '',
-			'port' => '',
-			'dbgl' => 0
-		);
+    /**
+     * Initiates the service
+     * 
+     * @return \Duality\Service\Mailer This instance
+     */
+    public function init()
+    {
+        $this->storage = new Storage;
+        $this->smtp = new Storage;
 
-		// Load SMTP from configuration
-		if ($this->app->getConfigItem('mailer.smtp')) {
-			$this->smtp = $this->app->getConfigItem('mailer.smtp');
-		}
+        $this->current->importArray(
+            array(
+                'from'          => array('email' => '', 'name' => ''),
+                'to'            => array(),
+                'cc'            => '',
+                'bcc'           => '',
+                'reply'         => array('email' => '', 'name' => ''),
+                'subject'       => '',
+                'body'          => '',
+                'altBody'       => '',
+                'attachments'   => array()
+            )
+        );
+        
+        $this->smtp->importArray(
+            array(
+                'host' => '',
+                'user' => '',
+                'pass' => '',
+                'encr' => '',
+                'port' => '',
+                'dbgl' => 0
+            )
+        );
 
-		// Load sender address from configuration
-		if ($this->app->getConfigItem('mailer.from')) {
-			$this->current['from'] = $this->app->getConfigItem('mailer.from');
-		}
+        // Load SMTP from configuration
+        if ($this->app->getConfigItem('mailer.smtp')) {
+            $this->smtp->importArray($this->app->getConfigItem('mailer.smtp'));
+        }
 
-		return $this;
-	}
+        // Load sender address from configuration
+        if ($this->app->getConfigItem('mailer.from')) {
+            $this->current->set('from', $this->app->getConfigItem('mailer.from'));
+        }
 
-	/**
-	 * Terminates the service
-	 * @return Duality\Service\Mailer
-	 */
-	public function terminate()
-	{
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Set mail smtp
-	 * @param string $host
-	 * @param string $user
-	 * @param string $pass
-	 * @param string $encr
-	 * @param string $port
-	 * @param int $debugLevel
-	 * @return Duality\Service\Mailer
-	 */
-	public function setSMTP($host, $user = '', $pass = '', $encr = 'tls', $port = 587, $debugLevel = 0)
-	{
-		$this->smtp = array(
-			'host' => $host,
-			'user' => $user,
-			'pass' => $pass,
-			'encr' => $encr,
-			'port' => $port,
-			'dbgl' => $debugLevel
-		);
-		return $this;
-	}	
+    /**
+     * Terminates the service
+     * 
+     * @return Duality\Service\Mailer This instance
+     */
+    public function terminate()
+    {
+        return $this;
+    }
 
-	/**
-	 * Set mail to
-	 * @param string $to
-	 * @return Duality\Service\Mailer
-	 */
-	public function to($to)
-	{
-		$this->current['to'][] = $to;
-		return $this;
-	}
+    /**
+     * Set mail smtp
+     * 
+     * @param string $host       The remote hostname
+     * @param string $user       The authentication user
+     * @param string $pass       The authentication password
+     * @param string $encr       The connection encryptino
+     * @param string $port       The remote port
+     * @param int    $debugLevel The debug level
+     * 
+     * @return Duality\Service\Mailer
+     */
+    public function setSMTP(
+        $host, $user = '', $pass = '', $encr = 'tls', $port = 587, $debugLevel = 0
+    ) {
+        $this->smtp->importArray(
+            array(
+                'host' => $host,
+                'user' => $user,
+                'pass' => $pass,
+                'encr' => $encr,
+                'port' => $port,
+                'dbgl' => $debugLevel
+            )
+        );
+        return $this;
+    }   
 
-	/**
-	 * Add address
-	 * @param string $address
-	 * @return Duality\Service\Mailer
-	 */
-	public function addAdress($address)
-	{
-		$this->current['to'][] = $address;
-		return $this;
-	}
+    /**
+     * Set mail to
+     * 
+     * @param string $to The target recipient
+     * 
+     * @return Duality\Service\Mailer This instance
+     */
+    public function to($to)
+    {
+        $this->addAddress($to);
+        return $this;
+    }
 
-	/**
-	 * Add copy
-	 * @param string $address
-	 * @param boolean $bcc
-	 * @return Duality\Service\Mailer
-	 */
-	public function copy($address, $bcc = true)
-	{
-		if ($bcc) {
-			$this->current['bcc'] = $address;	
-		} else {
-			$this->current['cc'] = $address;
-		}
-		return $this;
-	}
+    /**
+     * Add address
+     * 
+     * @param string $address Give the recipient address
+     * 
+     * @return Duality\Service\Mailer This instance
+     */
+    public function addAdress($address)
+    {
+        $list = $this->current->get('to');
+        $list[] = $address;
+        $this->current->set('to', $list);
+        return $this;
+    }
 
-	/**
-	 * Set reply address
-	 * @param string $address
-	 * @param string $name
-	 * @return Duality\Service\Mailer
-	 */
-	public function reply($address, $name)
-	{
-		$this->current['reply']['email'] = $address;
-		$this->current['reply']['name'] = $name;
-		return $this;
-	}
+    /**
+     * Add copy
+     * 
+     * @param string  $address The cc recipient
+     * @param boolean $bcc     Tells whether use bcc or not
+     * 
+     * @return Duality\Service\Mailer This instance
+     */
+    public function copy($address, $bcc = true)
+    {
+        if ($bcc) {
+            $this->current->set('bcc', $address);
+        } else {
+            $this->current->set('cc', $address);
+        }
+        return $this;
+    }
 
-	/**
-	 * Set mail from
-	 * @param string $from
-	 * @param string $name
-	 * @return Duality\Service\Mailer
-	 */
-	public function from($from, $name)
-	{
-		$this->current['from'] = array('email' => $from, 'name' => $name);	
-		return $this;
-	}
+    /**
+     * Set reply address
+     * 
+     * @param string $address The reply address
+     * @param string $name    The reply name
+     * 
+     * @return Duality\Service\Mailer This instance
+     */
+    public function reply($address, $name)
+    {
+        $reply = $this->current->get('reply');
+        $reply['email'] = $address;
+        $reply['name'] = $name;
+        $this->current->set('reply', $reply);
+        return $this;
+    }
 
-	/**
-	 * Set mail subject
-	 * @param string $subject
-	 * @return Duality\Service\Mailer
-	 */
-	public function subject($subject)
-	{
-		$this->current['subject'] = $subject;
-		return $this;
-	}
+    /**
+     * Set mail from
+     * 
+     * @param string $from Give the sender email address
+     * @param string $name Give the sender sender name
+     * 
+     * @return Duality\Service\Mailer This instance
+     */
+    public function from($from, $name)
+    {
+        $from = $this->current->get('from');
+        $from['email'] = $from;
+        $from['name'] = $name;
+        $this->current->set('from', $reply);  
+        return $this;
+    }
 
-	/**
-	 * Set body and alternate text body
-	 * @param string $html
-	 * @param string $altBody
-	 * @return Duality\Service\Mailer
-	 */
-	public function body($html, $altBody = 'Message in plain text for non-HTML mail clients')
-	{
-		$this->current['body'] = $html;
-		$this->current['altbody'] = $altBody;
-		return $this;
-	}
+    /**
+     * Set mail subject
+     * 
+     * @param string $subject Give the message subject
+     * 
+     * @return Duality\Service\Mailer This instance
+     */
+    public function subject($subject)
+    {
+        $this->current->set('subject', $subject);
+        return $this;
+    }
 
-	/**
-	 * Set mail attachments
-	 * @param array $list
-	 * @return Duality\Service\Mailer
-	 */
-	public function attach($list)
-	{
-		$this->current['attachments'] = $list;
-		return $this;
-	}
+    /**
+     * Set body and alternate text body
+     * 
+     * @param string $html    Give the HTML body
+     * @param string $altBody Give the alternate text message
+     * 
+     * @return Duality\Service\Mailer This instance
+     */
+    public function body($html, $altBody = 'Text message')
+    {
+        $this->current->set('body', $html);
+        $this->current->set('altbody', $altBody);
+        return $this;
+    }
 
-	/**
-	 * Send mail
-	 * @param \Closure $callback
-	 * @return Duality\Service\Mailer
-	 */
-	public function send(\Closure $callback)
-	{
+    /**
+     * Set mail attachments
+     * 
+     * @param array $list The list of files as array
+     * 
+     * @return Duality\Service\Mailer This instance
+     */
+    public function attach($list)
+    {
+        $this->current->set('attachments', $list);
+        return $this;
+    }
 
-		// TODO: choose driver
-		$mail = new \PHPMailer;
+    /**
+     * Send mail
+     * 
+     * @param \Closure $callback Give the after sent callback
+     * 
+     * @return Duality\Service\Mailer This instance
+     */
+    public function send(\Closure $callback)
+    {
 
-		// Setup SMTP
-		if (!empty($this->smtp['host'])) {
-			if ($this->smtp['dbgl']) {
-				$mail->SMTPDebug 	= $this->smtp['dbgl'];
-			}
-			$mail->isSMTP();
-			$mail->Host 		= $this->smtp['host'];
-			$mail->SMTPAuth 	= !empty($this->smtp['user']);
-			$mail->Username 	= $this->smtp['user'];
-			$mail->Password 	= $this->smtp['pass'];
-			$mail->SMTPSecure	= $this->smtp['encr'];
-			$mail->Port 		= $this->smtp['port'];	
-		}
-		
-		// Set params
-		$mail->From = $this->current['from']['email'];
-		$mail->FromName = $this->current['from']['name'];
-		foreach ($this->current['to'] as $item) {
-			$mail->addAddress($item);
-		}
-		
-		// Set message body options
-		$mail->isHTML(true);
-		$mail->Subject 		= $this->current['subject'];
-		$mail->Body    		= $this->current['body'];
-		$mail->AltBody 		= $this->current['altBody'];
-		$mail->WordWrap 	= 50;
+        // TODO: choose driver
+        $mail = new \PHPMailer;
 
-		// Set extra options: reply, cc and bcc
-		if (!empty($this->current['rely']['email'])) {
-			$replyEmail 	= $this->current['rely']['email'];
-			$replyName 		= $this->current['rely']['name'];
-			$mail->addReplyTo($replyEmail, $replyName);
-		}
-		if (!empty($this->current['cc'])) {
-			$mail->addCC($this->current['cc']);	
-		}
-		if (!empty($this->current['bcc'])) {
-			$mail->addBCC($this->current['bcc']);
-		}
+        // Setup SMTP
+        if (!$this->smtp->get('host')) {
+            if ($this->smtp->get('dbgl')) {
+                $mail->SMTPDebug    = $this->smtp->get('dbgl');
+            }
+            $mail->isSMTP();
+            $mail->Host         = $this->smtp->get('host');
+            $mail->SMTPAuth     = !$this->smtp->get('user');
+            $mail->Username     = $this->smtp->get('user');
+            $mail->Password     = $this->smtp->get('pass');
+            $mail->SMTPSecure   = $this->smtp->get('encr');
+            $mail->Port         = $this->smtp->get('port');  
+        }
+        
+        // Set params
+        $from = $this->current->get('from');
+        $mail->From = $from['email'];
+        $mail->FromName = $from['name'];
+        foreach ($this->current->get('to') as $item) {
+            $mail->addAddress($item);
+        }
+        
+        // Set message body options
+        $mail->isHTML(true);
+        $mail->Subject      = $this->current->get('subject');
+        $mail->Body         = $this->current->get('body');
+        $mail->AltBody      = $this->current->get('altBody');
+        $mail->WordWrap     = 50;
 
-		// Set attachments		
-		foreach ($this->current['attachments'] as $item) {
-			$mail->addAttachment($item);
-		}
-		
-		// Finally, sent mail
-		$result = $mail->send();
-		return $callback($result, $mail);
-	}
+        // Set extra options: reply, cc and bcc
+        $reply = $this->current->get('reply');
+        if (!empty($reply['email'])) {
+            $replyEmail     = $reply['email'];
+            $replyName      = $reply['name'];
+            $mail->addReplyTo($replyEmail, $replyName);
+        }
+        if (!$this->current->get('cc')) {
+            $mail->addCC($this->current->set('cc'); 
+        }
+        if (!$this->current->set('bcc')) {
+            $mail->addBCC($this->current->set('bcc'));
+        }
+
+        // Set attachments      
+        foreach ($this->current->set('attachments') as $item) {
+            $mail->addAttachment($item);
+        }
+        
+        // Finally, sent mail
+        $result = $mail->send();
+        return $callback($result, $mail);
+    }
 
 }

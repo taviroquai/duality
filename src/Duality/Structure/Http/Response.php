@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Basic property structure
+ * HTTP response structure
  *
  * PHP Version 5.3.3
  *
@@ -11,12 +11,12 @@
  * @since   0.7.0
  */
 
-namespace Duality\Structure;
+namespace Duality\Http;
 
-use Duality\Core\Structure;
+use \Duality\Structure\Http;
 
 /**
- * Property class
+ * HTTP response class
  * 
  * PHP Version 5.3.3
  *
@@ -25,18 +25,7 @@ use Duality\Core\Structure;
  * @link    http://github.com/taviroquai/duality
  * @since   0.7.0
  */
-class Property 
-extends Structure
+class Response extends Http
 {
-    /**
-     * Creates a new property
-     * 
-     * @param string $name Give a name to property
-     */
-    public function __construct($name = '')
-    {
-        if (!empty($name)) {
-            $this->setName($name);
-        }
-    }
+
 }

@@ -3,49 +3,65 @@
 /**
  * Generic structure
  *
- * @since       0.7.0
- * @author      Marco Afonso <mafonso333@gmail.com>
- * @license     MIT
+ * PHP Version 5.3.3
+ *
+ * @author  Marco Afonso <mafonso333@gmail.com>
+ * @license http://opensource.org/licenses/MIT MIT
+ * @link    http://github.com/taviroquai/duality
+ * @since   0.7.0
  */
 
 namespace Duality\Core;
 
 /**
  * The structure class
+ * 
+ * PHP Version 5.3.3
+ *
+ * @author  Marco Afonso <mafonso333@gmail.com>
+ * @license http://opensource.org/licenses/MIT MIT
+ * @link    http://github.com/taviroquai/duality
+ * @since   0.7.0
  */
-abstract class Structure {
-
+abstract class Structure
+{
     /**
      * Holds the structure name
-     * @var string
+     * 
+     * @var string Holds the structure name
      */
-	protected $name;
+    protected $name;
 
     /**
      * Sets the structure name
-     * @param string $name
+     * 
+     * @param string $name Give the name to the structure
+     * 
+     * @return void
      */
-	public function setName($name)
-	{
-		$this->name = $name;
-	}
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
 
     /**
      * Gets the structure name
-     * @return string
+     * 
+     * @return string Returns the structure name
      */
-	public function getName()
-	{
-		return $this->name;
-	}
+    public function getName()
+    {
+        return $this->name;
+    }
 
     /**
      * Gets the structure as string
-     * @return string
+     * 
+     * @return string The string representation of the structure
      */
-	public function __toString()
-	{
-		return $this->name;
-	}
+    public function __toString()
+    {
+        return $this->name;
+    }
 
 }

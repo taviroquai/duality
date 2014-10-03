@@ -3,9 +3,12 @@
 /**
  * Abstract entity structure
  *
- * @since       0.7.0
- * @author      Marco Afonso <mafonso333@gmail.com>
- * @license     MIT
+ * PHP Version 5.3.3
+ *
+ * @author  Marco Afonso <mafonso333@gmail.com>
+ * @license http://opensource.org/licenses/MIT MIT
+ * @link    http://github.com/taviroquai/duality
+ * @since   0.7.0
  */
 
 namespace Duality\Structure;
@@ -14,54 +17,70 @@ use \Duality\Core\DualityException;
 
 /**
  * Entity class
+ * 
+ * PHP Version 5.3.3
+ *
+ * @author  Marco Afonso <mafonso333@gmail.com>
+ * @license http://opensource.org/licenses/MIT MIT
+ * @link    http://github.com/taviroquai/duality
+ * @since   0.7.0
  */
 abstract class Entity 
 extends Property
-{	
+{
     /**
      * Holds the entity properties
-     * @var array
+     * 
+     * @var array The list of properties
      */
-	protected $properties;
+    protected $properties;
 
     /**
      * Holds the special ID property
-     * @var string
+     * 
+     * @var string Holds the name of the property to identify
      */
-	protected $defaultIdProperty = 'id';
+    protected $defaultIdProperty = 'id';
 
     /**
      * Creates a new entity
      */
-	public function __construct()
-	{
-		parent::__construct();
+    public function __construct()
+    {
+        parent::__construct();
 
-		$this->properties = array();
-		$this->addProperty(new Property($this->defaultIdProperty));
-	}
+        $this->properties = array();
+        $this->addProperty(new Property($this->defaultIdProperty));
+    }
 
     /**
      * Adds a property to the entity
-     * @param \Duality\Structure\Property $property
+     * 
+     * @param \Duality\Structure\Property $property The property to add
+     * 
+     * @return void
      */
-	public function addProperty(Property $property)
-	{
-		$this->properties[] = $property;
-	}
+    public function addProperty(Property $property)
+    {
+        $this->properties[] = $property;
+    }
 
     /**
      * Gets all entity's properties
-     * @return array
+     * 
+     * @return array The list of properties
      */
-	public function getProperties()
-	{
-		return $this->properties;
-	}
+    public function getProperties()
+    {
+        return $this->properties;
+    }
 
     /**
      * Adds properties from a list of properties
-     * @param array $array
+     * 
+     * @param array $array Give an array of properties
+     * 
+     * @return void
      */
     public function addPropertiesFromArray($array)
     {
@@ -76,11 +95,12 @@ extends Property
 
     /**
      * Returns the entity name
-     * @return string
+     * 
+     * @return string Returns this entity name
      */
-	public function __toString()
-	{
-		return $this->getName();
-	}
+    public function __toString()
+    {
+        return $this->getName();
+    }
 
 }

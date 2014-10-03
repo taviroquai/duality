@@ -1,7 +1,7 @@
 <?php
 
 /**
- * User session service (native php sessions)
+ * Array storage
  *
  * PHP Version 5.3.3
  *
@@ -11,14 +11,10 @@
  * @since   0.7.0
  */
 
-namespace Duality\Service;
-
-use Duality\Core\InterfaceService;
-use Duality\Core\InterfaceStorage;
-use Duality\App;
+namespace Duality\Core;
 
 /**
- * Default session service
+ * Session interface
  * 
  * PHP Version 5.3.3
  *
@@ -27,71 +23,60 @@ use Duality\App;
  * @link    http://github.com/taviroquai/duality
  * @since   0.7.0
  */
-class Session 
-implements InterfaceStorage, InterfaceService
+class Storage
+implements InterfaceStorage
 {
     /**
-     * The dependent application container
+     * Holds the data
      * 
-     * @var Duality\App Holds the application container
+     * @var array Holds the data
      */
-    protected $app;
+    protected $buffer;
 
     /**
-     * Creates a new error handler
-     * 
-     * @param Duality\App &$app Give the application container
+     * Creates a new array storage
      */
-    public function __construct(App &$app)
+    public function __construct()
     {
-        $this->app = & $app;
+        $this->buffer = array();
     }
 
     /**
-     * Initiates the service
+     * Add item
+     * 
+     * @param string $key   Give the key to be identified
+     * @param string $value Give the value to be stored
      * 
      * @return void
      */
-    public function init()
+    public function add($key, $value)
     {
-        session_start();
+        $this->set($key, $value);
     }
 
     /**
-     * Terminates the service
+     * Set item
      * 
-     * @return void
-     */
-    public function terminate()
-    {
-        if (session_id() == '') {
-            session_write_close();
-        }
-    }
-
-    /**
-     * Save item
-     * 
-     * @param string $key   Give the key which identifies the value
+     * @param string $key   Give the key to be identified
      * @param string $value Give the value to be stored
      * 
      * @return void
      */
     public function set($key, $value)
     {
-        $_SESSION[$key] = $value;
+        $this->buffer[$key]
     }
 
     /**
      * Return item
      * 
-     * @param string $key Give the key to retrieve the value
+     * @param string $key Give the value key
      * 
-     * @return mixed|null The value to be retrieved or null
+     * @return mixed The stored value
      */
     public function get($key)
     {
-        return isset($_SESSION[$key]) ? $_SESSION[$key] : null;
+        return $this->has($key) ? $this->buffer[$key] : false;
     }
 
     /**
@@ -103,7 +88,7 @@ implements InterfaceStorage, InterfaceService
      */
     public function has($key)
     {
-        return array_key_exists($key, $_SESSION);
+        return array_key_exists($key, $this->buffer);
     }
 
     /**
@@ -113,7 +98,7 @@ implements InterfaceStorage, InterfaceService
      */
     public function asArray()
     {
-        return (array) $_SESSION;
+        return (array) $this->buffer;
     }
 
     /**
@@ -125,18 +110,29 @@ implements InterfaceStorage, InterfaceService
      */
     public function importArray($data)
     {
-        $_SESSION = (array) $data;
+        $this->buffer = (array) $data;
     }
 
     /**
-     * Reset a session
+     * Remove item by its key
+     * 
+     * @param string $key Give the value key
+     * 
+     * @return void
+     */
+    public function remove($key)
+    {
+        unset($this->buffer[$key]);
+    }
+
+    /**
+     * Clear storage
      * 
      * @return void
      */
     public function reset()
     {
-        session_destroy();
-        session_start();
+        $this->buffer = array();
     }
 
 }

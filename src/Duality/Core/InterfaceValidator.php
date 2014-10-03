@@ -3,62 +3,59 @@
 /**
  * Interface for data validator
  *
- * @since 		0.7.0
- * @author 		Marco Afonso <mafonso333@gmail.com>
- * @license 	MIT
+ * PHP Version 5.3.3
+ *
+ * @author  Marco Afonso <mafonso333@gmail.com>
+ * @license http://opensource.org/licenses/MIT MIT
+ * @link    http://github.com/taviroquai/duality
+ * @since   0.7.0
  */
 
 namespace Duality\Core;
 
 /**
  * Validator interface
+ * 
+ * PHP Version 5.3.3
+ *
+ * @author  Marco Afonso <mafonso333@gmail.com>
+ * @license http://opensource.org/licenses/MIT MIT
+ * @link    http://github.com/taviroquai/duality
+ * @since   0.7.0
  */
 interface InterfaceValidator
 {
-	/**
-	 * Validate rule name (key) with params
-	 *
-	 * Example:
-	 * array(
-	 *     'value'	=> 'email@domain.pt',
-	 *     'rules'	=> 'required|email',
-	 *     'fail'	=> 'Invalid password',
-	 *     'info'	=> 'Password is OK!'
-	 * )
-	 *
-	 * @param string $key
-	 * @param array $params
-	 * @return boolean
-	 */
-	public function validate($key, $params);
+    /**
+     * Validate rule name (key) with params
+     *
+     * @param string $key    Give the validation key as identifier
+     * @param array  $params Give validation parameters as associative array
+     * 
+     * @return boolean
+     */
+    public function validate($key, $params);
 
-	/**
-	 * Validate all rules. Each rule as a key.
-	 * 
-	 * Example:
-	 * $rules = array(
-	 *     'email' => array(
-	 *         'value'	=> 'email@domain.pt',
-	 *         'rules'	=> 'required|email',
-	 *         'fail'	=> 'Invalid password',
-	 *         'info'	=> 'Password is OK!'
-	 *     )
-	 * )
-	 * 
-	 * @param array $rules
-	 */
-	public function validateAll($rules);
+    /**
+     * Validate all rules - Each rule as a key
+     * 
+     * @param array $rules Give the validation rules - list of rules
+     * 
+     * @return boolean
+     */
+    public function validateAll($rules);
 
-	/**
-	 * Get all validation messages
-	 * @return array
-	 */
-	public function getMessages();
+    /**
+     * Get all validation messages
+     * 
+     * @return array Retuns the validation messages
+     */
+    public function getMessages();
 
-	/**
-	 * Get validation result
-	 * @return boolean
-	 */
-	public function ok();
+    /**
+     * Get validation result
+     * 
+     * @return boolean Tells whether the validation is success
+     */
+    public function ok();
 
 }

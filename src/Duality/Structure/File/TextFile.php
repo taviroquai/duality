@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Basic property structure
+ * Text file structure
  *
  * PHP Version 5.3.3
  *
@@ -11,12 +11,12 @@
  * @since   0.7.0
  */
 
-namespace Duality\Structure;
+namespace Duality\File;
 
-use Duality\Core\Structure;
+use Duality\Structure\File;
 
 /**
- * Property class
+ * Text file class
  * 
  * PHP Version 5.3.3
  *
@@ -25,18 +25,16 @@ use Duality\Core\Structure;
  * @link    http://github.com/taviroquai/duality
  * @since   0.7.0
  */
-class Property 
-extends Structure
+class TextFile extends File
 {
     /**
-     * Creates a new property
+     * Creates a new text file by giving its file path
      * 
-     * @param string $name Give a name to property
+     * @param string $path Give the file path
      */
-    public function __construct($name = '')
+    public function __construct($path)
     {
-        if (!empty($name)) {
-            $this->setName($name);
-        }
+        $this->setPath($path);
     }
+
 }
