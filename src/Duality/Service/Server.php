@@ -16,8 +16,8 @@ namespace Duality\Service;
 use Duality\Core\DualityException;
 use Duality\Core\InterfaceService;
 use Duality\Structure\Url;
-use Duality\Http\Request;
-use Duality\Http\Response;
+use Duality\Structure\Http\Request;
+use Duality\Structure\Http\Response;
 use Duality\App;
 
 /**

@@ -139,7 +139,7 @@ implements InterfaceService
     {
         // Get a database table and its data from an entity
         $table = new Table($this);
-        $table->setPropertiesFromEntity($entity);
+        $table->setColumnsFromEntity($entity);
         return $table;
     }
 
@@ -172,9 +172,9 @@ implements InterfaceService
         foreach ($config['create'] as $name => $fields) {
             $table = new DbTable($this);
             $table->setName($name);
-            $props = array_keys($fields);
-            foreach ($props as $name) {
-                $table->addProperty(new Property($name));
+            $columns = array_keys($fields);
+            foreach ($columns as $name) {
+                $table->addColumn(new Property($name));
             }
             $this->addTable($table);
         }
@@ -226,17 +226,17 @@ implements InterfaceService
         foreach ($config['update'] as $item) {
             if (isset($this->tables[$item['table']])) {
                 $table = $this->tables[$item['table']];
-                $props = $table->getProperties();
+                $columns = $table->getColumns();
                 if (isset($item['add'])) {
                     $this->pdo->exec(
                         $this->getAddColumn($table, $item['add'], $item['type'])
                     );
                 } elseif (isset($item['modify']) 
-                    && isset($props[$item['modify']])
+                    && isset($columns[$item['modify']])
                 ) {
                     $this->pdo->exec(
                         $this->getModifyColumn(
-                            $table, $props[$item['modify']], $item['type']
+                            $table, $columns[$item['modify']], $item['type']
                         )
                     );
                 }

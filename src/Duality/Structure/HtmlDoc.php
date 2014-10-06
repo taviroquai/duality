@@ -14,7 +14,7 @@
 namespace Duality\Structure;
 
 use \Duality\Core\Structure;
-use \Duality\File\TextFile;
+use \Duality\Structure\File\TextFile;
 
 /**
  * HTML document class

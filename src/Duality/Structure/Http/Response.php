@@ -11,7 +11,7 @@
  * @since   0.7.0
  */
 
-namespace Duality\Http;
+namespace Duality\Structure\Http;
 
 use \Duality\Structure\Http;
 

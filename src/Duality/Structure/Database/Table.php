@@ -13,8 +13,10 @@
 
 namespace Duality\Structure\Database;
 
-use \Duality\Core\InterfaceStorage
-use \Duality\Service\Structure\Table;
+use \Duality\Core\InterfaceStorage;
+use \Duality\Structure\TableRow;
+use \Duality\Structure\Table as DataTable;
+use \Duality\Structure\Entity;
 use \Duality\Service\Database;
 
 /**
@@ -28,7 +30,7 @@ use \Duality\Service\Database;
  * @since   0.11.1
  */
 class Table 
-extends Table
+extends DataTable
 {
     /**
      * Holds the database service instance
@@ -54,12 +56,12 @@ extends Table
      * 
      * @return void
      */
-    public function setPropertiesFromEntity(Entity $entity)
+    public function setColumnsFromEntity(Entity $entity)
     {
         $this->setName((string) $entity);
-        foreach ($entity->getProperties() as $property) {
-            if (!$this->propertyExists($property)) {
-                $this->addProperty($property);
+        foreach ($entity->getProperties() as $column) {
+            if (!$this->columnExists($column)) {
+                $this->addColumn($column);
             }
         }
     }
@@ -88,10 +90,8 @@ extends Table
         while ($trow = $stm->fetch(\PDO::FETCH_ASSOC)) {
             $row = new TableRow;
             $row->setTable($this);
-            foreach ($this->getProperties() as $property) {
-                $data = new \Duality\Core\Data;
-                $data->setValue($trow[(string) $property]);
-                $row->addData($property, $data);
+            foreach ($this->getColumns() as $column) {
+                $row->addData($column, $trow[(string) $column]);
             }
             $this->addRow($row);
         }

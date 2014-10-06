@@ -97,9 +97,9 @@ extends Structure
      * 
      * @return boolean The check result
      */
-    public function propertyExists(Property $property)
+    public function columnExists(Property $property)
     {
-        return in_array($property, $this->getProperties());
+        return in_array($property, $this->getColumns());
     }
 
     /**
@@ -110,12 +110,12 @@ extends Structure
     public function toArray()
     {
         $out = array();
-        $properties = $this->getProperties();
+        $columns = $this->getColumns();
 
         foreach ($this->getRows() as $row) {
             $trow = array();
-            foreach ($properties as $property) {
-                $trow[(string) $property] = (string) $row->getData($property);
+            foreach ($columns as $column) {
+                $trow[(string) $column] = (string) $row->getData($column);
             }
             $out[] = $trow;
         }
@@ -130,17 +130,17 @@ extends Structure
     public function toCSV()
     {
         $out = "";
-        $properties = $this->getProperties();
-        foreach ($properties as $property) {
-            $out .= (string) $property;
+        $columns = $this->getColumns();
+        foreach ($columns as $column) {
+            $out .= (string) $column;
             $out .= ',';
         }
         $out = rtrim($out, ',');
         $out .= PHP_EOL;
 
         foreach ($this->getRows() as $row) {
-            foreach ($properties as $property) {
-                $out .= (string) $row->getData($property);
+            foreach ($columns as $column) {
+                $out .= (string) $row->getData($column);
                 $out .= ',';
             }
             $out = rtrim($out, ',');

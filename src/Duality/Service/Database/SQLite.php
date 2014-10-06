@@ -11,7 +11,7 @@
  * @since   0.7.0
  */
 
-namespace Duality\Database;
+namespace Duality\Service\Database;
 
 use \Duality\Core\DualityException;
 use \Duality\Structure\Property;
@@ -206,7 +206,7 @@ class SQLite extends Database
     public function getDelete(Table $table, $item)
     {
         $sql  = "DELETE FROM " . strtolower((string) $table) . " ";
-        $sql .= "WHERE id = ?"
+        $sql .= "WHERE id = ?";
         return $sql;
     }
 

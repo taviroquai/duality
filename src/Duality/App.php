@@ -16,9 +16,9 @@ namespace Duality;
 use \Duality\Core\DualityException;
 use \Duality\Core\Container;
 use \Duality\Structure\Storage;
-use \Duality\Database\SQLite;
-use \Duality\Database\MySql;
-use \Duality\File\StreamFile;
+use \Duality\Service\Database\SQLite;
+use \Duality\Service\Database\MySql;
+use \Duality\Structure\File\StreamFile;
 use \Duality\Service\Localization;
 use \Duality\Service\Logger;
 use \Duality\Service\Validator;
@@ -140,10 +140,10 @@ extends Container
         // Register database
         if ($name === 'db') {
             if ($this->getConfigItem('db.dsn')) {
-                $isMysql = strpos($this->getConfigItem('db.dsn'), 'mysql') === 0
+                $isMysql = strpos($this->getConfigItem('db.dsn'), 'mysql') === 0;
                 $this->defaults['db'] = $isMysql ?
-                    'Duality\Database\MySql' : 
-                    'Duality\Database\SQLite';
+                    'Duality\Service\Database\MySql' : 
+                    'Duality\Service\Database\SQLite';
             }   
         }
 
@@ -255,7 +255,7 @@ extends Container
         if ($cache) {
             if (!$this->cache->has($name)) {
                 $this->cache->set(
-                    $name, call_user_func_array($this->services[$name], $params)
+                    $name, call_user_func_array($this->services->get($name), $params)
                 );
             }
             return $this->cache->get($name);

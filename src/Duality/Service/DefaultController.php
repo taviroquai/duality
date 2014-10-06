@@ -13,8 +13,10 @@
 
 namespace Duality\Service;
 
-use Duality\Core\InterfaceService;
-use Duality\App;
+use \Duality\Structure\Http\Request;
+use \Duality\Structure\Http\Response;
+use \Duality\Core\InterfaceService;
+use \Duality\App;
 
 /**
  * Abstract user controller service
@@ -76,8 +78,8 @@ implements InterfaceService
      * @return void
      */
     public function doIndex(
-        \Duality\Http\Request &$req,
-        \Duality\Http\Response &$res,
+        Request &$req,
+        Response &$res,
         $params = array()
     ) {
         $html = <<<EOF

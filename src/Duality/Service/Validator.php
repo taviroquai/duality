@@ -94,7 +94,7 @@ implements InterfaceService, InterfaceValidator
         ) {
             $key = $req->getParam('_assist_rule');
             $outputJson['result'] = (int) $this->validate($key, $rules[$key]);
-            $outputJson['msg'] = $this->get($key);
+            $outputJson['msg'] = $this->storage->get($key);
             if ($outputJson['result'] === 0) {
                 $outputJson['type'] = 'has-error';
             }
@@ -110,7 +110,7 @@ implements InterfaceService, InterfaceValidator
      */
     public function validateAll($rules)
     {
-        $this->reset();
+        $this->storage->reset();
         $this->result = true;
         foreach ($rules as $key => $params) {
             $this->result = $this->result & $this->validate($key, $params);

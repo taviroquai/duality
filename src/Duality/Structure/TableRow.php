@@ -14,7 +14,6 @@
 namespace Duality\Structure;
 
 use \Duality\Core\Structure;
-use \Duality\Core\Data;
 
 /**
  * Table row class
@@ -90,7 +89,7 @@ extends Structure
      */
     public function addData(Property $property, $data)
     {
-        if (!$this->getTable()->propertyExists($property)) {
+        if (!$this->getTable()->columnExists($property)) {
             throw new DualityException(
                 "Row property does not exists: " . $property, 1
             );
@@ -109,7 +108,7 @@ extends Structure
      */
     public function getData(Property $property)
     {
-        if (!$this->getTable()->propertyExists($property)) {
+        if (!$this->getTable()->columnExists($property)) {
             throw new DualityException(
                 "Row property does not exists: " . $property, 2
             );

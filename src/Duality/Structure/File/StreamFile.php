@@ -11,7 +11,7 @@
  * @since   0.7.0
  */
 
-namespace Duality\File;
+namespace Duality\Structure\File;
 
 use \Duality\Core\DualityException;
 use \Duality\Structure\File;

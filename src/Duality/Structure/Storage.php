@@ -11,7 +11,9 @@
  * @since   0.7.0
  */
 
-namespace Duality\Core;
+namespace Duality\Structure;
+
+use \Duality\Core\InterfaceStorage;
 
 /**
  * Session interface
@@ -64,7 +66,7 @@ implements InterfaceStorage
      */
     public function set($key, $value)
     {
-        $this->buffer[$key]
+        $this->buffer[$key] = $value;
     }
 
     /**
