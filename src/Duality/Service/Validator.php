@@ -49,11 +49,11 @@ implements InterfaceService, InterfaceValidator
     /**
      * Creates a new validator
      * 
-     * @param Duality\App &$app Give the application container
+     * @param \Duality\App &$app Give the application container
      */
     public function __construct(App &$app)
     {
-        $this->app = & $app;
+        $this->app = $app;
     }
 
     /**

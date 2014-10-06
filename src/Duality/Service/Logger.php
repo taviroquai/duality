@@ -56,7 +56,7 @@ implements InterfaceErrorHandler, InterfaceService
     /**
      * Creates a new error handler
      * 
-     * @param Duality\App &$app Give the application container
+     * @param \Duality\App &$app Give the application container
      */
     public function __construct(App &$app)
     {

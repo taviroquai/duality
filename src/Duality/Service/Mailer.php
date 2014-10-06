@@ -15,7 +15,7 @@ namespace Duality\Service;
 
 use \Duality\Core\InterfaceService;
 use \Duality\Core\InterfaceMailer;
-use \Duality\Structure\Storage
+use \Duality\Structure\Storage;
 use \Duality\App;
 
 /**
@@ -55,7 +55,7 @@ implements InterfaceMailer, InterfaceService
     /**
      * Creates a new error handler
      * 
-     * @param Duality\App &$app The application container
+     * @param \Duality\App &$app The application container
      */
     public function __construct(App &$app)
     {

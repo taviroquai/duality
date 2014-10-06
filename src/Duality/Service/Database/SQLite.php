@@ -34,9 +34,9 @@ class SQLite extends Database
     /**
      * Creates a new SQLite query writer
      * 
-     * @param \Duality\App $app The application container
+     * @param \Duality\App &$app The application container
      */
-    public function __construct(App $app)
+    public function __construct(App &$app)
     {
         parent::__construct($app);
     }

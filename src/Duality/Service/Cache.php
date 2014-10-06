@@ -41,11 +41,11 @@ implements InterfaceStorage, InterfaceService
     /**
      * Creates a new error handler
      * 
-     * @param Duality\App &$app The application container
+     * @param \Duality\App &$app The application container
      */
     public function __construct(App &$app)
     {
-        $this->app = & $app;
+        $this->app = $app;
     }
 
     /**
@@ -111,7 +111,7 @@ implements InterfaceStorage, InterfaceService
      */
     public function set($key, $value)
     {
-        $this->put($key, $value)
+        $this->put($key, $value);
     }
 
     /**

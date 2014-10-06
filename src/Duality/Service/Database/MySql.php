@@ -34,9 +34,9 @@ class MySql extends Database
     /**
      * Creates a new MySql query writer
      * 
-     * @param \Duality\App $app The application container
+     * @param \Duality\App &$app The application container
      */
-    public function __construct(App $app)
+    public function __construct(App &$app)
     {
         parent::__construct($app);
     }
@@ -206,7 +206,7 @@ class MySql extends Database
     public function getDelete(Table $table, $item)
     {
         $sql  = "DELETE FROM " . strtolower((string) $table) . " ";
-        $sql .= "WHERE id = ?"
+        $sql .= "WHERE id = ?";
         return $sql;
     }
 

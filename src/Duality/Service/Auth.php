@@ -47,9 +47,9 @@ implements InterfaceAuth, InterfaceService
     /**
      * Creates a new error handler
      * 
-     * @param Duality\App $app The application container
+     * @param \Duality\App &$app The application container
      */
-    public function __construct(App $app)
+    public function __construct(App &$app)
     {
         $this->app = $app;
     }

@@ -71,17 +71,14 @@ implements InterfaceService
     /**
      * Default application action
      * 
-     * @param \Duality\Http\Request  &$req   Give the current request
-     * @param \Duality\Http\Response &$res   Give the current response
-     * @param array                  $params Give the URI params
+     * @param \Duality\Structure\Http\Request  $req   Give the current request
+     * @param \Duality\Structure\Http\Response $res   Give the current response
+     * @param array                            $params Give the URI params
      * 
      * @return void
      */
-    public function doIndex(
-        Request &$req,
-        Response &$res,
-        $params = array()
-    ) {
+    public function doIndex(Request &$req, Response &$res, $params = array())
+    {
         $html = <<<EOF
 <!DOCTYPE html>
 <html>

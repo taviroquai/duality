@@ -14,6 +14,7 @@
 namespace Duality\Structure;
 
 use \Duality\Core\DualityException;
+use \Duality\Core\Structure;
 
 /**
  * Entity class
@@ -26,7 +27,7 @@ use \Duality\Core\DualityException;
  * @since   0.7.0
  */
 abstract class Entity 
-extends Property
+extends Structure
 {
     /**
      * Holds the entity properties
@@ -47,8 +48,6 @@ extends Property
      */
     public function __construct()
     {
-        parent::__construct();
-
         $this->properties = array();
         $this->addProperty(new Property($this->defaultIdProperty));
     }

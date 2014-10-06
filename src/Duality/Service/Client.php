@@ -47,7 +47,7 @@ implements InterfaceService
     /**
      * Creates a new HTTP client
      * 
-     * @param \Duality\System|App &$app The application container
+     * @param \Duality\App &$app The application container
      */
     public function __construct(App &$app)
     {
