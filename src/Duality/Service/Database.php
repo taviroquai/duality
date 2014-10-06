@@ -69,6 +69,11 @@ implements InterfaceService
      */
     public function init()
     {
+        if (!$this->app->getConfigItem('db.dsn')) {
+            throw new DualityException(
+                "Error Config: db[dsn] not found", 1
+            );
+        }
         $dsn = $this->app->getConfigItem('db.dsn') ? 
             $this->app->getConfigItem('db.dsn') : '';
         $user = $this->app->getConfigItem('db.user') ? 
@@ -87,7 +92,7 @@ implements InterfaceService
     }
 
     /**
-     * Temrinates connection
+     * Terminates connection
      * 
      * @return void
      */

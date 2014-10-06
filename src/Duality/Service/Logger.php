@@ -91,7 +91,9 @@ implements InterfaceErrorHandler, InterfaceService
         if ($this->error) {
             echo 'Ops! Something went wrong...';
         }
-        $this->stream->close();
+        if ($this->stream) {
+            $this->stream->close();
+        }
     }
 
     /**
@@ -132,6 +134,11 @@ implements InterfaceErrorHandler, InterfaceService
     {
         if (!(error_reporting() & $errno)) {
             // This error code is not included in error_reporting
+            return;
+        }
+
+        if (!$this->stream) {
+            // cannot log anything... break?!?
             return;
         }
 

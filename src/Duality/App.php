@@ -77,7 +77,7 @@ extends Container
      * @var array The default Duality services
      */
     protected $defaults = array(
-        'logging'   => 'Duality\Service\Logger',
+        'logger'    => 'Duality\Service\Logger',
         'validator' => 'Duality\Service\Validator',
         'session'   => 'Duality\Service\Session',
         'auth'      => 'Duality\Service\Auth',
@@ -98,8 +98,11 @@ extends Container
      */
     public function __construct($path, $config)
     {
-        $this->path = $path;
-        $this->config = $config;
+        if (!is_dir($path)) {
+            throw new DualityException("Error Application: path not found", 1);
+        }
+        $this->path = (string) $path;
+        $this->config = (array) $config;
 
         $this->services = new Storage;
         $this->services->reset();
@@ -139,6 +142,9 @@ extends Container
 
         // Register database
         if ($name === 'db') {
+            if (!$this->getConfigItem('db.dsn')) {
+                throw new DualityException("Error configuration: db.dsn not found ", 2);
+            }
             if ($this->getConfigItem('db.dsn')) {
                 $isMysql = strpos($this->getConfigItem('db.dsn'), 'mysql') === 0;
                 $this->defaults['db'] = $isMysql ?
