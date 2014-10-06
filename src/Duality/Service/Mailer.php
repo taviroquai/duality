@@ -319,7 +319,7 @@ implements InterfaceMailer, InterfaceService
             $mail->addReplyTo($replyEmail, $replyName);
         }
         if (!$this->current->get('cc')) {
-            $mail->addCC($this->current->set('cc'); 
+            $mail->addCC($this->current->set('cc')); 
         }
         if (!$this->current->set('bcc')) {
             $mail->addBCC($this->current->set('bcc'));
