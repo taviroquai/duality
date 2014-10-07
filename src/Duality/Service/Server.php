@@ -181,6 +181,7 @@ implements InterfaceService
             $uri = str_replace(
                 (string) $this->baseURL, '', $this->request->getUrl()->getUri()
             );
+            $uri = '/' . trim($uri, '/ ');
             if ($result = preg_match($ns, $uri, $matches)) {
                 array_shift($matches);
                 $cb = is_string($cb) ? $this->validateStringAction($cb) : $cb;
