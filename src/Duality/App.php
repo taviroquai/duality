@@ -119,6 +119,11 @@ extends Container
         }
     }
 
+    /**
+     * Terminate services and close buffer (if exists)
+     * 
+     * @return void
+     */
     public function __destruct()
     {
         foreach ($this->getServices() as $name => $service) {
