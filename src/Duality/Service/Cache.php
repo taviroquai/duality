@@ -69,6 +69,19 @@ implements InterfaceStorage, InterfaceService
     {
 
     }
+    
+    /**
+     * Add item
+     * 
+     * @param string $key   Give the key to be identified
+     * @param string $value Give the value to be stored
+     * 
+     * @return void
+     */
+    public function add($key, $value)
+    {
+        $this->set($key, $value);
+    }
 
     /**
      * Save item
@@ -123,7 +136,43 @@ implements InterfaceStorage, InterfaceService
      */
     public function get($key)
     {
-        return apc_exists($key) ? apc_fetch($key) : null;
+        return $this->has($key) ? apc_fetch($key) : null;
+    }
+    
+    /**
+     * Checks if item exists
+     * 
+     * @param string $key Give the value key
+     * 
+     * @return boolean If exists, return true, false otherwise
+     */
+    public function has($key)
+    {
+        return apc_exists($key);
+    }
+
+    /**
+     * Returns all items as array
+     * 
+     * @return array Returns all stored values
+     */
+    public function asArray()
+    {
+        return array();
+    }
+    
+    /**
+     * Loads items into storage
+     * 
+     * @param array $data The data to be loaded
+     * 
+     * @return void
+     */
+    public function importArray($data)
+    {
+        foreach ($data as $key => $value) {
+            $this->add($key, $value);
+        }
     }
 
     /**
