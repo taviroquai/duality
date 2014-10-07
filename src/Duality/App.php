@@ -108,25 +108,25 @@ extends Container
         $this->services->reset();
         $this->cache = new Storage;
         $this->cache->reset();
+        
+        if ($this->getConfigItem('buffer')) {
+            $this->buffer = new StreamFile(
+                $this->getConfigItem('buffer') ? 
+                $this->getConfigItem('buffer') :
+                'php://stdout'
+            );
+            $this->buffer->open();
+        }
+    }
 
-        $this->buffer = new StreamFile(
-            $this->getConfigItem('buffer') ? 
-            $this->getConfigItem('buffer') :
-            'php://output'
-        );
-        $this->buffer->open();
-
-        $me =& $this;
-
-        // Set script end hook
-        register_shutdown_function(
-            function () use ($me) {
-                foreach ($me->getServices() as $name => $service) {
-                    $me->call($name)->terminate();
-                }
-                $me->getBuffer()->close();
-            }
-        );
+    public function __destruct()
+    {
+        foreach ($this->getServices() as $name => $service) {
+            $this->call($name)->terminate();
+        }
+        if ($this->getBuffer()) {
+            $this->getBuffer()->close();
+        }
     }
 
     /**

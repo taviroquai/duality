@@ -345,9 +345,13 @@ implements InterfaceService
             foreach ($response->getHeaders() as $k => $v) {
                 header($k.': '.$v);
             }
+            http_response_code($response->getStatus());
         }
-        http_response_code($response->getStatus());
-        $this->app->getBuffer()->write($response->getContent());
+        if ($this->app->getBuffer()) {
+            $this->app->getBuffer()->write($response->getContent());
+        } else {
+            echo $response->getContent();
+        }
     }
 
     /**
