@@ -13,9 +13,8 @@
 
 namespace Duality\Service;
 
-use Duality\Core\InterfaceService;
+use Duality\Core\AbstractService;
 use Duality\Core\InterfaceCommander;
-use Duality\App;
 
 /**
  * Commander service
@@ -28,15 +27,9 @@ use Duality\App;
  * @since   0.7.0
  */
 class Commander 
-implements InterfaceCommander, InterfaceService
+extends AbstractService
+implements InterfaceCommander
 {
-    /**
-     * The dependent application container
-     * 
-     * @var Duality\App Holds the application container
-     */
-    protected $app;
-
     /**
      * Holds the input arguments
      * 
@@ -50,16 +43,6 @@ implements InterfaceCommander, InterfaceService
      * @var array Holds the list of callbacks responders
      */
     protected $responders;
-
-    /**
-     * Creates a new error handler
-     * 
-     * @param \Duality\App &$app The application container
-     */
-    public function __construct(App &$app)
-    {
-        $this->app = $app;
-    }
 
     /**
      * Initiates the service

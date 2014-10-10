@@ -11,11 +11,10 @@
  * @since   0.7.0
  */
 
-namespace Duality\Http;
+namespace Duality\Service;
 
-use Duality\Core\InterfaceService;
+use Duality\Core\AbstractService;
 use Duality\Structure\Url;
-use Duality\App;
 
 /**
  * Simulates an HTTP client
@@ -28,31 +27,14 @@ use Duality\App;
  * @since   0.7.0
  */
 class Client
-implements InterfaceService
+extends AbstractService
 {
-    /**
-     * Holds application container
-     * 
-     * @var Duality\App The application container
-     */
-    protected $app;
-
     /**
      * Holds the client user agent
      * 
      * @var string The default HTTP user-agent header
      */
     protected $useragent = 'Mozilla/5.0 (Windows NT 6.1; WOW64)';
-
-    /**
-     * Creates a new HTTP client
-     * 
-     * @param \Duality\App &$app The application container
-     */
-    public function __construct(App &$app)
-    {
-        $this->app = $app;
-    }
 
     /**
      * Initiates the service
@@ -103,7 +85,7 @@ implements InterfaceService
      * 
      * @return \Duality\Http\Request The HTTP request
      */
-    public static function createRequest(Url $url = '')
+    public static function createRequest(Url $url = null)
     {
         $request = new Request($url);
         return $request;

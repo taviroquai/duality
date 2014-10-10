@@ -14,10 +14,9 @@
 namespace Duality\Service;
 
 use Duality\Core\DualityException;
-use Duality\Core\InterfaceService;
+use Duality\Core\AbstractService;
 use Duality\Core\InterfaceErrorHandler;
-use Duality\File\StreamFile;
-use Duality\App;
+use Duality\Structure\File\StreamFile;
 
 /**
  * Default logger service
@@ -30,15 +29,9 @@ use Duality\App;
  * @since   0.7.0
  */
 class Logger 
-implements InterfaceErrorHandler, InterfaceService
+extends AbstractService
+implements InterfaceErrorHandler
 {
-    /**
-     * The dependent application container
-     * 
-     * @var Duality\App Holds the application container
-     */
-    protected $app;
-
     /**
      * Holds the stream that will receive the log
      * 
@@ -52,16 +45,6 @@ implements InterfaceErrorHandler, InterfaceService
      * @var $error Holds a global error flag
      */
     protected $error = false;
-
-    /**
-     * Creates a new error handler
-     * 
-     * @param \Duality\App &$app Give the application container
-     */
-    public function __construct(App &$app)
-    {
-        $this->app = $app;
-    }
 
     /**
      * Terminates the service

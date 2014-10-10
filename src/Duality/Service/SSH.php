@@ -14,9 +14,8 @@
 namespace Duality\Service;
 
 use Duality\Core\DualityException;
-use Duality\Core\InterfaceService;
+use Duality\Core\AbstractService;
 use Duality\Core\InterfaceRemote;
-use Duality\App;
 
 /**
  * Class SSH for remote operations
@@ -29,7 +28,7 @@ use Duality\App;
  * @since   0.7.0
  */
 class SSH
-implements InterfaceService, InterfaceRemote
+extends AbstractService
 {
     /**
      * The dependent application container

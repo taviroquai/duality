@@ -13,9 +13,8 @@
 
 namespace Duality\Service;
 
-use Duality\Core\InterfaceService;
+use Duality\Core\AbstractService;
 use Duality\Core\InterfacePaginator;
-use Duality\App;
 
 /**
  * Paginator Service
@@ -27,17 +26,9 @@ use Duality\App;
  * @link    http://github.com/taviroquai/duality
  * @since   0.7.0
  */
-class Paginator 
-implements InterfaceService, InterfacePaginator
+class Paginator
+extends AbstractService
 {
-
-    /**
-     * The dependent application container
-     * 
-     * @var Duality\App Holds the application container
-     */
-    protected $app;
-
     /**
      * Holds the base url
      * 
@@ -65,16 +56,6 @@ implements InterfaceService, InterfacePaginator
      * @var string Holds the current page number
      */
     protected $current;
-
-    /**
-     * Creates a new error handler
-     * 
-     * @param \Duality\App &$app Give the application container
-     */
-    public function __construct(App &$app)
-    {
-        $this->app = $app;
-    }
 
     /**
      * Initiates the service

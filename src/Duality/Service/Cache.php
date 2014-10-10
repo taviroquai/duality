@@ -14,9 +14,8 @@
 namespace Duality\Service;
 
 use Duality\Core\DualityException;
-use Duality\Core\InterfaceService;
+use Duality\Core\AbstractService;
 use Duality\Core\InterfaceStorage;
-use Duality\App;
 
 /**
  * Default cache service
@@ -29,25 +28,9 @@ use Duality\App;
  * @since   0.7.0
  */
 class Cache 
-implements InterfaceStorage, InterfaceService
+extends AbstractService
+implements InterfaceStorage
 {
-    /**
-     * The dependent application container
-     * 
-     * @var Duality\App The application container
-     */
-    protected $app;
-
-    /**
-     * Creates a new error handler
-     * 
-     * @param \Duality\App &$app The application container
-     */
-    public function __construct(App &$app)
-    {
-        $this->app = $app;
-    }
-
     /**
      * Initiates the service
      * 

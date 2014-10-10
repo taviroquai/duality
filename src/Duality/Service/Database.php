@@ -13,12 +13,12 @@
 
 namespace Duality\Service;
 
-use Duality\Core\InterfaceService;
+use Duality\Core\DualityException;
+use Duality\Core\AbstractService;
 use Duality\Core\Structure;
 use Duality\Structure\Property;
 use Duality\Structure\Database\Table;
 use Duality\Structure\Entity;
-use Duality\App;
 
 /**
  * Database class
@@ -31,15 +31,8 @@ use Duality\App;
  * @since   0.7.0
  */
 abstract class Database
-implements InterfaceService
+extends AbstractService
 {
-    /**
-     * The dependent application container
-     * 
-     * @var \Duality\App The application container
-     */
-    protected $app;
-
     /**
      * Holds the PDO handler
      * @var \PDO
@@ -51,16 +44,6 @@ implements InterfaceService
      * @var array
      */
     protected $tables = array();
-
-    /**
-     * Creates a new error handler
-     * 
-     * @param \Duality\App &$app The application container
-     */
-    public function __construct(App &$app)
-    {
-        $this->app = $app;
-    }
 
     /**
      * Initiates connection
@@ -319,5 +302,99 @@ implements InterfaceService
         }
         return $value;
     }
+
+    /**
+     * Returns a select query
+     * 
+     * @param string $fields The select clause
+     * @param string $from   The from clause
+     * @param string $where  The where condition - use ? for parameters
+     * @param string $limit  The number of rows to limit
+     * @param string $offset The offset number
+     * 
+     * @return string The final SQL string
+     */
+    public abstract function getSelect($fields, $from, $where, $limit, $offset);
+
+    /**
+     * Returns a create table statement
+     * 
+     * @param \Duality\Structure\Database\Table $table  The database table
+     * @param array                             $config The table configuration
+     * 
+     * @return string Returns the SQL statement
+     */
+    public abstract function getCreateTable(Table $table, $config = array());
+
+    /**
+     * Returns a drop table statement
+     * 
+     * @param Duality\Structure\DbTable $table    The database table
+     * @param boolean                   $ifExists Adds IF EXISTS clause
+     * 
+     * @return string Returns the SQL statement
+     */
+    public abstract function getDropTable(Table $table, $ifExists = true);
+
+    /**
+     * Returns a add column statement
+     * 
+     * @param \Duality\Structure\Database\Table $table      The database table
+     * @param string                            $property   The column name
+     * @param string                            $definition The table definition
+     * 
+     * @return string Returns the SQL statement
+     */
+    public abstract function getAddColumn(Table $table, $property, $definition);
+
+    /**
+     * Returns a add column statement
+     * 
+     * @param \Duality\Structure\Database\Table $table      The database table
+     * @param string                            $property   The column name
+     * @param string                            $definition The table definition
+     * 
+     * @return string Returns the SQL statement
+     */
+    public abstract function getModifyColumn(Table $table, Property $property, $definition);
+
+    /**
+     * Returns an INSERT statement
+     * 
+     * @param \Duality\Structure\Database\Table $table The database table
+     * @param string                            $item  The item as array
+     * 
+     * @return string Returns the SQL statement
+     */
+    public abstract function getInsert(Table $table, $item = array());
+
+    /**
+     * Returns an UPDATE statement
+     * 
+     * @param \Duality\Structure\Database\Table $table The database table
+     * @param string                            $item  The item as array
+     * 
+     * @return string Returns the SQL statement
+     */
+    public abstract function getUpdate(Table $table, $item = array());
+
+    /**
+     * Returns a DELETE statement
+     * 
+     * @param \Duality\Structure\Database\Table $table The database table
+     * @param array                             $item  The item to be deleted
+     * 
+     * @return string Returns the SQL statement
+     */
+    public abstract function getDelete(Table $table, $item);
+
+    /**
+     * Returns a TRUNCATE statement
+     * 
+     * @param \Duality\Structure\Database\Table $table The database table
+     * 
+     * @return string Returns the SQL statement
+     */
+    public abstract function getTruncate(Table $table);
 
 }

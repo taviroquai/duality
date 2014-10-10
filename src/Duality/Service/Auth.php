@@ -13,9 +13,8 @@
 
 namespace Duality\Service;
 
-use Duality\Core\InterfaceService;
+use Duality\Core\AbstractService;
 use Duality\Core\InterfaceAuth;
-use Duality\App;
 
 /**
  * Default authentication service
@@ -28,31 +27,15 @@ use Duality\App;
  * @since   0.7.0
  */
 class Auth 
-implements InterfaceAuth, InterfaceService
+extends AbstractService
+implements InterfaceAuth
 {
-    /**
-     * The dependent application container
-     * 
-     * @var \Duality\App The application container
-     */
-    protected $app;
-
     /**
      * Holds the current logged username
      * 
      * @var string The current user logged in
      */
     protected $current;
-
-    /**
-     * Creates a new error handler
-     * 
-     * @param \Duality\App &$app The application container
-     */
-    public function __construct(App &$app)
-    {
-        $this->app = $app;
-    }
 
     /**
      * Initiates the service

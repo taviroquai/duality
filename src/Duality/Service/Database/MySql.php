@@ -11,13 +11,12 @@
  * @since   0.7.0
  */
 
-namespace Duality\Database;
+namespace Duality\Service\Database;
 
-use \Duality\Core\DualityException;
-use \Duality\Structure\Property;
-use \Duality\Structure\Database\Table;
-use \Duality\Service\Database;
-use \Duality\App;
+use Duality\Core\DualityException;
+use Duality\Structure\Property;
+use Duality\Structure\Database\Table;
+use Duality\Service\Database;
 
 /**
  * MySql database query writer
@@ -31,16 +30,6 @@ use \Duality\App;
  */
 class MySql extends Database
 {
-    /**
-     * Creates a new MySql query writer
-     * 
-     * @param \Duality\App &$app The application container
-     */
-    public function __construct(App &$app)
-    {
-        parent::__construct($app);
-    }
-
     /**
      * Returns a select query
      * 
@@ -124,7 +113,7 @@ class MySql extends Database
         return $sql;
     }
 
-     /**
+    /**
      * Returns a add column statement
      * 
      * @param \Duality\Structure\Database\Table $table      The database table

@@ -41,28 +41,28 @@ interface InterfacePaginator
      * 
      * @return string The page URL
      */
-    public function getFirstPageLink();
+    public function getFirstPageUrl();
 
     /**
      * Returns last page link
      * 
      * @return string The page URL
      */
-    public function getLastPageLink();
+    public function getLastPageUrl();
 
     /**
      * Returns the previous page link
      * 
      * @return string The page URL
      */
-    public function getPreviousPageLink();
+    public function getPreviousPageUrl();
 
     /**
      * Returns the next page link
      * 
      * @return string The page URL
      */
-    public function getNextPageLink();
+    public function getNextPageUrl();
 
     /**
      * Returns the page link
@@ -71,7 +71,7 @@ interface InterfacePaginator
      * 
      * @return string The page URL
      */
-    public function getPageLink($number);
+    public function getPageUrl($number);
 
     /**
      * Returns total pages

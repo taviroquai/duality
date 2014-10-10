@@ -13,9 +13,9 @@
 
 namespace Duality\Structure\Http;
 
-use \Duality\Structure\Storage;
-use \Duality\Structure\Http;
-use \Duality\Structure\Url;
+use Duality\Structure\Storage;
+use Duality\Structure\Http;
+use Duality\Structure\Url;
 
 /**
  * HTTP request class

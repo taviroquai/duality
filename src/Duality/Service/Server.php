@@ -14,11 +14,10 @@
 namespace Duality\Service;
 
 use Duality\Core\DualityException;
-use Duality\Core\InterfaceService;
+use Duality\Core\AbstractService;
 use Duality\Structure\Url;
 use Duality\Structure\Http\Request;
 use Duality\Structure\Http\Response;
-use Duality\App;
 
 /**
  * Simulates an HTTP server
@@ -31,15 +30,8 @@ use Duality\App;
  * @since   0.7.0
  */
 class Server
-implements InterfaceService
+extends AbstractService
 {
-    /**
-     * Holds application container
-     * 
-     * @var Duality\App Holds the application container
-     */
-    protected $app;
-
     /**
      * Default request
      * 
@@ -83,16 +75,6 @@ implements InterfaceService
     protected $defaultController;
 
     /**
-     * Creates a new server
-     * 
-     * @param \Duality\App &$app Give the application container
-     */
-    public function __construct(App &$app)
-    {
-        $this->app = $app;
-    }
-
-    /**
      * Initiates the service
      * 
      * @return void
@@ -108,7 +90,7 @@ implements InterfaceService
         $this->baseURL = new Url($url);
 
         // Create default request and response
-        $this->setRequest($this->getRequestFromGlobals());
+        // $this->setRequest($this->getRequestFromGlobals());
         $this->setResponse($this->createResponse());
 
         // Create default routes
@@ -348,6 +330,7 @@ implements InterfaceService
             }
             http_response_code($response->getStatus());
         }
+
         if ($this->app->getBuffer()) {
             $this->app->getBuffer()->write($response->getContent());
         } else {
@@ -363,7 +346,9 @@ implements InterfaceService
     public static function getRequestFromGlobals()
     {
         $url = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . 
-            "://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+            "://"
+            . (empty($_SERVER['HTTP_HOST']) ? '' : $_SERVER['HTTP_HOST'])
+            . (empty($_SERVER['REQUEST_URI']) ? '/' : $_SERVER['REQUEST_URI']);
 
         $request = new Request(new Url($url));
         $request->setMethod($_SERVER['REQUEST_METHOD']);

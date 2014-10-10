@@ -13,11 +13,10 @@
 
 namespace Duality\Service\Database;
 
-use \Duality\Core\DualityException;
-use \Duality\Structure\Property;
-use \Duality\Service\Database;
-use \Duality\Structure\Database\Table;
-use \Duality\App;
+use Duality\Core\DualityException;
+use Duality\Structure\Property;
+use Duality\Structure\Database\Table;
+use Duality\Service\Database;
 
 /**
  * SQLite database query writer
@@ -31,16 +30,6 @@ use \Duality\App;
  */
 class SQLite extends Database
 {
-    /**
-     * Creates a new SQLite query writer
-     * 
-     * @param \Duality\App &$app The application container
-     */
-    public function __construct(App &$app)
-    {
-        parent::__construct($app);
-    }
-
     /**
      * Returns a select query
      * 

@@ -13,7 +13,7 @@
 
 namespace Duality\Structure;
 
-use \Duality\Core\Structure;
+use Duality\Core\Structure;
 
 /**
  * Table class

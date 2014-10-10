@@ -13,8 +13,8 @@
 
 namespace Duality\Structure\File;
 
-use \Duality\Core\DualityException;
-use \Duality\Structure\File;
+use Duality\Core\DualityException;
+use Duality\Structure\File;
 
 /**
  * The stream class

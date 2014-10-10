@@ -14,9 +14,8 @@
 namespace Duality\Service;
 
 use Duality\Core\DualityException;
-use Duality\Core\InterfaceService;
+use Duality\Core\AbstractService;
 use Duality\Structure\Storage;
-use Duality\App;
 
 /**
  * Default localization service
@@ -29,15 +28,8 @@ use Duality\App;
  * @since   0.7.0
  */
 class Localization 
-implements InterfaceService
+extends AbstractService
 {
-    /**
-     * The application container
-     * 
-     * @var Duality\App Holds the application container
-     */
-    protected $app;
-
     /**
      * Holds the directory for translations
      * 
@@ -88,22 +80,13 @@ implements InterfaceService
     protected $timezone;
 
     /**
-     * Creates a locale service
-     * 
-     * @param \Duality\App &$app Give the application container
-     */
-    public function __construct(App &$app)
-    {
-        $this->app = $app;
-    }
-
-    /**
      * Initiates the service
      * 
      * @return void
      */
     public function init()
     {
+        $this->storage = new Storage;
         $this->storage->reset();
 
         if (!extension_loaded('intl')) {
@@ -120,14 +103,11 @@ implements InterfaceService
                 "Error: directory not readable: " . $this->directory, 3
             );
         }
-        $request = $this->app->call('server')->getRequest();
-        if (is_null($this->current)) {
-            $this->current = $this->app->getConfigItem('locale.default');
-        }
         $timezone = null;
         if ($this->app->getConfigItem('locale.timezone')) {
             $timezone = $this->app->getConfigItem('locale.timezone');
         }
+        $this->current = $this->app->getConfigItem('locale.default');
         $this->setLocale($this->current, $timezone);
     }
 
@@ -166,6 +146,11 @@ implements InterfaceService
         // Define default locale
         \Locale::setDefault($this->current);
         $directory = $this->directory.DIRECTORY_SEPARATOR.$this->current;
+        if (!file_exists($directory.DIRECTORY_SEPARATOR.'messages.php')) {
+            throw new DualityException(
+                "Error locale: invalid messages file ".$this->current, 3
+            );
+        }
         $this->storage->importArray(
             include($directory.DIRECTORY_SEPARATOR.'messages.php')
         );
@@ -331,5 +316,19 @@ implements InterfaceService
         return \MessageFormatter::formatMessage(
             $current, $storage->get($key), $params
         );
+    }
+
+    /**
+     * Translate alias
+     * 
+     * @param string $key    Give the message key
+     * @param array  $params Give the message values
+     * @param string $target Give the target locale
+     * 
+     * @return string The translated message
+     */
+    public function t($key, $params = array(), $target = null)
+    {
+        return $this->translate($key, $params, $target);
     }
 }

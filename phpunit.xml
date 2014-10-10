@@ -6,15 +6,18 @@
         </testsuite>
     </testsuites>
     <filter>
+        <whitelist>
+            <directory>./src</directory>
+        </whitelist>
         <blacklist>
-            <directory suffix=".php">./src/</directory>
-            <directory suffix=".php">./vendor/</directory>
-            <directory suffix=".php">./demo/</directory>
+            <directory suffix=".php">./src</directory>
+            <directory suffix=".php">./vendor</directory>
+            <directory suffix=".php">./tests/data</directory>
+            <directory suffix=".php">./tests/coverage</directory>
         </blacklist>
     </filter>
     <php>
-        <const name="DATA_PATH" value="./tests/data/"/>
-        <const name="DB_DRIVER"     value="sqlite" />
-        <const name="DB_DATABASE"   value="./tests/data/test.sqlite"/>
+        <const name="DATA_PATH" value="./tests/data" />
+        <const name="DB_DNS"    value="sqlite:tests/data/test.sqlite" />
     </php>
 </phpunit>

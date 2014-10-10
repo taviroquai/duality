@@ -13,9 +13,8 @@
 
 namespace Duality\Service;
 
-use Duality\Core\InterfaceService;
+use Duality\Core\AbstractService;
 use Duality\Core\InterfaceStorage;
-use Duality\App;
 
 /**
  * Default session service
@@ -27,26 +26,10 @@ use Duality\App;
  * @link    http://github.com/taviroquai/duality
  * @since   0.7.0
  */
-class Session 
-implements InterfaceStorage, InterfaceService
+class Session
+extends AbstractService
+implements InterfaceStorage
 {
-    /**
-     * The dependent application container
-     * 
-     * @var Duality\App Holds the application container
-     */
-    protected $app;
-
-    /**
-     * Creates a new error handler
-     * 
-     * @param \Duality\App &$app Give the application container
-     */
-    public function __construct(App &$app)
-    {
-        $this->app = & $app;
-    }
-
     /**
      * Initiates the service
      * 
@@ -67,6 +50,19 @@ implements InterfaceStorage, InterfaceService
         if (session_id() == '') {
             session_write_close();
         }
+    }
+
+    /**
+     * Add item
+     * 
+     * @param string $key   Give the key which identifies the value
+     * @param string $value Give the value to be stored
+     * 
+     * @return void
+     */
+    public function add($key, $value)
+    {
+        $this->set($key, $value);
     }
 
     /**
@@ -114,6 +110,18 @@ implements InterfaceStorage, InterfaceService
     public function asArray()
     {
         return (array) $_SESSION;
+    }
+
+    /**
+     * Remove item by its key
+     * 
+     * @param string $key Give the value key
+     * 
+     * @return void
+     */
+    public function remove($key)
+    {
+        unset($_SESSION[$key]);
     }
 
     /**

@@ -11,12 +11,11 @@
  * @since   0.7.0
  */
 
-namespace Duality\Service;
+namespace Duality\Service\Controller;
 
-use \Duality\Structure\Http\Request;
-use \Duality\Structure\Http\Response;
-use \Duality\Core\InterfaceService;
-use \Duality\App;
+use Duality\Structure\Http\Request;
+use Duality\Structure\Http\Response;
+use Duality\Core\AbstractService;
 
 /**
  * Abstract user controller service
@@ -28,26 +27,9 @@ use \Duality\App;
  * @link    http://github.com/taviroquai/duality
  * @since   0.7.0
  */
-class DefaultController
-implements InterfaceService
+class Base
+extends AbstractService
 {
-    /**
-     * The dependent application container
-     * 
-     * @var \Duality\App Holds the application container
-     */
-    protected $app;
-
-    /**
-     * Creates a new error handler
-     * 
-     * @param \Duality\App &$app Give the application container
-     */
-    public function __construct(App &$app)
-    {
-        $this->app = $app;
-    }
-
     /**
      * Initiates the service
      * 

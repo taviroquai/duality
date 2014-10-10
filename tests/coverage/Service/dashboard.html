@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <title>Dashboard for /var/www/html/duality/src/Duality/Service</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <link href="../css/nv.d3.css" rel="stylesheet">
+  <link href="../css/style.css" rel="stylesheet">
+  <!--[if lt IE 9]>
+  <script src="../js/html5shiv.min.js"></script>
+  <script src="../js/respond.min.js"></script>
+  <![endif]-->
+ </head>
+ <body>
+  <header>
+   <div class="container">
+    <div class="row">
+     <div class="col-md-12">
+      <ol class="breadcrumb">
+        <li><a href="../index.html">/var/www/html/duality/src/Duality</a></li>
+        <li><a href="index.html">Service</a></li>
+        <li class="active">(Dashboard)</li>
+
+      </ol>
+     </div>
+    </div>
+   </div>
+  </header>
+  <div class="container">
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Classes</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="classCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="classComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Service/Database/MySql.php.html#31">MySql</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Controller/Base.php.html#30">Base</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Database/SQLite.php.html#31">SQLite</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Client.php.html#29">Client</a></td><td class="text-right">3%</td></tr>
+       <tr><td><a href="Service/Validator.php.html#31">Validator</a></td><td class="text-right">4%</td></tr>
+       <tr><td><a href="Service/Paginator.php.html#29">Paginator</a></td><td class="text-right">7%</td></tr>
+       <tr><td><a href="Service/Cache.php.html#30">Cache</a></td><td class="text-right">7%</td></tr>
+       <tr><td><a href="Service/Security.php.html#29">Security</a></td><td class="text-right">8%</td></tr>
+       <tr><td><a href="Service/Session.php.html#29">Session</a></td><td class="text-right">10%</td></tr>
+       <tr><td><a href="Service/Auth.php.html#29">Auth</a></td><td class="text-right">13%</td></tr>
+       <tr><td><a href="Service/Database.php.html#33">Database</a></td><td class="text-right">13%</td></tr>
+       <tr><td><a href="Service/Server.php.html#32">Server</a></td><td class="text-right">15%</td></tr>
+       <tr><td><a href="Service/SSH.php.html#30">SSH</a></td><td class="text-right">18%</td></tr>
+       <tr><td><a href="Service/Commander.php.html#29">Commander</a></td><td class="text-right">22%</td></tr>
+       <tr><td><a href="Service/Mailer.php.html#30">Mailer</a></td><td class="text-right">28%</td></tr>
+       <tr><td><a href="Service/Logger.php.html#31">Logger</a></td><td class="text-right">50%</td></tr>
+       <tr><td><a href="Service/Localization.php.html#30">Localization</a></td><td class="text-right">54%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Service/Database.php.html#33">Database</a></td><td class="text-right">1414</td></tr>
+       <tr><td><a href="Service/Server.php.html#32">Server</a></td><td class="text-right">1019</td></tr>
+       <tr><td><a href="Service/Validator.php.html#31">Validator</a></td><td class="text-right">820</td></tr>
+       <tr><td><a href="Service/Database/MySql.php.html#31">MySql</a></td><td class="text-right">342</td></tr>
+       <tr><td><a href="Service/Database/SQLite.php.html#31">SQLite</a></td><td class="text-right">342</td></tr>
+       <tr><td><a href="Service/Cache.php.html#30">Cache</a></td><td class="text-right">246</td></tr>
+       <tr><td><a href="Service/Paginator.php.html#29">Paginator</a></td><td class="text-right">220</td></tr>
+       <tr><td><a href="Service/Mailer.php.html#30">Mailer</a></td><td class="text-right">218</td></tr>
+       <tr><td><a href="Service/SSH.php.html#30">SSH</a></td><td class="text-right">174</td></tr>
+       <tr><td><a href="Service/Security.php.html#29">Security</a></td><td class="text-right">122</td></tr>
+       <tr><td><a href="Service/Session.php.html#29">Session</a></td><td class="text-right">116</td></tr>
+       <tr><td><a href="Service/Localization.php.html#30">Localization</a></td><td class="text-right">89</td></tr>
+       <tr><td><a href="Service/Auth.php.html#29">Auth</a></td><td class="text-right">49</td></tr>
+       <tr><td><a href="Service/Commander.php.html#29">Commander</a></td><td class="text-right">46</td></tr>
+       <tr><td><a href="Service/Logger.php.html#31">Logger</a></td><td class="text-right">34</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Methods</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="methodCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="methodComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Service/Paginator.php.html#162"><abbr title="Paginator::getPageUrl">getPageUrl</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Paginator.php.html#175"><abbr title="Paginator::getTotalPages">getTotalPages</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Paginator.php.html#185"><abbr title="Paginator::getCurrentOffset">getCurrentOffset</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Paginator.php.html#150"><abbr title="Paginator::getNextPageUrl">getNextPageUrl</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Paginator.php.html#140"><abbr title="Paginator::getPreviousPageUrl">getPreviousPageUrl</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Paginator.php.html#120"><abbr title="Paginator::getFirstPageUrl">getFirstPageUrl</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Paginator.php.html#130"><abbr title="Paginator::getLastPageUrl">getLastPageUrl</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/SSH.php.html#100"><abbr title="SSH::init">init</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/SSH.php.html#110"><abbr title="SSH::terminate">terminate</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Security.php.html#93"><abbr title="Security::decrypt">decrypt</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Security.php.html#106"><abbr title="Security::filter">filter</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Server.php.html#106"><abbr title="Server::terminate">terminate</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Security.php.html#66"><abbr title="Security::encrypt">encrypt</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Security.php.html#54"><abbr title="Security::terminate">terminate</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/SSH.php.html#127"><abbr title="SSH::connectSSH">connectSSH</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/SSH.php.html#150"><abbr title="SSH::connect">connect</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Paginator.php.html#102"><abbr title="Paginator::parseCurrentPageInput">parseCurrentPageInput</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Paginator.php.html#89"><abbr title="Paginator::config">config</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Mailer.php.html#135"><abbr title="Mailer::setSMTP">setSMTP</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Mailer.php.html#158"><abbr title="Mailer::to">to</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Mailer.php.html#171"><abbr title="Mailer::addAdress">addAdress</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Mailer.php.html#118"><abbr title="Mailer::terminate">terminate</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Logger.php.html#101"><abbr title="Logger::myException">myException</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Logger.php.html#72"><abbr title="Logger::terminate">terminate</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Logger.php.html#89"><abbr title="Logger::log">log</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Mailer.php.html#187"><abbr title="Mailer::copy">copy</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Mailer.php.html#205"><abbr title="Mailer::reply">reply</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Mailer.php.html#279"><abbr title="Mailer::send">send</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Paginator.php.html#75"><abbr title="Paginator::terminate">terminate</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Mailer.php.html#266"><abbr title="Mailer::attach">attach</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Mailer.php.html#252"><abbr title="Mailer::body">body</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Mailer.php.html#222"><abbr title="Mailer::from">from</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Mailer.php.html#238"><abbr title="Mailer::subject">subject</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Server.php.html#119"><abbr title="Server::addRoute">addRoute</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Server.php.html#143"><abbr title="Server::setHome">setHome</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Validator.php.html#93"><abbr title="Validator::validateAll">validateAll</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Validator.php.html#111"><abbr title="Validator::validate">validate</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Validator.php.html#152"><abbr title="Validator::ok">ok</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Validator.php.html#71"><abbr title="Validator::validateAssist">validateAssist</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Validator.php.html#57"><abbr title="Validator::terminate">terminate</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Session.php.html#134"><abbr title="Session::importArray">importArray</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Session.php.html#144"><abbr title="Session::reset">reset</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Validator.php.html#162"><abbr title="Validator::getMessages">getMessages</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Validator.php.html#174"><abbr title="Validator::isRequired">isRequired</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Validator.php.html#239"><abbr title="Validator::isPassword">isPassword</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Validator.php.html#254"><abbr title="Validator::isLength">isLength</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Validator.php.html#267"><abbr title="Validator::isBetween">isBetween</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Validator.php.html#224"><abbr title="Validator::isEquals">isEquals</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Validator.php.html#211"><abbr title="Validator::isEmail">isEmail</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Validator.php.html#186"><abbr title="Validator::isNumber">isNumber</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Validator.php.html#199"><abbr title="Validator::isAlpha">isAlpha</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Session.php.html#122"><abbr title="Session::remove">remove</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Session.php.html#110"><abbr title="Session::asArray">asArray</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Server.php.html#267"><abbr title="Server::getResponse">getResponse</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Server.php.html#279"><abbr title="Server::setHostname">setHostname</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Server.php.html#289"><abbr title="Server::getHostname">getHostname</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Server.php.html#245"><abbr title="Server::getRequest">getRequest</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Server.php.html#235"><abbr title="Server::setRequest">setRequest</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Server.php.html#153"><abbr title="Server::listen">listen</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Server.php.html#197"><abbr title="Server::validateStringAction">validateStringAction</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Server.php.html#302"><abbr title="Server::createUrl">createUrl</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Server.php.html#325"><abbr title="Server::send">send</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Session.php.html#88"><abbr title="Session::get">get</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Session.php.html#100"><abbr title="Session::has">has</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Session.php.html#76"><abbr title="Session::set">set</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Session.php.html#63"><abbr title="Session::add">add</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Server.php.html#346"><abbr title="Server::getRequestFromGlobals">getRequestFromGlobals</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Session.php.html#48"><abbr title="Session::terminate">terminate</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Auth.php.html#55"><abbr title="Auth::terminate">terminate</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Localization.php.html#330"><abbr title="Localization::t">t</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Commander.php.html#99"><abbr title="Commander::listen">listen</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Controller/Base.php.html#38"><abbr title="Base::init">init</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Controller/Base.php.html#48"><abbr title="Base::terminate">terminate</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Commander.php.html#79"><abbr title="Commander::addResponder">addResponder</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Commander.php.html#66"><abbr title="Commander::terminate">terminate</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Client.php.html#88"><abbr title="Client::createRequest">createRequest</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Client.php.html#101"><abbr title="Client::execute">execute</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Controller/Base.php.html#62"><abbr title="Base::doIndex">doIndex</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Controller/Base.php.html#84"><abbr title="Base::__toString">__toString</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Database.php.html#126"><abbr title="Database::createTableFromEntity">createTableFromEntity</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Database.php.html#139"><abbr title="Database::getSchemaConfig">getSchemaConfig</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Database.php.html#156"><abbr title="Database::reloadFromConfig">reloadFromConfig</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Database.php.html#114"><abbr title="Database::getPDO">getPDO</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Database.php.html#104"><abbr title="Database::getTables">getTables</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Database.php.html#82"><abbr title="Database::terminate">terminate</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Database.php.html#94"><abbr title="Database::addTable">addTable</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Client.php.html#76"><abbr title="Client::getUserAgent">getUserAgent</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Client.php.html#66"><abbr title="Client::setUserAgent">setUserAgent</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Cache.php.html#51"><abbr title="Cache::terminate">terminate</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Cache.php.html#64"><abbr title="Cache::add">add</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Cache.php.html#78"><abbr title="Cache::put">put</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Auth.php.html#108"><abbr title="Auth::whoAmI">whoAmI</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Auth.php.html#98"><abbr title="Auth::logout">logout</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Auth.php.html#69"><abbr title="Auth::login">login</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Auth.php.html#84"><abbr title="Auth::isLogged">isLogged</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Cache.php.html#90"><abbr title="Cache::pull">pull</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Cache.php.html#108"><abbr title="Cache::set">set</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Cache.php.html#168"><abbr title="Cache::remove">remove</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Cache.php.html#178"><abbr title="Cache::reset">reset</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Client.php.html#54"><abbr title="Client::terminate">terminate</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Cache.php.html#154"><abbr title="Cache::importArray">importArray</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Cache.php.html#142"><abbr title="Cache::asArray">asArray</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Cache.php.html#120"><abbr title="Cache::get">get</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Cache.php.html#132"><abbr title="Cache::has">has</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Localization.php.html#291"><abbr title="Localization::translate">translate</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Database.php.html#176"><abbr title="Database::createFromConfig">createFromConfig</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Database/SQLite.php.html#195"><abbr title="SQLite::getDelete">getDelete</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Database/SQLite.php.html#209"><abbr title="SQLite::getTruncate">getTruncate</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Localization.php.html#119"><abbr title="Localization::terminate">terminate</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Database/SQLite.php.html#173"><abbr title="SQLite::getUpdate">getUpdate</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Database/SQLite.php.html#141"><abbr title="SQLite::getInsert">getInsert</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Database/SQLite.php.html#108"><abbr title="SQLite::getAddColumn">getAddColumn</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Database/SQLite.php.html#126"><abbr title="SQLite::getModifyColumn">getModifyColumn</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Localization.php.html#186"><abbr title="Localization::getDisplayLanguage">getDisplayLanguage</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Localization.php.html#200"><abbr title="Localization::getNumber">getNumber</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Localization.php.html#267"><abbr title="Localization::getCalendar">getCalendar</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Localization.php.html#277"><abbr title="Localization::getTimeZone">getTimeZone</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Localization.php.html#257"><abbr title="Localization::getDateFormatter">getDateFormatter</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Localization.php.html#247"><abbr title="Localization::getNumberFormatter">getNumberFormatter</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Localization.php.html#219"><abbr title="Localization::parseNumber">parseNumber</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Localization.php.html#234"><abbr title="Localization::getCurrency">getCurrency</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Database.php.html#203"><abbr title="Database::updateFromConfig">updateFromConfig</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Database/SQLite.php.html#88"><abbr title="SQLite::getDropTable">getDropTable</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Database/MySql.php.html#64"><abbr title="MySql::getCreateTable">getCreateTable</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Database/SQLite.php.html#64"><abbr title="SQLite::getCreateTable">getCreateTable</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Database/MySql.php.html#44"><abbr title="MySql::getSelect">getSelect</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Database.php.html#288"><abbr title="Database::parseValue">parseValue</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Database.php.html#243"><abbr title="Database::seedFromConfig">seedFromConfig</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Database/MySql.php.html#107"><abbr title="MySql::getAddColumn">getAddColumn</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Database/MySql.php.html#87"><abbr title="MySql::getDropTable">getDropTable</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Database/MySql.php.html#125"><abbr title="MySql::getModifyColumn">getModifyColumn</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Database/MySql.php.html#209"><abbr title="MySql::getTruncate">getTruncate</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Database/SQLite.php.html#44"><abbr title="SQLite::getSelect">getSelect</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Database/MySql.php.html#173"><abbr title="MySql::getUpdate">getUpdate</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Database/MySql.php.html#195"><abbr title="MySql::getDelete">getDelete</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Database/MySql.php.html#142"><abbr title="MySql::getInsert">getInsert</a></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/SSH.php.html#194"><abbr title="SSH::execute">execute</a></a></td><td class="text-right">18%</td></tr>
+       <tr><td><a href="Service/Security.php.html#38"><abbr title="Security::init">init</a></a></td><td class="text-right">25%</td></tr>
+       <tr><td><a href="Service/Logger.php.html#116"><abbr title="Logger::error">error</a></a></td><td class="text-right">53%</td></tr>
+       <tr><td><a href="Service/Cache.php.html#39"><abbr title="Cache::init">init</a></a></td><td class="text-right">66%</td></tr>
+       <tr><td><a href="Service/Database.php.html#53"><abbr title="Database::init">init</a></a></td><td class="text-right">83%</td></tr>
+       <tr><td><a href="Service/Localization.php.html#132"><abbr title="Localization::setLocale">setLocale</a></a></td><td class="text-right">87%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Service/Server.php.html#346"><abbr title="Server::getRequestFromGlobals">getRequestFromGlobals</abbr></a></td><td class="text-right">132</td></tr>
+       <tr><td><a href="Service/Validator.php.html#111"><abbr title="Validator::validate">validate</abbr></a></td><td class="text-right">72</td></tr>
+       <tr><td><a href="Service/Mailer.php.html#279"><abbr title="Mailer::send">send</abbr></a></td><td class="text-right">72</td></tr>
+       <tr><td><a href="Service/Database.php.html#243"><abbr title="Database::seedFromConfig">seedFromConfig</abbr></a></td><td class="text-right">56</td></tr>
+       <tr><td><a href="Service/SSH.php.html#150"><abbr title="SSH::connect">connect</abbr></a></td><td class="text-right">56</td></tr>
+       <tr><td><a href="Service/Database.php.html#203"><abbr title="Database::updateFromConfig">updateFromConfig</abbr></a></td><td class="text-right">42</td></tr>
+       <tr><td><a href="Service/Server.php.html#153"><abbr title="Server::listen">listen</abbr></a></td><td class="text-right">42</td></tr>
+       <tr><td><a href="Service/Commander.php.html#99"><abbr title="Commander::listen">listen</abbr></a></td><td class="text-right">30</td></tr>
+       <tr><td><a href="Service/Localization.php.html#291"><abbr title="Localization::translate">translate</abbr></a></td><td class="text-right">30</td></tr>
+       <tr><td><a href="Service/Security.php.html#66"><abbr title="Security::encrypt">encrypt</abbr></a></td><td class="text-right">30</td></tr>
+       <tr><td><a href="Service/Paginator.php.html#102"><abbr title="Paginator::parseCurrentPageInput">parseCurrentPageInput</abbr></a></td><td class="text-right">20</td></tr>
+       <tr><td><a href="Service/Database/SQLite.php.html#141"><abbr title="SQLite::getInsert">getInsert</abbr></a></td><td class="text-right">20</td></tr>
+       <tr><td><a href="Service/Server.php.html#325"><abbr title="Server::send">send</abbr></a></td><td class="text-right">20</td></tr>
+       <tr><td><a href="Service/Server.php.html#197"><abbr title="Server::validateStringAction">validateStringAction</abbr></a></td><td class="text-right">20</td></tr>
+       <tr><td><a href="Service/Database/MySql.php.html#142"><abbr title="MySql::getInsert">getInsert</abbr></a></td><td class="text-right">20</td></tr>
+       <tr><td><a href="Service/Database.php.html#288"><abbr title="Database::parseValue">parseValue</abbr></a></td><td class="text-right">20</td></tr>
+       <tr><td><a href="Service/Validator.php.html#71"><abbr title="Validator::validateAssist">validateAssist</abbr></a></td><td class="text-right">20</td></tr>
+       <tr><td><a href="Service/SSH.php.html#194"><abbr title="SSH::execute">execute</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Service/Database/MySql.php.html#64"><abbr title="MySql::getCreateTable">getCreateTable</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Service/Paginator.php.html#162"><abbr title="Paginator::getPageUrl">getPageUrl</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Service/Validator.php.html#267"><abbr title="Validator::isBetween">isBetween</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Service/Database.php.html#156"><abbr title="Database::reloadFromConfig">reloadFromConfig</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Service/Logger.php.html#72"><abbr title="Logger::terminate">terminate</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Service/Database.php.html#139"><abbr title="Database::getSchemaConfig">getSchemaConfig</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Service/Database/MySql.php.html#44"><abbr title="MySql::getSelect">getSelect</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Service/Database/SQLite.php.html#44"><abbr title="SQLite::getSelect">getSelect</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Service/Database/SQLite.php.html#64"><abbr title="SQLite::getCreateTable">getCreateTable</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Service/Security.php.html#38"><abbr title="Security::init">init</abbr></a></td><td class="text-right">10</td></tr>
+       <tr><td><a href="Service/Logger.php.html#116"><abbr title="Logger::error">error</abbr></a></td><td class="text-right">9</td></tr>
+       <tr><td><a href="Service/Database.php.html#53"><abbr title="Database::init">init</abbr></a></td><td class="text-right">7</td></tr>
+       <tr><td><a href="Service/Session.php.html#88"><abbr title="Session::get">get</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Service/Validator.php.html#152"><abbr title="Validator::ok">ok</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Service/Validator.php.html#93"><abbr title="Validator::validateAll">validateAll</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Service/Validator.php.html#224"><abbr title="Validator::isEquals">isEquals</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Service/Session.php.html#48"><abbr title="Session::terminate">terminate</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Service/Database/SQLite.php.html#173"><abbr title="SQLite::getUpdate">getUpdate</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Service/Cache.php.html#154"><abbr title="Cache::importArray">importArray</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Service/Cache.php.html#120"><abbr title="Cache::get">get</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Service/Cache.php.html#90"><abbr title="Cache::pull">pull</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Service/Auth.php.html#84"><abbr title="Auth::isLogged">isLogged</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Service/Database.php.html#176"><abbr title="Database::createFromConfig">createFromConfig</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Service/Database/MySql.php.html#87"><abbr title="MySql::getDropTable">getDropTable</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Service/Auth.php.html#69"><abbr title="Auth::login">login</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Service/Mailer.php.html#187"><abbr title="Mailer::copy">copy</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Service/Database/SQLite.php.html#88"><abbr title="SQLite::getDropTable">getDropTable</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Service/Database/MySql.php.html#173"><abbr title="MySql::getUpdate">getUpdate</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Service/Localization.php.html#132"><abbr title="Localization::setLocale">setLocale</abbr></a></td><td class="text-right">4</td></tr>
+       <tr><td><a href="Service/Cache.php.html#39"><abbr title="Cache::init">init</abbr></a></td><td class="text-right">3</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <footer>
+    <hr/>
+    <p>
+     <small>Generated by <a href="http://github.com/sebastianbergmann/php-code-coverage" target="_top">PHP_CodeCoverage 2.0.11-2-g62f8cd5</a> using <a href="http://php.net/" target="_top">PHP 5.5.9-1ubuntu4.4</a> and <a href="http://phpunit.de/">PHPUnit 4.3.1</a> at Fri Oct 10 11:35:06 CEST 2014.</small>
+    </p>
+   </footer>
+  </div>
+  <script src="../js/jquery.min.js" type="text/javascript"></script>
+  <script src="../js/bootstrap.min.js" type="text/javascript"></script>
+  <script src="../js/holder.js" type="text/javascript"></script>
+  <script src="../js/d3.min.js" type="text/javascript"></script>
+  <script src="../js/nv.d3.min.js" type="text/javascript"></script>
+  <script type="text/javascript">
+$(document).ready(function() {
+  nv.addGraph(function() {
+    var chart = nv.models.multiBarChart();
+    chart.tooltips(false)
+      .showControls(false)
+      .showLegend(false)
+      .reduceXTicks(false)
+      .staggerLabels(true)
+      .yAxis.tickFormat(d3.format('d'));
+
+    d3.select('#classCoverageDistribution svg')
+      .datum(getCoverageDistributionData([3,5,5,2,0,0,2,0,0,0,0,0], "Class Coverage"))
+      .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.multiBarChart();
+    chart.tooltips(false)
+      .showControls(false)
+      .showLegend(false)
+      .reduceXTicks(false)
+      .staggerLabels(true)
+      .yAxis.tickFormat(d3.format('d'));
+
+    d3.select('#methodCoverageDistribution svg')
+      .datum(getCoverageDistributionData([136,0,1,1,0,0,1,1,0,2,1,26], "Method Coverage"))
+      .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  function getCoverageDistributionData(data, label) {
+    var labels = [
+      '0%',
+      '0-10%',
+      '10-20%',
+      '20-30%',
+      '30-40%',
+      '40-50%',
+      '50-60%',
+      '60-70%',
+      '70-80%',
+      '80-90%',
+      '90-100%',
+      '100%'
+    ];
+    var values = [];
+    $.each(labels, function(key) {
+      values.push({x: labels[key], y: data[key]});
+    });
+
+    return [
+      {
+        key: label,
+        values: values,
+        color: "#4572A7"
+      }
+    ];
+  }
+  nv.addGraph(function() {
+    var chart = nv.models.scatterChart()
+      .showDistX(true)
+      .showDistY(true)
+      .showLegend(false)
+      .forceX([0, 100]);
+    chart.scatter.onlyCircles(false);
+    chart.tooltipContent(function(key, y, e, graph) {
+      return '<p>' + graph.point.class + '</p>';
+    });
+
+    chart.xAxis.axisLabel('Code Coverage (in percent)');
+    chart.yAxis.axisLabel('Cyclomatic Complexity');
+
+    d3.select('#classComplexity svg')
+      .datum(getComplexityData([[13.333333333333,8,"<a href=\"Service\/Auth.php.html#29\">Auth<\/a>"],[7.4074074074074,17,"<a href=\"Service\/Cache.php.html#30\">Cache<\/a>"],[3.5714285714286,6,"<a href=\"Service\/Client.php.html#29\">Client<\/a>"],[22.727272727273,9,"<a href=\"Service\/Commander.php.html#29\">Commander<\/a>"],[0,4,"<a href=\"Service\/Controller\/Base.php.html#30\">Base<\/a>"],[13.513513513514,46,"<a href=\"Service\/Database.php.html#33\">Database<\/a>"],[0,18,"<a href=\"Service\/Database\/MySql.php.html#31\">MySql<\/a>"],[0,18,"<a href=\"Service\/Database\/SQLite.php.html#31\">SQLite<\/a>"],[54.651162790698,26,"<a href=\"Service\/Localization.php.html#30\">Localization<\/a>"],[50,13,"<a href=\"Service\/Logger.php.html#31\">Logger<\/a>"],[28.181818181818,23,"<a href=\"Service\/Mailer.php.html#30\">Mailer<\/a>"],[7.1428571428571,16,"<a href=\"Service\/Paginator.php.html#29\">Paginator<\/a>"],[18.367346938776,17,"<a href=\"Service\/SSH.php.html#30\">SSH<\/a>"],[8.3333333333333,12,"<a href=\"Service\/Security.php.html#29\">Security<\/a>"],[15.094339622642,40,"<a href=\"Service\/Server.php.html#32\">Server<\/a>"],[10,12,"<a href=\"Service\/Session.php.html#29\">Session<\/a>"],[4.2253521126761,30,"<a href=\"Service\/Validator.php.html#31\">Validator<\/a>"]], 'Class Complexity'))
+      .transition()
+      .duration(500)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.scatterChart()
+      .showDistX(true)
+      .showDistY(true)
+      .showLegend(false)
+      .forceX([0, 100]);
+    chart.scatter.onlyCircles(false);
+    chart.tooltipContent(function(key, y, e, graph) {
+      return '<p>' + graph.point.class + '</p>';
+    });
+
+    chart.xAxis.axisLabel('Code Coverage (in percent)');
+    chart.yAxis.axisLabel('Method Complexity');
+
+    d3.select('#methodComplexity svg')
+      .datum(getComplexityData([[100,1,"<a href=\"Service\/Auth.php.html#45\">Auth::init<\/a>"],[0,1,"<a href=\"Service\/Auth.php.html#55\">Auth::terminate<\/a>"],[0,2,"<a href=\"Service\/Auth.php.html#69\">Auth::login<\/a>"],[0,2,"<a href=\"Service\/Auth.php.html#84\">Auth::isLogged<\/a>"],[0,1,"<a href=\"Service\/Auth.php.html#98\">Auth::logout<\/a>"],[0,1,"<a href=\"Service\/Auth.php.html#108\">Auth::whoAmI<\/a>"],[66.666666666667,3,"<a href=\"Service\/Cache.php.html#39\">Cache::init<\/a>"],[0,1,"<a href=\"Service\/Cache.php.html#51\">Cache::terminate<\/a>"],[0,1,"<a href=\"Service\/Cache.php.html#64\">Cache::add<\/a>"],[0,1,"<a href=\"Service\/Cache.php.html#78\">Cache::put<\/a>"],[0,2,"<a href=\"Service\/Cache.php.html#90\">Cache::pull<\/a>"],[0,1,"<a href=\"Service\/Cache.php.html#108\">Cache::set<\/a>"],[0,2,"<a href=\"Service\/Cache.php.html#120\">Cache::get<\/a>"],[0,1,"<a href=\"Service\/Cache.php.html#132\">Cache::has<\/a>"],[0,1,"<a href=\"Service\/Cache.php.html#142\">Cache::asArray<\/a>"],[0,2,"<a href=\"Service\/Cache.php.html#154\">Cache::importArray<\/a>"],[0,1,"<a href=\"Service\/Cache.php.html#168\">Cache::remove<\/a>"],[0,1,"<a href=\"Service\/Cache.php.html#178\">Cache::reset<\/a>"],[100,1,"<a href=\"Service\/Client.php.html#44\">Client::init<\/a>"],[0,1,"<a href=\"Service\/Client.php.html#54\">Client::terminate<\/a>"],[0,1,"<a href=\"Service\/Client.php.html#66\">Client::setUserAgent<\/a>"],[0,1,"<a href=\"Service\/Client.php.html#76\">Client::getUserAgent<\/a>"],[0,1,"<a href=\"Service\/Client.php.html#88\">Client::createRequest<\/a>"],[0,1,"<a href=\"Service\/Client.php.html#101\">Client::execute<\/a>"],[100,1,"<a href=\"Service\/Commander.php.html#52\">Commander::init<\/a>"],[0,1,"<a href=\"Service\/Commander.php.html#66\">Commander::terminate<\/a>"],[0,1,"<a href=\"Service\/Commander.php.html#79\">Commander::addResponder<\/a>"],[100,1,"<a href=\"Service\/Commander.php.html#89\">Commander::parseFromGlobals<\/a>"],[0,5,"<a href=\"Service\/Commander.php.html#99\">Commander::listen<\/a>"],[0,1,"<a href=\"Service\/Controller\/Base.php.html#38\">Base::init<\/a>"],[0,1,"<a href=\"Service\/Controller\/Base.php.html#48\">Base::terminate<\/a>"],[0,1,"<a href=\"Service\/Controller\/Base.php.html#62\">Base::doIndex<\/a>"],[0,1,"<a href=\"Service\/Controller\/Base.php.html#84\">Base::__toString<\/a>"],[83.333333333333,7,"<a href=\"Service\/Database.php.html#53\">Database::init<\/a>"],[0,1,"<a href=\"Service\/Database.php.html#82\">Database::terminate<\/a>"],[0,1,"<a href=\"Service\/Database.php.html#94\">Database::addTable<\/a>"],[0,1,"<a href=\"Service\/Database.php.html#104\">Database::getTables<\/a>"],[0,1,"<a href=\"Service\/Database.php.html#114\">Database::getPDO<\/a>"],[0,1,"<a href=\"Service\/Database.php.html#126\">Database::createTableFromEntity<\/a>"],[0,3,"<a href=\"Service\/Database.php.html#139\">Database::getSchemaConfig<\/a>"],[0,3,"<a href=\"Service\/Database.php.html#156\">Database::reloadFromConfig<\/a>"],[0,2,"<a href=\"Service\/Database.php.html#176\">Database::createFromConfig<\/a>"],[0,6,"<a href=\"Service\/Database.php.html#203\">Database::updateFromConfig<\/a>"],[0,7,"<a href=\"Service\/Database.php.html#243\">Database::seedFromConfig<\/a>"],[0,4,"<a href=\"Service\/Database.php.html#288\">Database::parseValue<\/a>"],[100,1,"<a href=\"Service\/Database.php.html#317\">Database::getSelect<\/a>"],[100,1,"<a href=\"Service\/Database.php.html#327\">Database::getCreateTable<\/a>"],[100,1,"<a href=\"Service\/Database.php.html#337\">Database::getDropTable<\/a>"],[100,1,"<a href=\"Service\/Database.php.html#348\">Database::getAddColumn<\/a>"],[100,1,"<a href=\"Service\/Database.php.html#359\">Database::getModifyColumn<\/a>"],[100,1,"<a href=\"Service\/Database.php.html#369\">Database::getInsert<\/a>"],[100,1,"<a href=\"Service\/Database.php.html#379\">Database::getUpdate<\/a>"],[100,1,"<a href=\"Service\/Database.php.html#389\">Database::getDelete<\/a>"],[100,1,"<a href=\"Service\/Database.php.html#398\">Database::getTruncate<\/a>"],[0,3,"<a href=\"Service\/Database\/MySql.php.html#44\">MySql::getSelect<\/a>"],[0,3,"<a href=\"Service\/Database\/MySql.php.html#64\">MySql::getCreateTable<\/a>"],[0,2,"<a href=\"Service\/Database\/MySql.php.html#87\">MySql::getDropTable<\/a>"],[0,1,"<a href=\"Service\/Database\/MySql.php.html#107\">MySql::getAddColumn<\/a>"],[0,1,"<a href=\"Service\/Database\/MySql.php.html#125\">MySql::getModifyColumn<\/a>"],[0,4,"<a href=\"Service\/Database\/MySql.php.html#142\">MySql::getInsert<\/a>"],[0,2,"<a href=\"Service\/Database\/MySql.php.html#173\">MySql::getUpdate<\/a>"],[0,1,"<a href=\"Service\/Database\/MySql.php.html#195\">MySql::getDelete<\/a>"],[0,1,"<a href=\"Service\/Database\/MySql.php.html#209\">MySql::getTruncate<\/a>"],[0,3,"<a href=\"Service\/Database\/SQLite.php.html#44\">SQLite::getSelect<\/a>"],[0,3,"<a href=\"Service\/Database\/SQLite.php.html#64\">SQLite::getCreateTable<\/a>"],[0,2,"<a href=\"Service\/Database\/SQLite.php.html#88\">SQLite::getDropTable<\/a>"],[0,1,"<a href=\"Service\/Database\/SQLite.php.html#108\">SQLite::getAddColumn<\/a>"],[0,1,"<a href=\"Service\/Database\/SQLite.php.html#126\">SQLite::getModifyColumn<\/a>"],[0,4,"<a href=\"Service\/Database\/SQLite.php.html#141\">SQLite::getInsert<\/a>"],[0,2,"<a href=\"Service\/Database\/SQLite.php.html#173\">SQLite::getUpdate<\/a>"],[0,1,"<a href=\"Service\/Database\/SQLite.php.html#195\">SQLite::getDelete<\/a>"],[0,1,"<a href=\"Service\/Database\/SQLite.php.html#209\">SQLite::getTruncate<\/a>"],[95,7,"<a href=\"Service\/Localization.php.html#87\">Localization::init<\/a>"],[0,1,"<a href=\"Service\/Localization.php.html#119\">Localization::terminate<\/a>"],[87.5,4,"<a href=\"Service\/Localization.php.html#132\">Localization::setLocale<\/a>"],[0,1,"<a href=\"Service\/Localization.php.html#186\">Localization::getDisplayLanguage<\/a>"],[0,1,"<a href=\"Service\/Localization.php.html#200\">Localization::getNumber<\/a>"],[0,1,"<a href=\"Service\/Localization.php.html#219\">Localization::parseNumber<\/a>"],[0,1,"<a href=\"Service\/Localization.php.html#234\">Localization::getCurrency<\/a>"],[0,1,"<a href=\"Service\/Localization.php.html#247\">Localization::getNumberFormatter<\/a>"],[0,1,"<a href=\"Service\/Localization.php.html#257\">Localization::getDateFormatter<\/a>"],[0,1,"<a href=\"Service\/Localization.php.html#267\">Localization::getCalendar<\/a>"],[0,1,"<a href=\"Service\/Localization.php.html#277\">Localization::getTimeZone<\/a>"],[0,5,"<a href=\"Service\/Localization.php.html#291\">Localization::translate<\/a>"],[0,1,"<a href=\"Service\/Localization.php.html#330\">Localization::t<\/a>"],[100,2,"<a href=\"Service\/Logger.php.html#54\">Logger::init<\/a>"],[0,3,"<a href=\"Service\/Logger.php.html#72\">Logger::terminate<\/a>"],[0,1,"<a href=\"Service\/Logger.php.html#89\">Logger::log<\/a>"],[0,1,"<a href=\"Service\/Logger.php.html#101\">Logger::myException<\/a>"],[53.571428571429,6,"<a href=\"Service\/Logger.php.html#116\">Logger::error<\/a>"],[100,1,"<a href=\"Service\/Mailer.php.html#60\">Mailer::__construct<\/a>"],[100,3,"<a href=\"Service\/Mailer.php.html#70\">Mailer::init<\/a>"],[0,1,"<a href=\"Service\/Mailer.php.html#118\">Mailer::terminate<\/a>"],[0,1,"<a href=\"Service\/Mailer.php.html#135\">Mailer::setSMTP<\/a>"],[0,1,"<a href=\"Service\/Mailer.php.html#158\">Mailer::to<\/a>"],[0,1,"<a href=\"Service\/Mailer.php.html#171\">Mailer::addAdress<\/a>"],[0,2,"<a href=\"Service\/Mailer.php.html#187\">Mailer::copy<\/a>"],[0,1,"<a href=\"Service\/Mailer.php.html#205\">Mailer::reply<\/a>"],[0,1,"<a href=\"Service\/Mailer.php.html#222\">Mailer::from<\/a>"],[0,1,"<a href=\"Service\/Mailer.php.html#238\">Mailer::subject<\/a>"],[0,1,"<a href=\"Service\/Mailer.php.html#252\">Mailer::body<\/a>"],[0,1,"<a href=\"Service\/Mailer.php.html#266\">Mailer::attach<\/a>"],[0,8,"<a href=\"Service\/Mailer.php.html#279\">Mailer::send<\/a>"],[100,1,"<a href=\"Service\/Paginator.php.html#65\">Paginator::init<\/a>"],[0,1,"<a href=\"Service\/Paginator.php.html#75\">Paginator::terminate<\/a>"],[0,1,"<a href=\"Service\/Paginator.php.html#89\">Paginator::config<\/a>"],[0,4,"<a href=\"Service\/Paginator.php.html#102\">Paginator::parseCurrentPageInput<\/a>"],[0,1,"<a href=\"Service\/Paginator.php.html#120\">Paginator::getFirstPageUrl<\/a>"],[0,1,"<a href=\"Service\/Paginator.php.html#130\">Paginator::getLastPageUrl<\/a>"],[0,1,"<a href=\"Service\/Paginator.php.html#140\">Paginator::getPreviousPageUrl<\/a>"],[0,1,"<a href=\"Service\/Paginator.php.html#150\">Paginator::getNextPageUrl<\/a>"],[0,3,"<a href=\"Service\/Paginator.php.html#162\">Paginator::getPageUrl<\/a>"],[0,1,"<a href=\"Service\/Paginator.php.html#175\">Paginator::getTotalPages<\/a>"],[0,1,"<a href=\"Service\/Paginator.php.html#185\">Paginator::getCurrentOffset<\/a>"],[100,1,"<a href=\"Service\/SSH.php.html#80\">SSH::__construct<\/a>"],[100,1,"<a href=\"Service\/SSH.php.html#90\">SSH::__destruct<\/a>"],[0,1,"<a href=\"Service\/SSH.php.html#100\">SSH::init<\/a>"],[0,1,"<a href=\"Service\/SSH.php.html#110\">SSH::terminate<\/a>"],[0,1,"<a href=\"Service\/SSH.php.html#127\">SSH::connectSSH<\/a>"],[0,7,"<a href=\"Service\/SSH.php.html#150\">SSH::connect<\/a>"],[18.181818181818,4,"<a href=\"Service\/SSH.php.html#194\">SSH::execute<\/a>"],[100,1,"<a href=\"Service\/SSH.php.html#216\">SSH::disconnect<\/a>"],[25,4,"<a href=\"Service\/Security.php.html#38\">Security::init<\/a>"],[0,1,"<a href=\"Service\/Security.php.html#54\">Security::terminate<\/a>"],[0,5,"<a href=\"Service\/Security.php.html#66\">Security::encrypt<\/a>"],[0,1,"<a href=\"Service\/Security.php.html#93\">Security::decrypt<\/a>"],[0,1,"<a href=\"Service\/Security.php.html#106\">Security::filter<\/a>"],[100,3,"<a href=\"Service\/Server.php.html#82\">Server::init<\/a>"],[0,1,"<a href=\"Service\/Server.php.html#106\">Server::terminate<\/a>"],[0,1,"<a href=\"Service\/Server.php.html#119\">Server::addRoute<\/a>"],[100,1,"<a href=\"Service\/Server.php.html#131\">Server::setDefault<\/a>"],[0,1,"<a href=\"Service\/Server.php.html#143\">Server::setHome<\/a>"],[0,6,"<a href=\"Service\/Server.php.html#153\">Server::listen<\/a>"],[0,4,"<a href=\"Service\/Server.php.html#197\">Server::validateStringAction<\/a>"],[0,1,"<a href=\"Service\/Server.php.html#235\">Server::setRequest<\/a>"],[0,1,"<a href=\"Service\/Server.php.html#245\">Server::getRequest<\/a>"],[100,1,"<a href=\"Service\/Server.php.html#257\">Server::setResponse<\/a>"],[0,1,"<a href=\"Service\/Server.php.html#267\">Server::getResponse<\/a>"],[0,1,"<a href=\"Service\/Server.php.html#279\">Server::setHostname<\/a>"],[0,1,"<a href=\"Service\/Server.php.html#289\">Server::getHostname<\/a>"],[0,1,"<a href=\"Service\/Server.php.html#302\">Server::createUrl<\/a>"],[100,1,"<a href=\"Service\/Server.php.html#312\">Server::createResponse<\/a>"],[0,4,"<a href=\"Service\/Server.php.html#325\">Server::send<\/a>"],[0,11,"<a href=\"Service\/Server.php.html#346\">Server::getRequestFromGlobals<\/a>"],[100,1,"<a href=\"Service\/Session.php.html#38\">Session::init<\/a>"],[0,2,"<a href=\"Service\/Session.php.html#48\">Session::terminate<\/a>"],[0,1,"<a href=\"Service\/Session.php.html#63\">Session::add<\/a>"],[0,1,"<a href=\"Service\/Session.php.html#76\">Session::set<\/a>"],[0,2,"<a href=\"Service\/Session.php.html#88\">Session::get<\/a>"],[0,1,"<a href=\"Service\/Session.php.html#100\">Session::has<\/a>"],[0,1,"<a href=\"Service\/Session.php.html#110\">Session::asArray<\/a>"],[0,1,"<a href=\"Service\/Session.php.html#122\">Session::remove<\/a>"],[0,1,"<a href=\"Service\/Session.php.html#134\">Session::importArray<\/a>"],[0,1,"<a href=\"Service\/Session.php.html#144\">Session::reset<\/a>"],[100,1,"<a href=\"Service\/Validator.php.html#46\">Validator::init<\/a>"],[0,1,"<a href=\"Service\/Validator.php.html#57\">Validator::terminate<\/a>"],[0,4,"<a href=\"Service\/Validator.php.html#71\">Validator::validateAssist<\/a>"],[0,2,"<a href=\"Service\/Validator.php.html#93\">Validator::validateAll<\/a>"],[0,8,"<a href=\"Service\/Validator.php.html#111\">Validator::validate<\/a>"],[0,2,"<a href=\"Service\/Validator.php.html#152\">Validator::ok<\/a>"],[0,1,"<a href=\"Service\/Validator.php.html#162\">Validator::getMessages<\/a>"],[0,1,"<a href=\"Service\/Validator.php.html#174\">Validator::isRequired<\/a>"],[0,1,"<a href=\"Service\/Validator.php.html#186\">Validator::isNumber<\/a>"],[0,1,"<a href=\"Service\/Validator.php.html#199\">Validator::isAlpha<\/a>"],[0,1,"<a href=\"Service\/Validator.php.html#211\">Validator::isEmail<\/a>"],[0,2,"<a href=\"Service\/Validator.php.html#224\">Validator::isEquals<\/a>"],[0,1,"<a href=\"Service\/Validator.php.html#239\">Validator::isPassword<\/a>"],[0,1,"<a href=\"Service\/Validator.php.html#254\">Validator::isLength<\/a>"],[0,3,"<a href=\"Service\/Validator.php.html#267\">Validator::isBetween<\/a>"]], 'Method Complexity'))
+      .transition()
+      .duration(500)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  function getComplexityData(data, label) {
+    var values = [];
+    $.each(data, function(key) {
+      var value = Math.round(data[key][0]*100) / 100;
+      values.push({
+        x: value,
+        y: data[key][1],
+        class: data[key][2],
+        size: 0.05,
+        shape: 'diamond'
+      });
+    });
+
+    return [
+      {
+        key: label,
+        values: values,
+        color: "#4572A7"
+      }
+    ];
+  }
+});
+  </script>
+ </body>
+</html>

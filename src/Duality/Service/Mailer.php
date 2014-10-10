@@ -13,10 +13,9 @@
 
 namespace Duality\Service;
 
-use \Duality\Core\InterfaceService;
-use \Duality\Core\InterfaceMailer;
-use \Duality\Structure\Storage;
-use \Duality\App;
+use Duality\Structure\Storage;
+use Duality\Core\AbstractService;
+use Duality\Core\InterfaceMailer;
 
 /**
  * Default mailer service
@@ -29,7 +28,8 @@ use \Duality\App;
  * @since   0.7.0
  */
 class Mailer 
-implements InterfaceMailer, InterfaceService
+extends AbstractService
+implements InterfaceMailer
 {
     /**
      * The dependent application container
@@ -69,7 +69,7 @@ implements InterfaceMailer, InterfaceService
      */
     public function init()
     {
-        $this->storage = new Storage;
+        $this->current = new Storage;
         $this->smtp = new Storage;
 
         $this->current->importArray(

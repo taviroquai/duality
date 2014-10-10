@@ -16,19 +16,7 @@ namespace Duality;
 use \Duality\Core\DualityException;
 use \Duality\Core\Container;
 use \Duality\Structure\Storage;
-use \Duality\Service\Database\SQLite;
-use \Duality\Service\Database\MySql;
 use \Duality\Structure\File\StreamFile;
-use \Duality\Service\Localization;
-use \Duality\Service\Logger;
-use \Duality\Service\Validator;
-use \Duality\Service\Session;
-use \Duality\Service\Auth;
-use \Duality\Service\Cache;
-use \Duality\Service\Mailer;
-use \Duality\Service\Paginator;
-use \Duality\Service\SSH;
-use \Duality\Service\Server;
 
 /**
  * Default application container
@@ -77,7 +65,9 @@ extends Container
      * @var array The default Duality services
      */
     protected $defaults = array(
+        'db'        => 'Duality\Service\Database\SQLite',
         'logger'    => 'Duality\Service\Logger',
+        'security'  => 'Duality\Service\Security',
         'validator' => 'Duality\Service\Validator',
         'session'   => 'Duality\Service\Session',
         'auth'      => 'Duality\Service\Auth',
@@ -87,7 +77,8 @@ extends Container
         'ssh'       => 'Duality\Service\SSH',
         'server'    => 'Duality\Service\Server',
         'locale'    => 'Duality\Service\Localization',
-        'cmd'       => 'Duality\Service\Commander'
+        'cmd'       => 'Duality\Service\Commander',
+        'client'    => 'Duality\Service\Client'
     );
 
     /**
@@ -102,21 +93,20 @@ extends Container
             throw new DualityException("Error Application: path not found", 1);
         }
         $this->path = (string) $path;
+
+        $config['services'] = empty($config['services']) ? array() : $config['services'];
+        $config['services'] = array_merge($this->defaults, $config['services']);
         $this->config = (array) $config;
 
         $this->services = new Storage;
         $this->services->reset();
         $this->cache = new Storage;
         $this->cache->reset();
-        
-        if ($this->getConfigItem('buffer')) {
-            $this->buffer = new StreamFile(
-                $this->getConfigItem('buffer') ? 
-                $this->getConfigItem('buffer') :
-                'php://stdout'
-            );
-            $this->buffer->open();
-        }
+
+        $bufferType = $this->getConfigItem('buffer') ? 
+            $this->getConfigItem('buffer') : 'php://output';
+        $this->buffer = new StreamFile($bufferType);
+        $this->buffer->open();
     }
 
     /**
@@ -127,7 +117,10 @@ extends Container
     public function __destruct()
     {
         foreach ($this->getServices() as $name => $service) {
-            $this->call($name)->terminate();
+            $instance = $this->call($name);
+            if (is_callable(array($instance, 'terminate'))) {
+                $instance->terminate();
+            }
         }
         if ($this->getBuffer()) {
             $this->getBuffer()->close();
@@ -145,19 +138,6 @@ extends Container
     {
         $me =& $this;
 
-        // Register database
-        if ($name === 'db') {
-            if (!$this->getConfigItem('db.dsn')) {
-                throw new DualityException("Error configuration: db.dsn not found ", 2);
-            }
-            if ($this->getConfigItem('db.dsn')) {
-                $isMysql = strpos($this->getConfigItem('db.dsn'), 'mysql') === 0;
-                $this->defaults['db'] = $isMysql ?
-                    'Duality\Service\Database\MySql' : 
-                    'Duality\Service\Database\SQLite';
-            }   
-        }
-
         // Verify if default service exists
         if (!isset($this->defaults[$name])) {
             throw new DualityException("Default service not found: " . $name, 15);
@@ -167,7 +147,8 @@ extends Container
         $class = $this->defaults[$name];
         $this->register(
             $name, function () use ($class, $me) {
-                return new $class($me);
+                $instance = new $class($me);
+                return $instance;
             }
         );
         $this->call($name)->init();
@@ -264,7 +245,7 @@ extends Container
             $this->loadService($name);
         }
         if ($cache) {
-            if (!$this->cache->has($name)) {
+            if (!$this->exists($name)) {
                 $this->cache->set(
                     $name, call_user_func_array($this->services->get($name), $params)
                 );
@@ -272,46 +253,5 @@ extends Container
             return $this->cache->get($name);
         }
         return call_user_func_array($this->services->get($name), $params);
-    }
-
-    /**
-     * Translate Helper
-     * 
-     * @param string $key    Give the message key
-     * @param array  $params Give the message values
-     * @param string $target Give the target locale
-     * 
-     * @return string The translated message
-     */
-    public function t($key, $params = array(), $target = null)
-    {
-        return $this->call('locale')->translate($key, $params, $target);
-    }
-
-    /**
-     * Security Helper
-     * 
-     * @param string $data Give the data to be encrypt
-     * 
-     * @return string The resulting encrypted data
-     */
-    public function encrypt($data)
-    {
-        // Set defaults
-        $algo = 'sha256';
-        $salt = '';
-
-        // Apply user configuration if exists
-        if ($this->getConfigItem('security')) {
-            if ($this->getConfigItem('security.salt')) {
-                $salt = $this->getConfigItem('security.salt');
-            }
-            if ($this->getConfigItem('security.algo') 
-                && in_array($this->getConfigItem('security.algo'), hash_algos())
-            ) {
-                $algo = $this->getConfigItem('security.algo');
-            }
-        }
-        return hash($algo, (string) $data . $salt);
     }
 }

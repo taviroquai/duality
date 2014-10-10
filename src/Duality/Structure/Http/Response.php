@@ -13,7 +13,7 @@
 
 namespace Duality\Structure\Http;
 
-use \Duality\Structure\Http;
+use Duality\Structure\Http;
 
 /**
  * HTTP response class

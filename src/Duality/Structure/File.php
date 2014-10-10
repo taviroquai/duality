@@ -13,8 +13,8 @@
 
 namespace Duality\Structure;
 
-use \Duality\Core\DualityException;
-use \Duality\Core\Structure;
+use Duality\Core\DualityException;
+use Duality\Core\Structure;
 
 /**
  * File structure class

@@ -13,8 +13,8 @@
 
 namespace Duality\Structure;
 
-use \Duality\Core\Structure;
-use \Duality\Structure\File\TextFile;
+use Duality\Core\Structure;
+use Duality\Structure\File\TextFile;
 
 /**
  * HTML document class

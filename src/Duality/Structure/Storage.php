@@ -13,7 +13,7 @@
 
 namespace Duality\Structure;
 
-use \Duality\Core\InterfaceStorage;
+use Duality\Core\InterfaceStorage;
 
 /**
  * Session interface

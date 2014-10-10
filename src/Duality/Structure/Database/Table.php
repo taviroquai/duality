@@ -13,11 +13,11 @@
 
 namespace Duality\Structure\Database;
 
-use \Duality\Core\InterfaceStorage;
-use \Duality\Structure\TableRow;
-use \Duality\Structure\Table as DataTable;
-use \Duality\Structure\Entity;
-use \Duality\Service\Database;
+use Duality\Core\InterfaceStorage;
+use Duality\Structure\TableRow;
+use Duality\Structure\Table as DataTable;
+use Duality\Structure\Entity;
+use Duality\Service\Database;
 
 /**
  * Database table class

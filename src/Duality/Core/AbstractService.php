@@ -13,6 +13,8 @@
 
 namespace Duality\Core;
 
+use Duality\App;
+
 /**
  * Starts and ends a service
  * 
@@ -23,19 +25,36 @@ namespace Duality\Core;
  * @link    http://github.com/taviroquai/duality
  * @since   0.7.0
  */
-interface InterfaceService
+abstract class AbstractService
 {
+    /**
+     * The dependent application container
+     * 
+     * @var Duality\App Holds the application container
+     */
+    protected $app;
+
+    /**
+     * Creates a new error handler
+     * 
+     * @param \Duality\App &$app Give the application container
+     */
+    public function __construct(App &$app)
+    {
+        $this->app = $app;
+    }
+
     /**
      * Initiates the service
      * 
      * @return void
      */
-    public function init();
+    public abstract function init();
 
     /**
      * Terminates the service
      * 
      * @return void
      */
-    public function terminate();
+    public abstract function terminate();
 }

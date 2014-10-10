@@ -14,10 +14,9 @@
 namespace Duality\Service;
 
 use Duality\Core\DualityException;
-use Duality\Core\InterfaceService;
+use Duality\Core\AbstractService;
 use Duality\Core\InterfaceValidator;
 use Duality\Structure\Storage;
-use Duality\App;
 
 /**
  * Default validator service
@@ -29,32 +28,15 @@ use Duality\App;
  * @link    http://github.com/taviroquai/duality
  * @since   0.7.0
  */
-class Validator 
-implements InterfaceService, InterfaceValidator
+class Validator
+extends AbstractService
 {
-    /**
-     * The dependent application container
-     * 
-     * @var \Duality\App Holds the application container
-     */
-    protected $app;
-
     /**
      * Holds the messages storage
      * 
      * @var \Duality\Core\InterfaceStorage Holds the messages storage
      */
     protected $storage;
-
-    /**
-     * Creates a new validator
-     * 
-     * @param \Duality\App &$app Give the application container
-     */
-    public function __construct(App &$app)
-    {
-        $this->app = $app;
-    }
 
     /**
      * Initiates the service
