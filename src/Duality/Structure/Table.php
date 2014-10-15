@@ -14,6 +14,7 @@
 namespace Duality\Structure;
 
 use Duality\Core\Structure;
+use Duality\Structure\Storage;
 
 /**
  * Table class
@@ -31,16 +32,26 @@ extends Structure
     /**
      * Holds the table properties
      * 
-     * @var array Holds the table columns
+     * @var \Duality\Structure\Storage Holds the table columns
      */
-    protected $columns = array();
+    protected $columns;
 
     /**
      * Holds the table rows
      * 
-     * @var array Holds the table rows
+     * @var \Duality\Structure\Storage Holds the table rows
      */
     protected $rows = array();
+
+    /**
+     * Creates a new table
+     * Initializes empty columns and empty rows
+     */
+    public function __construct()
+    {
+        $this->columns = new Storage;
+        $this->rows    = new Storage;
+    }
 
     /**
      * Adds a column to the table
@@ -51,7 +62,7 @@ extends Structure
      */
     public function addColumn(Property $property)
     {
-        $this->columns[(string) $property] = $property;
+        $this->columns->add((string) $property, $property);
     }
 
     /**
@@ -65,9 +76,25 @@ extends Structure
     public function addRow(TableRow $row, $position = null)
     {
         if (empty($position)) {
-            $position = count($this->rows);
+            $position = count($this->rows->asArray());
         }
-        $this->rows[$position] = $row;
+        $this->rows->set($position, $row);
+    }
+
+    /**
+     * Inserts a row in a specified position
+     * 
+     * @param \Duality\Structure\TableRow $row      The row to add
+     * @param int                         $position The index position
+     * 
+     * @return void
+     */
+    public function insertRow(TableRow $row, $position = null)
+    {
+        if (empty($position)) {
+            $position = count($this->rows->asArray());
+        }
+        $this->rows->set($position, $row);
     }
 
     /**
@@ -77,7 +104,7 @@ extends Structure
      */
     public function getColumns()
     {
-        return $this->columns;
+        return $this->columns->asArray();
     }
 
     /**
@@ -87,7 +114,7 @@ extends Structure
      */
     public function getRows()
     {
-        return $this->rows;
+        return $this->rows->asArray();
     }
 
     /**
@@ -99,7 +126,7 @@ extends Structure
      */
     public function columnExists(Property $property)
     {
-        return in_array($property, $this->getColumns());
+        return $this->columns->has((string) $property);
     }
 
     /**
@@ -111,7 +138,7 @@ extends Structure
     {
         $out = array();
         $columns = $this->getColumns();
-
+        
         foreach ($this->getRows() as $row) {
             $trow = array();
             foreach ($columns as $column) {
@@ -130,7 +157,7 @@ extends Structure
     public function toCSV()
     {
         $out = "";
-        $columns = $this->getColumns();
+        $columns = $this->getColumns()->asArray();
         foreach ($columns as $column) {
             $out .= (string) $column;
             $out .= ',';
@@ -138,7 +165,7 @@ extends Structure
         $out = rtrim($out, ',');
         $out .= PHP_EOL;
 
-        foreach ($this->getRows() as $row) {
+        foreach ($this->getRows()->asArray() as $row) {
             foreach ($columns as $column) {
                 $out .= (string) $row->getData($column);
                 $out .= ',';

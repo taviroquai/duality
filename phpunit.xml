@@ -3,6 +3,7 @@
     <testsuites>
         <testsuite name="Duality Test Suite">
             <directory>./tests</directory>
+            <exclude>./tests/Duality/Service/Database/MySql.php</exclude>
         </testsuite>
     </testsuites>
     <filter>
@@ -18,6 +19,9 @@
     </filter>
     <php>
         <const name="DATA_PATH" value="./tests/data" />
-        <const name="DB_DNS"    value="sqlite:tests/data/test.sqlite" />
+        <const name="DB_SCHEMA" value="./tests/data/schema.php" />
+        <const name="DB_DSN"    value="sqlite:tests/data/test.sqlite" />
+        <const name="DB_USER"   value="root" />
+        <const name="DB_PASS"   value="pass" />
     </php>
 </phpunit>

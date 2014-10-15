@@ -83,7 +83,7 @@ EOF;
      */
     public function __toString()
     {
-        return class_name($this);
+        return get_class($this);
     }
 
 }

@@ -37,12 +37,16 @@ implements InterfaceSecurity
      */
     public function init()
     {
-        if (!empty($_SERVER['REQUEST_METHOD'])) {
-            foreach ($_SERVER[$_SERVER['REQUEST_METHOD']] as $key => &$value) {
+        if ($this->app->call('server')->getRequest()
+            && !empty($this->app->call('server')->getRequest()->getMethod())
+        ) {
+            $params = $this->app->call('server')->getRequest()->getParams();
+            foreach ($params as $key => &$value) {
                 if (!is_array($value)) {
                     $this->filter($value);
                 }
             }
+            $this->app->call('server')->getRequest()->setParams($params);
         }
     }
 
@@ -70,14 +74,14 @@ implements InterfaceSecurity
         $salt = '';
 
         // Apply user configuration if exists
-        if ($this->getConfigItem('security')) {
-            if ($this->getConfigItem('security.salt')) {
-                $salt = $this->getConfigItem('security.salt');
+        if ($this->app->getConfigItem('security')) {
+            if ($this->app->getConfigItem('security.salt')) {
+                $salt = $this->app->getConfigItem('security.salt');
             }
-            if ($this->getConfigItem('security.algo') 
-                && in_array($this->getConfigItem('security.algo'), hash_algos())
+            if ($this->app->getConfigItem('security.algo') 
+                && in_array($this->app->getConfigItem('security.algo'), hash_algos())
             ) {
-                $algo = $this->getConfigItem('security.algo');
+                $algo = $this->app->getConfigItem('security.algo');
             }
         }
         return hash($algo, (string) $data . $salt);

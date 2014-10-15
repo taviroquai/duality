@@ -51,7 +51,7 @@ abstract class Structure
      */
     public function getName()
     {
-        return $this->name;
+        return (string) $this->name;
     }
 
     /**
@@ -61,7 +61,7 @@ abstract class Structure
      */
     public function __toString()
     {
-        return $this->name;
+        return (string) $this->name;
     }
 
 }

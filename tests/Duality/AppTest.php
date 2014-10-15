@@ -38,7 +38,7 @@ extends PHPUnit_Framework_TestCase
                 'logger'    => 'Duality\Service\Logger',
                 'security'  => 'Duality\Service\Security',
                 'validator' => 'Duality\Service\Validator',
-                'session'   => 'Duality\Service\Session',
+                'session'   => 'Duality\Service\Session\Dummy',
                 'auth'      => 'Duality\Service\Auth',
                 'cache'     => 'Duality\Service\Cache',
                 'mailer'    => 'Duality\Service\Mailer',

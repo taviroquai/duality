@@ -95,7 +95,7 @@ extends AbstractService
 
         // Create default routes
         $this->routes = array();
-        $this->setDefault('\Duality\Service\UserController@doIndex');
+        $this->setDefault('\Duality\Service\Controller\Base@doIndex');
     }
 
     /**
@@ -155,33 +155,37 @@ extends AbstractService
         // Set default values
         $result = false;
         $matches = array();
-        
-        // Start looking for matching routes patterns
-        foreach ($this->routes as $ns => $cb) {
+
+        if (!empty($this->request)) {
             
-            // Check if route matches and stop looking
-            $uri = str_replace(
-                (string) $this->baseURL, '', $this->request->getUrl()->getUri()
-            );
-            $uri = '/' . trim($uri, '/ ');
-            if ($result = preg_match($ns, $uri, $matches)) {
-                array_shift($matches);
-                $cb = is_string($cb) ? $this->validateStringAction($cb) : $cb;
-                break;
+            // Start looking for matching routes patterns
+            foreach ($this->routes as $ns => $cb) {
+                
+                // Check if route matches and stop looking
+                $uri = str_replace(
+                    (string) $this->baseURL, '', $this->request->getUrl()->getUri()
+                );
+                $uri = '/' . trim($uri, '/ ');
+                if ($result = preg_match($ns, $uri, $matches)) {
+                    array_shift($matches);
+                    $cb = is_string($cb) ? $this->validateStringAction($cb) : $cb;
+                    break;
+                }
             }
+            
+            // No route matches. Call default controller
+            if (!$result) {
+                $cb = is_string($this->defaultController) ? 
+                    $this->validateStringAction($this->defaultController) : 
+                    $this->defaultController;
+            }
+            
+            // Finally, call controller
+            call_user_func_array(
+                $cb, array(&$this->request, &$this->response, $matches)
+            );
         }
-        
-        // No route matches. Call default controller
-        if (!$result) {
-            $cb = is_string($this->defaultController) ? 
-                $this->validateStringAction($cb) : 
-                $this->defaultController;
-        }
-        
-        // Finally, call controller
-        call_user_func_array(
-            $cb, array(&$this->request, &$this->response, $matches)
-        );
+
         $this->send($this->response);
     }
     
@@ -195,14 +199,7 @@ extends AbstractService
      * @return array The valid and callable callback
      */
     protected function validateStringAction($cb)
-    {
-        // Validate string controller@action
-        if (!is_string($cb)) {
-            throw new DualityException(
-                "Error Route: can only translate from string: ".$cb, 1
-            );
-        }
-        
+    {   
         // Translate
         list($controllerClass, $method) = explode('@', $cb);
         
@@ -325,17 +322,10 @@ extends AbstractService
     public function send(Response $response, $withHeaders = true)
     {
         if ($withHeaders) {
-            foreach ($response->getHeaders() as $k => $v) {
-                header($k.': '.$v);
-            }
-            http_response_code($response->getStatus());
+            $response->sendHeaders();
         }
 
-        if ($this->app->getBuffer()) {
-            $this->app->getBuffer()->write($response->getContent());
-        } else {
-            echo $response->getContent();
-        }
+        $this->app->getBuffer()->write($response->getContent());
     }
 
     /**
@@ -343,13 +333,17 @@ extends AbstractService
      * 
      * @return Request The resulting request instance
      */
-    public static function getRequestFromGlobals()
+    public function getRequestFromGlobals()
     {
+        if (empty($_SERVER['REQUEST_METHOD'])) {
+            return false;
+        }
+
         $url = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . 
             "://"
-            . (empty($_SERVER['HTTP_HOST']) ? '' : $_SERVER['HTTP_HOST'])
+            . (empty($_SERVER['HTTP_HOST']) ? $this->getHostname() : $_SERVER['HTTP_HOST'])
             . (empty($_SERVER['REQUEST_URI']) ? '/' : $_SERVER['REQUEST_URI']);
-
+        
         $request = new Request(new Url($url));
         $request->setMethod($_SERVER['REQUEST_METHOD']);
         $request->setContent(file_get_contents('php://input'));

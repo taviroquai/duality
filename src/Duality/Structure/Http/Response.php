@@ -27,5 +27,20 @@ use Duality\Structure\Http;
  */
 class Response extends Http
 {
-
+    /**
+     * Sends HTTP Headers if supported by SAPI
+     * 
+     * @return void
+     */
+    public function sendHeaders()
+    {
+        $sapi_type = php_sapi_name();
+        $no_support = array('cli', 'cli-server');
+        if (!in_array($sapi, $no_suport)) {       
+            http_response_code($this->getStatus());
+            foreach ($this->getHeaders() as $k => $v) {
+                header($k.': '.$v);
+            }
+        }
+    }
 }

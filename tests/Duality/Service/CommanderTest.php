@@ -4,11 +4,23 @@ class CommanderTest
 extends PHPUnit_Framework_TestCase
 {
     /**
-     * Test HTTP client service
+     * Test commander service
      */
     public function testCommander()
     {
         $app = new \Duality\App(dirname(__FILE__), null);
-        $auth = $app->call('cmd');
+        $cmd = $app->call('cmd');
+
+        $cmd->addResponder('/dummy/', function () {
+            echo 'response';
+        });
+
+        $cmd->setInput('');
+        $cmd->listen();
+
+        $cmd->setInput('dummy.php dummy');
+        $cmd->listen();
+
+        $cmd->terminate();
     }
 }

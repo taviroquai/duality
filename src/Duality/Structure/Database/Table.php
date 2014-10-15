@@ -38,6 +38,13 @@ extends DataTable
      * @var \Duality\Service\Database The database service
      */
     protected $database;
+
+    /**
+     * Holds the primary key column
+     * 
+     * @var string The primary key column
+     */
+    protected $primaryKey = 'id';
     
     /**
      * Creates a new database table giving a database structure
@@ -46,7 +53,36 @@ extends DataTable
      */
     public function __construct(Database $database)
     {
+        parent::__construct();
         $this->database = $database;
+    }
+
+    /**
+     * Sets the table primary key
+     * 
+     * @param string $name The primary key column name
+     * 
+     * @return void
+     */
+    public function setPrimaryKey($name)
+    {
+        $this->primaryKey = $name;
+    }
+
+    /**
+     * Sets table properties from an array
+     * 
+     * @param array $columns Import columns from an associative array
+     * 
+     * @return void
+     */
+    public function setColumns($columns)
+    {
+        $this->columns->reset();
+        foreach ($columns as $name => $item) {
+            $property = new \Duality\Structure\Property($name);
+            $this->addColumn($property);
+        }
     }
 
     /**
@@ -59,10 +95,9 @@ extends DataTable
     public function setColumnsFromEntity(Entity $entity)
     {
         $this->setName((string) $entity);
+        $this->columns->reset();
         foreach ($entity->getProperties() as $column) {
-            if (!$this->columnExists($column)) {
-                $this->addColumn($column);
-            }
+            $this->addColumn($column);
         }
     }
 
@@ -86,7 +121,7 @@ extends DataTable
         $stm = $this->database->getPDO()->prepare($sql);
         $stm->execute($values);
         
-        $this->rows = array();
+        $this->rows->reset();
         while ($trow = $stm->fetch(\PDO::FETCH_ASSOC)) {
             $row = new TableRow;
             $row->setTable($this);

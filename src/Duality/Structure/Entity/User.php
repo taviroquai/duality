@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Interface for error handler
+ * Abstract entity structure
  *
  * PHP Version 5.3.3
  *
@@ -11,10 +11,12 @@
  * @since   0.7.0
  */
 
-namespace Duality\Core;
+namespace Duality\Structure\Entity;
+
+use Duality\Structure\Entity;
 
 /**
- * Default error handler
+ * Entity class
  * 
  * PHP Version 5.3.3
  *
@@ -23,15 +25,8 @@ namespace Duality\Core;
  * @link    http://github.com/taviroquai/duality
  * @since   0.7.0
  */
-interface InterfaceErrorHandler
+class User
+extends Entity
 {
-    /**
-     * Log action
-     * 
-     * @param string $msg        Give the complete log message
-     * @param int    $error_type Give the type of information to be logged
-     * 
-     * @return void
-     */
-    public function log($msg, $error_type = E_USER_NOTICE);
+
 }

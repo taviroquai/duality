@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Array storage
+ * User session service (native php sessions)
  *
  * PHP Version 5.3.3
  *
@@ -11,12 +11,13 @@
  * @since   0.7.0
  */
 
-namespace Duality\Structure;
+namespace Duality\Service\Session;
 
+use Duality\Core\AbstractService;
 use Duality\Core\InterfaceStorage;
 
 /**
- * Session interface
+ * Default session service
  * 
  * PHP Version 5.3.3
  *
@@ -25,28 +26,36 @@ use Duality\Core\InterfaceStorage;
  * @link    http://github.com/taviroquai/duality
  * @since   0.7.0
  */
-class Storage
+class Native
+extends AbstractService
 implements InterfaceStorage
 {
     /**
-     * Holds the data
+     * Initiates the service
      * 
-     * @var array Holds the data
+     * @return void
      */
-    protected $buffer;
+    public function init()
+    {
+        session_start();
+    }
 
     /**
-     * Creates a new array storage
+     * Terminates the service
+     * 
+     * @return void
      */
-    public function __construct()
+    public function terminate()
     {
-        $this->buffer = array();
+        if (session_id() == '') {
+            session_write_close();
+        }
     }
 
     /**
      * Add item
      * 
-     * @param string $key   Give the key to be identified
+     * @param string $key   Give the key which identifies the value
      * @param string $value Give the value to be stored
      * 
      * @return void
@@ -57,41 +66,28 @@ implements InterfaceStorage
     }
 
     /**
-     * Set item
+     * Save item
      * 
-     * @param string $key   Give the key to be identified
+     * @param string $key   Give the key which identifies the value
      * @param string $value Give the value to be stored
      * 
      * @return void
      */
     public function set($key, $value)
     {
-        $this->buffer[$key] = $value;
-    }
-
-    /**
-     * Insert item on specified position. Usefull for ordered keys.
-     * 
-     * @param string $key   Give the key to be identified
-     * @param string $value Give the value to be stored
-     * 
-     * @return void
-     */
-    public function insert($key, $value)
-    {
-        array_splice($this->buffer, $key, 0, array($value));
+        $_SESSION[$key] = $value;
     }
 
     /**
      * Return item
      * 
-     * @param string $key Give the value key
+     * @param string $key Give the key to retrieve the value
      * 
-     * @return mixed The stored value
+     * @return mixed|null The value to be retrieved or null
      */
     public function get($key)
     {
-        return $this->has($key) ? $this->buffer[$key] : false;
+        return isset($_SESSION[$key]) ? $_SESSION[$key] : null;
     }
 
     /**
@@ -103,7 +99,7 @@ implements InterfaceStorage
      */
     public function has($key)
     {
-        return array_key_exists($key, $this->buffer);
+        return array_key_exists($key, $_SESSION);
     }
 
     /**
@@ -113,19 +109,7 @@ implements InterfaceStorage
      */
     public function asArray()
     {
-        return (array) $this->buffer;
-    }
-
-    /**
-     * Loads items into storage
-     * 
-     * @param array $data The data to be loaded
-     * 
-     * @return void
-     */
-    public function importArray($data)
-    {
-        $this->buffer = (array) $data;
+        return (array) $_SESSION;
     }
 
     /**
@@ -137,17 +121,30 @@ implements InterfaceStorage
      */
     public function remove($key)
     {
-        unset($this->buffer[$key]);
+        unset($_SESSION[$key]);
     }
 
     /**
-     * Clear storage
+     * Loads items into storage
+     * 
+     * @param array $data The data to be loaded
+     * 
+     * @return void
+     */
+    public function importArray($data)
+    {
+        $_SESSION = (array) $data;
+    }
+
+    /**
+     * Reset a session
      * 
      * @return void
      */
     public function reset()
     {
-        $this->buffer = array();
+        session_destroy();
+        session_start();
     }
 
 }

@@ -1,27 +1,17 @@
 <?php
 
-class SQLiteTest 
+class MySqlTest 
 extends PHPUnit_Framework_TestCase
 {
     /**
-     * Test SQLite database service with invalid config
-     * 
-     * @expectedException \Duality\Core\DualityException
+     * Test MySql database service
      */
-    public function testSQLiteInvalidConfig()
+    public function testMySql()
     {
-        $config = array(
-            'db' => array()
-        );
-        $app = new \Duality\App(dirname(__FILE__), $config);
-        $db = $app->call('db');
-    }
+        if (strpos(DB_DSN, 'mysql') === false) {
+            $this->markTestSkipped('The MySQL configuration is not available.');
+        }
 
-    /**
-     * Test SQLite database service
-     */
-    public function testSQLite()
-    {
         $config = array(
             'db' => array(
                 'dsn'   => DB_DSN,
@@ -31,52 +21,6 @@ extends PHPUnit_Framework_TestCase
         );
         $app = new \Duality\App(dirname(__FILE__), $config);
         $db = $app->call('db');
-    }
-
-    /**
-     * Test missing schema configuration
-     * 
-     * @expectedException \Duality\Core\DualityException
-     */
-    public function testCreateSchemaInvalidConfig()
-    {
-        $config = array(
-            'db' => array(
-                'dsn'   => DB_DSN,
-                'user'  => DB_USER,
-                'pass'  => DB_PASS
-            )
-        );
-        $app = new \Duality\App(dirname(__FILE__), $config);
-        $db = $app->call('db');
-
-        $db->getSchemaConfig();
-    }
-
-    /**
-     * Test schema
-     */
-    public function testCreateSchema()
-    {
-        $config = array(
-            'db' => array(
-                'dsn'   => DB_DSN,
-                'user'  => DB_USER,
-                'pass'  => DB_PASS,
-                'schema'=> DB_SCHEMA
-            )
-        );
-        $app = new \Duality\App(dirname(__FILE__), $config);
-        $db = $app->call('db');
-
-        $schema = array();
-        $db->reloadFromConfig($schema);
-
-        $schema = $db->getSchemaConfig();
-        $db->reloadFromConfig($schema);
-        $db->createFromConfig();
-        $db->updateFromConfig();
-        $db->seedFromConfig();
     }
 
     /**
@@ -84,6 +28,10 @@ extends PHPUnit_Framework_TestCase
      */
     public function testMethods()
     {
+        if (strpos(DB_DSN, 'mysql') === false) {
+            $this->markTestSkipped('The MySQL configuration is not available.');
+        }
+
         $config = array(
             'db' => array(
                 'dsn'   => DB_DSN,
@@ -96,13 +44,7 @@ extends PHPUnit_Framework_TestCase
 
         $table = new \Duality\Structure\Database\Table($db);
         $table->setName('dummy');
-        $table->setColumns(array('dummy' => 'integer'));
-
-        $db->AddTable($table);
-        $db->getTables();
-        $db->getPDO();
-        $entity = new \Duality\Structure\Entity\User();
-        $db->createTableFromEntity($entity);
+        $table->setColumns(array('name' => 'value'));
 
         $property = new \Duality\Structure\Property('dummy');
 
@@ -130,10 +72,6 @@ extends PHPUnit_Framework_TestCase
         // $result = $db->getModifyColumn($table, $property, 'integer');
         // $this->assertEquals($expected, $result);
 
-        $expected = false;
-        $result = $db->getModifyColumn($table, $property, 'integer');
-        $this->assertEquals($expected, $result);
-
         $expected = 'INSERT INTO dummy (dummy) VALUES (?);';
         $result = $db->getInsert($table, array('dummy' => 'value'));
         $this->assertEquals($expected, $result);
@@ -149,13 +87,5 @@ extends PHPUnit_Framework_TestCase
         // $expected = 'DELETE FROM dummy;';
         // $result = $db->getTruncate($table);
         // $this->assertEquals($expected, $result);
-
-        $expected = false;
-        $result = $db->getTruncate($table);
-        $this->assertEquals($expected, $result);
-
-        $db->terminate();
     }
-
-    
 }

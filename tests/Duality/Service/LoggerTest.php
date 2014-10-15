@@ -4,14 +4,14 @@ class LoggerTest
 extends PHPUnit_Framework_TestCase
 {
     /**
-     * Test logger service
+     * Test invalid logger configuration
      * 
      * @expectedException \Duality\Core\DualityException
      */
     public function testLoggerWithoutConfig()
     {
         $app = new \Duality\App(dirname(__FILE__), null);
-        $auth = $app->call('logger');
+        $app->call('logger');
     }
 
     /**
@@ -25,6 +25,18 @@ extends PHPUnit_Framework_TestCase
             )
         );
         $app = new \Duality\App(dirname(__FILE__), $config);
-        $auth = $app->call('logger');
+        $logger = $app->call('logger');
+
+        // Test NOTICE
+        $logger->log('dummy');
+
+        // Test E_USER_WARNING
+        $logger->log('dummy', E_USER_WARNING);
+
+        // Test E_USER_ERROR
+        $logger->log('dummy', E_USER_ERROR);
+
+        // Terminate
+        $logger->terminate();
     }
 }

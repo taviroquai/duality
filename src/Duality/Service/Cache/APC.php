@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Array storage
+ * APC cache service
  *
  * PHP Version 5.3.3
  *
@@ -11,13 +11,15 @@
  * @since   0.7.0
  */
 
-namespace Duality\Structure;
+namespace Duality\Service\Cache;
 
+use Duality\Core\DualityException;
+use Duality\Core\AbstractService;
 use Duality\Core\InterfaceStorage;
 
 /**
- * Session interface
- * 
+ * APC cache service
+ *
  * PHP Version 5.3.3
  *
  * @author  Marco Afonso <mafonso333@gmail.com>
@@ -25,24 +27,32 @@ use Duality\Core\InterfaceStorage;
  * @link    http://github.com/taviroquai/duality
  * @since   0.7.0
  */
-class Storage
+class APC
+extends AbstractService
 implements InterfaceStorage
 {
     /**
-     * Holds the data
+     * Initiates the service
      * 
-     * @var array Holds the data
+     * @return void
      */
-    protected $buffer;
-
-    /**
-     * Creates a new array storage
-     */
-    public function __construct()
+    public function init()
     {
-        $this->buffer = array();
+        if (!extension_loaded('apcu') && !extension_loaded('apc')) {
+            throw new DualityException("Error: apc extension not loaded", 1);
+        }
     }
 
+    /**
+     * Terminates the service
+     * 
+     * @return void
+     */
+    public function terminate()
+    {
+
+    }
+    
     /**
      * Add item
      * 
@@ -57,43 +67,58 @@ implements InterfaceStorage
     }
 
     /**
-     * Set item
+     * Save item
      * 
-     * @param string $key   Give the key to be identified
+     * @param string $key    Give the key to identify the value
+     * @param string $value  Give the value to be stored
+     * @param int    $expire Give the time to live value as integer
+     * 
+     * @return void
+     */
+    public function put($key, $value, $expire = 0)
+    {
+        apc_store($key, $value, $expire);
+    }
+
+    /**
+     * Return item
+     * 
+     * @param string $key Give the key to retrieve the value
+     * 
+     * @return mixed The value to be retrived or null
+     */
+    public function pull($key)
+    {
+        $value = $this->get($key);
+        $this->remove($key);
+        return $value;
+    }
+
+    /**
+     * Save item
+     * 
+     * @param string $key   Give the key to identify the value
      * @param string $value Give the value to be stored
      * 
      * @return void
      */
     public function set($key, $value)
     {
-        $this->buffer[$key] = $value;
-    }
-
-    /**
-     * Insert item on specified position. Usefull for ordered keys.
-     * 
-     * @param string $key   Give the key to be identified
-     * @param string $value Give the value to be stored
-     * 
-     * @return void
-     */
-    public function insert($key, $value)
-    {
-        array_splice($this->buffer, $key, 0, array($value));
+        $this->put($key, $value);
     }
 
     /**
      * Return item
      * 
-     * @param string $key Give the value key
+     * @param string $key Give the key to retrieve the value
      * 
-     * @return mixed The stored value
+     * @return mixed The value to be retrived or null
      */
     public function get($key)
     {
-        return $this->has($key) ? $this->buffer[$key] : false;
+        return $this->has($key) ? apc_fetch($key) : null;
     }
-
+    
     /**
      * Checks if item exists
      * 
@@ -103,7 +128,7 @@ implements InterfaceStorage
      */
     public function has($key)
     {
-        return array_key_exists($key, $this->buffer);
+        return apc_exists($key);
     }
 
     /**
@@ -113,9 +138,9 @@ implements InterfaceStorage
      */
     public function asArray()
     {
-        return (array) $this->buffer;
+        return array();
     }
-
+    
     /**
      * Loads items into storage
      * 
@@ -125,7 +150,9 @@ implements InterfaceStorage
      */
     public function importArray($data)
     {
-        $this->buffer = (array) $data;
+        foreach ($data as $key => $value) {
+            $this->add($key, $value);
+        }
     }
 
     /**
@@ -137,17 +164,16 @@ implements InterfaceStorage
      */
     public function remove($key)
     {
-        unset($this->buffer[$key]);
+        apc_delete($key);
     }
 
     /**
-     * Clear storage
+     * Reset a session
      * 
      * @return void
      */
     public function reset()
     {
-        $this->buffer = array();
+        apc_clear_cache();
     }
-
 }

@@ -6,3 +6,4 @@ Thumbs.db
 duality.sublime-project
 duality.sublime-workspace
 /nbproject
+/tests/coverage

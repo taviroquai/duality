@@ -35,12 +35,21 @@ extends AbstractService
 {
     /**
      * Holds the PDO handler
+     * 
      * @var \PDO
      */
     protected $pdo;
 
     /**
+     * Holds the schema configuration
+     * 
+     * @var array
+     */
+    protected $schema;
+
+    /**
      * Holds the database tables structures
+     * 
      * @var array
      */
     protected $tables = array();
@@ -71,6 +80,7 @@ extends AbstractService
                 \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION
             );
         }
+        
         $this->pdo = new \PDO($dsn, $user, $pass, $options);
     }
 
@@ -141,7 +151,7 @@ extends AbstractService
         if (!$this->app->getConfigItem('db.schema') 
             || !file_exists($this->app->getConfigItem('db.schema'))
         ) {
-            throw new Exception("Missing schema configuration", 1);
+            throw new DualityException("Missing schema configuration", 1);
         }
         return include($this->app->getConfigItem('db.schema'));
     }
@@ -155,10 +165,19 @@ extends AbstractService
      */
     public function reloadFromConfig($config)
     {
-
+        $this->schema = $config;
+        if (!isset($this->schema['create'])) {
+            $this->schema['create'] = array();
+        }
+        if (!isset($this->schema['update'])) {
+            $this->schema['update'] = array();
+        }
+        if (!isset($this->schema['seed'])) {
+            $this->schema['seed'] = array();
+        }
         $this->tables = array();
-        foreach ($config['create'] as $name => $fields) {
-            $table = new DbTable($this);
+        foreach ($this->schema['create'] as $name => $fields) {
+            $table = new Table($this);
             $table->setName($name);
             $columns = array_keys($fields);
             foreach ($columns as $name) {
@@ -174,17 +193,12 @@ extends AbstractService
      * @return void
      */
     public function createFromConfig()
-    {
-        $config = $this->getSchemaConfig();
-        
+    {   
         // Begin transation
         $this->pdo->beginTransaction();
 
-        // Reload tables
-        $this->reloadFromConfig($config);
-
         // Create tables
-        foreach ($config['create'] as $name => $item) {
+        foreach ($this->schema['create'] as $name => $item) {
             $table = $this->tables[$name];
             $this->pdo->exec($this->getDropTable($table));
             $sql = $this->getCreateTable($table, $item);
@@ -202,31 +216,27 @@ extends AbstractService
      */
     public function updateFromConfig()
     {
-        $config = $this->getSchemaConfig();
-
         // Begin transation
         $this->pdo->beginTransaction();
 
-        // Reload tables
-        $this->reloadFromConfig($config);
-
         // Update tables
-        foreach ($config['update'] as $item) {
+        foreach ($this->schema['update'] as $item) {
             if (isset($this->tables[$item['table']])) {
                 $table = $this->tables[$item['table']];
                 $columns = $table->getColumns();
-                if (isset($item['add'])) {
-                    $this->pdo->exec(
-                        $this->getAddColumn($table, $item['add'], $item['type'])
-                    );
+                if (isset($item['drop'])) {
+                    $sql = $this->getDropColumn($table, $item['drop']);
+                } elseif (isset($item['add'])) {
+                    $sql = $this->getAddColumn($table, $item['add'], $item['type']);
                 } elseif (isset($item['modify']) 
                     && isset($columns[$item['modify']])
                 ) {
-                    $this->pdo->exec(
-                        $this->getModifyColumn(
-                            $table, $columns[$item['modify']], $item['type']
-                        )
+                    $sql = $this->getModifyColumn(
+                        $table, $columns[$item['modify']], $item['type']
                     );
+                }
+                if (!empty($sql)) {
+                    $this->pdo->exec($sql);
                 }
             }
         }
@@ -242,20 +252,15 @@ extends AbstractService
      */
     public function seedFromConfig()
     {
-        $config = $this->getSchemaConfig(); 
-        
         // Begin transation
         $this->pdo->beginTransaction();
 
-        // Reload tables
-        $this->reloadFromConfig($config);
-
         // Seed tables
-        foreach ($config['seed'] as $item) {
+        foreach ($this->schema['seed'] as $item) {
             if (isset($this->tables[$item['table']])) {
                 $table = $this->tables[$item['table']];
                 if (isset($item['truncate']) && $item['truncate']) {
-                    $this->pdo->exec($this->getTruncate($table));
+                    $sql = $this->getTruncate($table);
                 }
                 if (isset($item['values'])) {
                     $sql = $this->getInsert($table, $item['values']);
@@ -265,6 +270,8 @@ extends AbstractService
                         $values[] = $this->parseValue($v);
                     }
                     $stm->execute($values);
+                } else {
+                    $this->pdo->exec($sql);
                 }
             }
         }
@@ -293,7 +300,7 @@ extends AbstractService
 
             switch ($fn)
             {
-            case 'hash': $value = $this->app->encrypt($value); 
+            case 'hash': $value = $this->app->call('security')->encrypt($value); 
                 break;
             case 'int': $value = (int) $value;
                 break;
@@ -314,7 +321,7 @@ extends AbstractService
      * 
      * @return string The final SQL string
      */
-    public abstract function getSelect($fields, $from, $where, $limit, $offset);
+    public abstract function getSelect($fields, $from, $where = '', $limit = 0, $offset = 0);
 
     /**
      * Returns a create table statement
@@ -324,7 +331,7 @@ extends AbstractService
      * 
      * @return string Returns the SQL statement
      */
-    public abstract function getCreateTable(Table $table, $config = array());
+    public abstract function getCreateTable(Table $table, $config);
 
     /**
      * Returns a drop table statement
@@ -346,6 +353,15 @@ extends AbstractService
      * @return string Returns the SQL statement
      */
     public abstract function getAddColumn(Table $table, $property, $definition);
+
+    /**
+     * Returns a drop column statement
+     * 
+     * @param \Duality\Structure\Database\Table $table      The database table
+     * 
+     * @return string Returns the SQL statement
+     */
+    public abstract function getDropColumn(Table $table, $property);
 
     /**
      * Returns a add column statement

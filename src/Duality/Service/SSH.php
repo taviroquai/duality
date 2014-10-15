@@ -31,13 +31,6 @@ class SSH
 extends AbstractService
 {
     /**
-     * The dependent application container
-     * 
-     * @var Duality\App The application container
-     */
-    protected $app;
-
-    /**
      * Own public key
      * 
      * @var string Holds the public key to authenticate
@@ -71,16 +64,6 @@ extends AbstractService
      * @var \resource Holds the connection resource
      */
     protected $connection;
-
-    /**
-     * Creates a new error handler
-     * 
-     * @param \Duality\App &$app Give the application container
-     */
-    public function __construct(App &$app)
-    {
-        $this->app = $app;
-    }
 
     /**
      * On end disconnect
@@ -155,13 +138,13 @@ extends AbstractService
         }
         
         // Verify fingerprint
-        if (!empty($this->ssh_fingerprint)) {
-            $fingerprint = ssh2_fingerprint(
-                $this->connection, SSH2_FINGERPRINT_MD5 | SSH2_FINGERPRINT_HEX
-            );
-            if (strcmp($this->ssh_fingerprint, $fingerprint) !== 0) {
-                throw new DualityException('Unable to verify server identity!');
-            }
+        $fingerprint = ssh2_fingerprint(
+            $this->connection, SSH2_FINGERPRINT_MD5 | SSH2_FINGERPRINT_HEX
+        );
+        if (!empty($this->ssh_fingerprint)
+            && (strcmp($this->ssh_fingerprint, $fingerprint) !== 0)
+        ) {
+            throw new DualityException('Unable to verify server identity!');
         }
         
         // Try auth methods

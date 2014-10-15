@@ -32,13 +32,6 @@ extends AbstractService
 implements InterfaceMailer
 {
     /**
-     * The dependent application container
-     * 
-     * @var Duality\App The application container
-     */
-    protected $app;
-
-    /**
      * Holds the current mail params
      * 
      * @var \Duality\Core\InterfaceStorage The mail params
@@ -51,16 +44,6 @@ implements InterfaceMailer
      * @var \Duality\Core\InterfaceStorage The current smtp configuration
      */
     protected $smtp;
-
-    /**
-     * Creates a new error handler
-     * 
-     * @param \Duality\App &$app The application container
-     */
-    public function __construct(App &$app)
-    {
-        $this->app = $app;
-    }
 
     /**
      * Initiates the service
@@ -168,7 +151,7 @@ implements InterfaceMailer
      * 
      * @return Duality\Service\Mailer This instance
      */
-    public function addAdress($address)
+    public function addAddress($address)
     {
         $list = $this->current->get('to');
         $list[] = $address;
@@ -221,10 +204,10 @@ implements InterfaceMailer
      */
     public function from($from, $name)
     {
-        $from = $this->current->get('from');
-        $from['email'] = $from;
-        $from['name'] = $name;
-        $this->current->set('from', $reply);  
+        $config = $this->current->get('from');
+        $config['email'] = $from;
+        $config['name'] = $name;
+        $this->current->set('from', $config);  
         return $this;
     }
 

@@ -51,6 +51,42 @@ extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test invalid locale code
+     */
+    public function testLocalizationInvalidCode()
+    {
+        $config = array(
+            'locale' => array(
+                'default'   => 'en_US',
+                'dir'       => './tests/data/lang',
+                'timezone'  => 'Europe/Lisbon'
+            )
+        );
+        $app = new \Duality\App(dirname(__FILE__), $config);
+        $locale = $app->call('locale');
+        $locale->setLocale('dummy');
+    }
+
+    /**
+     * Test localization service
+     * 
+     * @expectedException \Duality\Core\DualityException
+     */
+    public function testLocalizationInvalidTranslateCode()
+    {
+        $config = array(
+            'locale' => array(
+                'default'   => 'en_US',
+                'dir'       => './tests/data/lang',
+                'timezone'  => 'Europe/Lisbon'
+            )
+        );
+        $app = new \Duality\App(dirname(__FILE__), $config);
+        $locale = $app->call('locale');
+        $result = $locale->t('key', array(), 'dummy');
+    }
+
+    /**
      * Test localization service
      */
     public function testLocalization()
@@ -63,6 +99,22 @@ extends PHPUnit_Framework_TestCase
             )
         );
         $app = new \Duality\App(dirname(__FILE__), $config);
-        $auth = $app->call('locale');
+        $locale = $app->call('locale');
+
+        $locale->getDisplayLanguage();
+        $locale->getNumber(1001.11);
+        $locale->parseNumber('1.001,11');
+        $locale->getCurrency(1001.11);
+        $locale->getNumberFormatter();
+        $locale->getDateFormatter();
+        $locale->getCalendar();
+        $locale->getTimeZone();
+        $locale->t('key');
+
+        $expected = 'valor';
+        $result = $locale->t('key', array(), 'es_ES');
+        $this->assertEquals($expected, $result);
+
+        $locale->terminate();
     }
 }

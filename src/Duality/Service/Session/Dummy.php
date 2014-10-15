@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Array storage
+ * Dummy session service (native php sessions)
  *
  * PHP Version 5.3.3
  *
@@ -11,12 +11,14 @@
  * @since   0.7.0
  */
 
-namespace Duality\Structure;
+namespace Duality\Service\Session;
 
+use Duality\Core\AbstractService;
 use Duality\Core\InterfaceStorage;
+use Duality\Structure\Storage;
 
 /**
- * Session interface
+ * Dummy session service
  * 
  * PHP Version 5.3.3
  *
@@ -25,73 +27,73 @@ use Duality\Core\InterfaceStorage;
  * @link    http://github.com/taviroquai/duality
  * @since   0.7.0
  */
-class Storage
+class Dummy
+extends AbstractService
 implements InterfaceStorage
 {
     /**
-     * Holds the data
+     * Holds the session data
      * 
-     * @var array Holds the data
+     * @var \Duality\Structure\Storage The session storage
      */
-    protected $buffer;
+    protected $storage;
 
     /**
-     * Creates a new array storage
+     * Initiates the service
+     * 
+     * @return void
      */
-    public function __construct()
+    public function init()
     {
-        $this->buffer = array();
+        $this->storage = new Storage;
+    }
+
+    /**
+     * Terminates the service
+     * 
+     * @return void
+     */
+    public function terminate()
+    {
+        unset($this->storage);
     }
 
     /**
      * Add item
      * 
-     * @param string $key   Give the key to be identified
+     * @param string $key   Give the key which identifies the value
      * @param string $value Give the value to be stored
      * 
      * @return void
      */
     public function add($key, $value)
     {
-        $this->set($key, $value);
+        $this->storage->add($key, $value);
     }
 
     /**
-     * Set item
+     * Save item
      * 
-     * @param string $key   Give the key to be identified
+     * @param string $key   Give the key which identifies the value
      * @param string $value Give the value to be stored
      * 
      * @return void
      */
     public function set($key, $value)
     {
-        $this->buffer[$key] = $value;
-    }
-
-    /**
-     * Insert item on specified position. Usefull for ordered keys.
-     * 
-     * @param string $key   Give the key to be identified
-     * @param string $value Give the value to be stored
-     * 
-     * @return void
-     */
-    public function insert($key, $value)
-    {
-        array_splice($this->buffer, $key, 0, array($value));
+        $this->storage->set($key, $value);
     }
 
     /**
      * Return item
      * 
-     * @param string $key Give the value key
+     * @param string $key Give the key to retrieve the value
      * 
-     * @return mixed The stored value
+     * @return mixed|null The value to be retrieved or null
      */
     public function get($key)
     {
-        return $this->has($key) ? $this->buffer[$key] : false;
+        return $this->storage->get($key);
     }
 
     /**
@@ -103,7 +105,7 @@ implements InterfaceStorage
      */
     public function has($key)
     {
-        return array_key_exists($key, $this->buffer);
+        return $this->storage->has($key);
     }
 
     /**
@@ -113,19 +115,7 @@ implements InterfaceStorage
      */
     public function asArray()
     {
-        return (array) $this->buffer;
-    }
-
-    /**
-     * Loads items into storage
-     * 
-     * @param array $data The data to be loaded
-     * 
-     * @return void
-     */
-    public function importArray($data)
-    {
-        $this->buffer = (array) $data;
+        return $this->storage->asArray();
     }
 
     /**
@@ -137,17 +127,29 @@ implements InterfaceStorage
      */
     public function remove($key)
     {
-        unset($this->buffer[$key]);
+        $this->storage->remove($key);
     }
 
     /**
-     * Clear storage
+     * Loads items into storage
+     * 
+     * @param array $data The data to be loaded
+     * 
+     * @return void
+     */
+    public function importArray($data)
+    {
+        $this->storage->importArray($data);
+    }
+
+    /**
+     * Reset a session
      * 
      * @return void
      */
     public function reset()
     {
-        $this->buffer = array();
+        $this->storage->reset();
     }
 
 }

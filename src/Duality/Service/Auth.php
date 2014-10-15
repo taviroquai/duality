@@ -31,12 +31,12 @@ extends AbstractService
 implements InterfaceAuth
 {
     /**
-     * Holds the current logged username
+     * Holds the session key
      * 
-     * @var string The current user logged in
+     * @var string The session auth key
      */
-    protected $current;
-
+    protected $sessionKey = '__auth';
+        
     /**
      * Initiates the service
      * 
@@ -44,7 +44,7 @@ implements InterfaceAuth
      */
     public function init()
     {
-        $this->current = '';
+        
     }
 
     /**
@@ -69,8 +69,7 @@ implements InterfaceAuth
     public function login($username, $password, \Closure $storageCallback)
     {
         if (count($storageCallback($username, $password))) {
-            $this->app->call('session')->set('__user', $username);
-            $this->current = $username;
+            $this->app->call('session')->set($this->sessionKey, $username);
             return true;    
         }
         return false;
@@ -83,11 +82,7 @@ implements InterfaceAuth
      */
     public function isLogged()
     {
-        $user = $this->app->call('session')->get('__user');
-        if (!empty($user)) {
-            return true;
-        }
-        return false;
+        return $this->app->call('session')->has($this->sessionKey);
     }
 
     /**
@@ -107,7 +102,7 @@ implements InterfaceAuth
      */
     public function whoAmI()
     {
-        return $this->current;
+        return $this->app->call('session')->get($this->sessionKey);
     }
 
 }

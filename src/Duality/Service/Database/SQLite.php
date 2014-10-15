@@ -41,7 +41,7 @@ class SQLite extends Database
      * 
      * @return string The final SQL string
      */
-    public function getSelect($fields, $from, $where, $limit, $offset)
+    public function getSelect($fields, $from, $where = '', $limit = 0, $offset = 0)
     {
         $sql = "SELECT $fields FROM ".strtolower((string) $from);
         if (!empty($where)) {
@@ -50,6 +50,7 @@ class SQLite extends Database
         if ($limit > 0) {
             $sql .= ' LIMIT '.$limit.' OFFSET '.$offset;
         }
+        $sql .= ';';
         return $sql;
     }
 
@@ -61,17 +62,17 @@ class SQLite extends Database
      * 
      * @return string Returns the SQL statement
      */
-    public function getCreateTable(Table $table, $config = array())
+    public function getCreateTable(Table $table, $config)
     {
-        $sql = "CREATE TABLE " . strtolower((string) $table) . " ( ";
+        $sql = "CREATE TABLE " . strtolower((string) $table) . " (";
 
         foreach ($config as $field => $definition) {
             if ($definition == 'auto') {
-                $definition = 'INTEGER PRIMARY KEY ';
+                $definition = 'INTEGER PRIMARY KEY';
             }
-            $sql .= $field . " " . $definition . ",";
+            $sql .= $field . " " . $definition . ", ";
         }
-        $sql = rtrim($sql, ',');
+        $sql = rtrim($sql, ', ');
         $sql .= ');';
         
         return $sql;
@@ -115,6 +116,20 @@ class SQLite extends Database
     }
 
     /**
+     * Returns a drop column statement
+     * 
+     * @param \Duality\Structure\Database\Table $table      The database table
+     * @param string                            $property   The column name
+     * 
+     * @return string Returns the SQL statement
+     */
+    public function getDropColumn(Table $table, $property)
+    {
+        // Not implemented in sqlite
+        return false;
+    }
+
+    /**
      * Returns a add column statement
      * 
      * @param \Duality\Structure\Database\Table $table      The database table
@@ -125,9 +140,8 @@ class SQLite extends Database
      */
     public function getModifyColumn(Table $table, Property $property, $definition)
     {
-        throw new DualityException(
-            "Error Modify Column Type does not exists in SQLite", 1
-        );
+        // Not implemented in sqlite
+        return false;
     }
 
     /**
@@ -140,7 +154,7 @@ class SQLite extends Database
      */
     public function getInsert(Table $table, $item = array())
     {
-        $sql = "INSERT INTO " . strtolower((string) $table) . " ( ";
+        $sql = "INSERT INTO " . strtolower((string) $table) . " (";
 
         $values = array();
         foreach ($item as $field => $value) {
@@ -151,14 +165,14 @@ class SQLite extends Database
         $sql .= ') ';
 
         if (!empty($values)) {
-            $sql .= ' VALUES (';
+            $sql .= 'VALUES (';
             foreach ($values as $item) {
                 $sql .= '?,';
             }
             $sql = rtrim($sql, ',');
-            $sql .= ') ';
+            $sql .= ')';
         }
-
+        $sql .= ";";
         return $sql;
     }
 
@@ -180,7 +194,7 @@ class SQLite extends Database
             $sql .= $field. " = ?";
         }
         $sql = rtrim($sql, ',');
-
+        $sql .= ";";
         return $sql;
     }
 
@@ -195,7 +209,14 @@ class SQLite extends Database
     public function getDelete(Table $table, $item)
     {
         $sql  = "DELETE FROM " . strtolower((string) $table) . " ";
-        $sql .= "WHERE id = ?";
+        $sql .= "WHERE ";
+        $values = array();
+        foreach ($item as $field => $value) {
+            $values[] = $this->parseValue($value);
+            $sql .= $field. " = ?";
+        }
+        $sql = rtrim($sql, ',');
+        $sql .= ";";
         return $sql;
     }
 
@@ -208,7 +229,7 @@ class SQLite extends Database
      */
     public function getTruncate(Table $table)
     {
-        $sql  = "TRUNCATE " . strtolower((string) $table) . " ";
-        return $sql;
+        // Not implemented in sqlite
+        return false;
     }
 }

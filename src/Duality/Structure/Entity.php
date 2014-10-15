@@ -15,6 +15,7 @@ namespace Duality\Structure;
 
 use Duality\Core\DualityException;
 use Duality\Core\Structure;
+use Duality\Structure\Storage;
 
 /**
  * Entity class
@@ -32,7 +33,7 @@ extends Structure
     /**
      * Holds the entity properties
      * 
-     * @var array The list of properties
+     * @var \Duality\Structure\Storage The list of properties
      */
     protected $properties;
 
@@ -48,7 +49,7 @@ extends Structure
      */
     public function __construct()
     {
-        $this->properties = array();
+        $this->properties = new Storage;
         $this->addProperty(new Property($this->defaultIdProperty));
     }
 
@@ -61,7 +62,8 @@ extends Structure
      */
     public function addProperty(Property $property)
     {
-        $this->properties[] = $property;
+        $index = count($this->properties->asArray());
+        $this->properties->add($index, $property);
     }
 
     /**
@@ -71,7 +73,7 @@ extends Structure
      */
     public function getProperties()
     {
-        return $this->properties;
+        return $this->properties->asArray();
     }
 
     /**

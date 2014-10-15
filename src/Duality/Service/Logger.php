@@ -61,7 +61,6 @@ implements InterfaceErrorHandler
         $this->stream = new StreamFile($this->app->getConfigItem('logger.buffer'));
         $this->stream->open('a+b');
         set_error_handler(array($this, 'error'));
-        set_exception_handler(array($this, 'myException'));
     }
 
     /**
@@ -82,25 +81,14 @@ implements InterfaceErrorHandler
     /**
      * Log action
      * 
-     * @param string $msg Give the message to log
+     * @param string $msg        Give the message to log
+     * @param int    $error_type Give the type of information to be logged
      * 
      * @return void
      */
-    public function log($msg)
+    public function log($msg, $error_type = E_USER_NOTICE)
     {
-        trigger_error($msg);
-    }
-
-    /**
-     * Handles exceptions
-     * 
-     * @param \Exception $e Give the exception to handler
-     * 
-     * @return void
-     */
-    public function myException($e)
-    {
-        $this->error(E_USER_ERROR, $e->getMessage(), $e->getFile(), $e->getLine());
+        trigger_error($msg, $error_type);
     }
 
     /**
@@ -115,38 +103,23 @@ implements InterfaceErrorHandler
      */
     public function error($errno, $errstr, $errfile, $errline)
     {
-        if (!(error_reporting() & $errno)) {
-            // This error code is not included in error_reporting
-            return;
-        }
-
-        if (!$this->stream) {
-            // cannot log anything... break?!?
-            return;
-        }
-
         $msg = '';
 
         switch ($errno) {
         case E_USER_ERROR:
-            $msg  = "My Fatal Error [$errno] $errstr"
-                . "on line $errline in file $errfile\n";
+            $msg  = "Duality Fatal Error [$errno] $errstr"
+                . " on line $errline in file $errfile\n";
             $msg .= "PHP ". PHP_VERSION . " (" . PHP_OS . ")\n";
             $msg .= "Cannot continue. Aborting...\n";
             break;
 
         case E_USER_WARNING:
-            $msg  = "My Warning [$errno] $errstr"
-                . " on line $errline in file $errfile\n";
-            break;
-
-        case E_USER_NOTICE:
-            $msg  = "My Notice [$errno] $errstr"
+            $msg  = "Duality Warning [$errno] $errstr"
                 . " on line $errline in file $errfile\n";
             break;
 
         default:
-            $msg  = "My Notice [$errno] $errstr"
+            $msg  = "Duality Notice [$errno] $errstr"
                 . " on line $errline in file $errfile\n";
             break;
         }
@@ -154,7 +127,7 @@ implements InterfaceErrorHandler
         // Add date to message
         $msg = date('Y-m-d H:i:s').": ".$msg;
 
-        // write log
+        // write log to buffer
         $this->stream->write($msg);
 
         // Set error

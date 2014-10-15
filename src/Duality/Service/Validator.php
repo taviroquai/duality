@@ -60,30 +60,6 @@ extends AbstractService
     }
 
     /**
-     * Process Form Assist validation
-     * 
-     * @param Duality\Http\Request &$req        Give the HTTP request
-     * @param array                $rules       Give the rules to validate
-     * @param array                &$outputJson Give a variable to modify output
-     * 
-     * @return void
-     */
-    public function validateAssist(&$req, $rules, &$outputJson)
-    {
-        $input = $req->getParams();
-        if ($req->hasParam('_assist_rule') 
-            && array_key_exists($input['_assist_rule'], $rules)
-        ) {
-            $key = $req->getParam('_assist_rule');
-            $outputJson['result'] = (int) $this->validate($key, $rules[$key]);
-            $outputJson['msg'] = $this->storage->get($key);
-            if ($outputJson['result'] === 0) {
-                $outputJson['type'] = 'has-error';
-            }
-        }
-    }
-
-    /**
      * Validates an array of rules
      * 
      * @param array $rules Give the rules to validate
@@ -111,17 +87,15 @@ extends AbstractService
     public function validate($key, $params)
     {
         $result = true;
-        if (empty($params['rules'])) {
-            throw new DualityException("Error Validation: rules required", 1);
-        }
-        if (!array_key_exists('value', $params)) {
-            throw new DualityException("Error Validation: value required", 2);
-        }
-        if (empty($params['fail']) || empty($params['info'])) {
+        if (empty($params['rules'])
+            || !array_key_exists('value', $params)
+            || (empty($params['fail']) || empty($params['info']))
+        ) {
             throw new DualityException(
-                "Error Validation: fail and info messages are required", 3
+                "Error Validation: required params are rules, value, fail and info", 1
             );
         }
+        
         $rules = explode('|', $params['rules']);
         foreach ($rules as $item) {
             $values = explode(':', $item);
@@ -162,6 +136,18 @@ extends AbstractService
     public function getMessages()
     {
         return $this->storage->asArray();
+    }
+
+    /**
+     * Get message by key
+     * 
+     * @param string $key Give the key of rule to get resulting message
+     * 
+     * @return string Returns stored message by key
+     */
+    public function getMessage($key)
+    {
+        return $this->storage->get($key);
     }
 
     /**
@@ -223,10 +209,7 @@ extends AbstractService
      */
     public function isEquals($value, $params)
     {
-        if (!isset($params[0])) {
-            return false;
-        }
-        return $value === $params[0];
+        return $value === empty($params[0]) ? '' : $params[0];
     }
 
     /**

@@ -35,7 +35,7 @@ implements InterfaceCommander
      * 
      * @var string Holds the user input command
      */
-    protected $argsv;
+    protected $argv;
 
     /**
      * Commander responders
@@ -51,8 +51,8 @@ implements InterfaceCommander
      */
     public function init()
     {
-        $argv = self::parseFromGlobals();
-        $this->argsv = array_slice($argv, 1);
+        // Set input from globals
+        $this->setInput(implode(' ', self::parseFromGlobals()));
 
         // Register built-in responders
         $app = $this->app;
@@ -65,7 +65,20 @@ implements InterfaceCommander
      */
     public function terminate()
     {
-        $this->argsv = array();
+        $this->argv = array();
+    }
+
+    /**
+     * Sets the input arguments
+     * 
+     * @param string Give the input line
+     * 
+     * @return void
+     */
+    public function setInput($argv)
+    {
+        $argv = explode(' ', $argv);
+        $this->argv = array_slice($argv, 1);
     }
 
     /**
@@ -100,7 +113,7 @@ implements InterfaceCommander
     {
         $notfound = true;
         foreach ($this->responders as $ns => $cb) {
-            foreach ($this->argsv as $item) {
+            foreach ($this->argv as $item) {
                 if ($result = preg_match($ns, $item, $matches)) {
                     $notfound = false;
                     $cb($matches);

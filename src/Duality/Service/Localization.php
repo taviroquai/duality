@@ -89,9 +89,6 @@ extends AbstractService
         $this->storage = new Storage;
         $this->storage->reset();
 
-        if (!extension_loaded('intl')) {
-            throw new DualityException("Error: intl extension not loaded", 1);
-        }
         if ($this->app->getConfigItem('locale.default') == null) {
             throw new DualityException("Error: locale configuration missing", 2);
         }
@@ -304,7 +301,7 @@ extends AbstractService
             if (\Locale::canonicalize($current) === null
                 || !is_dir($this->directory.DIRECTORY_SEPARATOR.$current)
             ) {
-                throw new Exception("Error Locale: target code ", 2);
+                throw new DualityException("Error Locale: target code ", 2);
             }
         }
 

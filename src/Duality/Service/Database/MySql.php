@@ -41,7 +41,7 @@ class MySql extends Database
      * 
      * @return string The final SQL string
      */
-    public function getSelect($fields, $from, $where, $limit, $offset)
+    public function getSelect($fields, $from, $where = '', $limit = 0, $offset = 0)
     {
         $sql = "SELECT $fields FROM ".strtolower((string) $from);
         if (!empty($where)) {
@@ -50,6 +50,7 @@ class MySql extends Database
         if ($limit > 0) {
             $sql .= ' LIMIT '.$limit.' OFFSET '.$offset;
         }
+        $sql .= ';';
         return $sql;
     }
 
@@ -61,9 +62,9 @@ class MySql extends Database
      * 
      * @return string Returns the SQL statement
      */
-    public function getCreateTable(Table $table, $config = array())
+    public function getCreateTable(Table $table, $config)
     {
-        $sql = "CREATE TABLE " . strtolower((string) $table) . " ( ";
+        $sql = "CREATE TABLE " . strtolower((string) $table) . " (";
 
         foreach ($config as $field => $definition) {
             if ($definition == 'auto') {
@@ -114,6 +115,22 @@ class MySql extends Database
     }
 
     /**
+     * Returns a drop column statement
+     * 
+     * @param \Duality\Structure\Database\Table $table      The database table
+     * @param string                            $property   The column name
+     * 
+     * @return string Returns the SQL statement
+     */
+    public function getDropColumn(Table $table, $property)
+    {
+        $sql  = "ALTER TABLE " . strtolower((string) $table) . " ";
+        $sql .= "DROP COLUMN " . strtolower((string) $property);
+        $sql .= ";";
+        return $sql;
+    }
+
+    /**
      * Returns a add column statement
      * 
      * @param \Duality\Structure\Database\Table $table      The database table
@@ -141,7 +158,7 @@ class MySql extends Database
      */
     public function getInsert(Table $table, $item = array())
     {
-        $sql = "INSERT INTO " . strtolower((string) $table) . " ( ";
+        $sql = "INSERT INTO " . strtolower((string) $table) . " (";
 
         $values = array();
         foreach ($item as $field => $value) {
@@ -152,13 +169,14 @@ class MySql extends Database
         $sql .= ') ';
 
         if (!empty($values)) {
-            $sql .= ' VALUES (';
+            $sql .= 'VALUES (';
             foreach ($values as $item) {
                 $sql .= '?,';
             }
             $sql = rtrim($sql, ',');
-            $sql .= ') ';
+            $sql .= ')';
         }
+        $sql .= ";";
         return $sql;
     }
 
@@ -180,7 +198,7 @@ class MySql extends Database
             $sql .= $field. " = ?";
         }
         $sql = rtrim($sql, ',');
-
+        $sql .= ";";
         return $sql;
     }
 
@@ -195,7 +213,14 @@ class MySql extends Database
     public function getDelete(Table $table, $item)
     {
         $sql  = "DELETE FROM " . strtolower((string) $table) . " ";
-        $sql .= "WHERE id = ?";
+        $sql .= "WHERE ";
+        $values = array();
+        foreach ($item as $field => $value) {
+            $values[] = $this->parseValue($value);
+            $sql .= $field. " = ?";
+        }
+        $sql = rtrim($sql, ',');
+        $sql .= ";";
         return $sql;
     }
 
@@ -208,7 +233,8 @@ class MySql extends Database
      */
     public function getTruncate(Table $table)
     {
-        $sql  = "TRUNCATE " . strtolower((string) $table) . " ";
+        $sql  = "TRUNCATE " . strtolower((string) $table);
+        $sql .= ";";
         return $sql;
     }
 

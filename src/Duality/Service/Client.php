@@ -15,6 +15,8 @@ namespace Duality\Service;
 
 use Duality\Core\AbstractService;
 use Duality\Structure\Url;
+use Duality\Structure\Http\Request;
+use Duality\Structure\Http\Response;
 
 /**
  * Simulates an HTTP client

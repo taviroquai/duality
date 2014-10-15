@@ -9,6 +9,13 @@ extends PHPUnit_Framework_TestCase
     public function testClient()
     {
         $app = new \Duality\App(dirname(__FILE__), null);
-        $auth = $app->call('client');
+        $client = $app->call('client');
+
+        $client->setUserAgent('dummy');
+        $client->getUserAgent();
+        $url = new \Duality\Structure\Url('http://google.com/');
+        $request = $client->createRequest($url);
+        $client->execute($request);
+        $client->terminate();
     }
 }
