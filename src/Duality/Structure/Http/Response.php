@@ -36,7 +36,7 @@ class Response extends Http
     {
         $sapi_type = php_sapi_name();
         $no_support = array('cli', 'cli-server');
-        if (!in_array($sapi, $no_suport)) {       
+        if (!in_array($sapi_type, $no_support)) {       
             http_response_code($this->getStatus());
             foreach ($this->getHeaders() as $k => $v) {
                 header($k.': '.$v);

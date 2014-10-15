@@ -88,8 +88,9 @@ extends AbstractService
     {
         $result = true;
         if (empty($params['rules'])
-            || !array_key_exists('value', $params)
-            || (empty($params['fail']) || empty($params['info']))
+            || empty($params['value'])
+            || empty($params['fail']) 
+            || empty($params['info'])
         ) {
             throw new DualityException(
                 "Error Validation: required params are rules, value, fail and info", 1
