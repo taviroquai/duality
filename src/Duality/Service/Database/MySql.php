@@ -31,6 +31,20 @@ use Duality\Service\Database;
 class MySql extends Database
 {
     /**
+     * Holds the information schema column name
+     * 
+     * @var string
+     */
+    protected $schema_column_name = 'COLUMN_NAME';
+
+    /**
+     * Holds the information schema column type
+     * 
+     * @var string
+     */
+    protected $schema_column_type = 'COLUMN_TYPE';
+
+    /**
      * Returns a select query
      * 
      * @param string $fields The select clause
@@ -238,4 +252,19 @@ class MySql extends Database
         return $sql;
     }
 
+    /**
+     * Returns a get columns statement
+     * 
+     * @param string $tablename The table name
+     * 
+     * @return string Returns the SQL statement
+     */
+    public function getColumns($tablename)
+    {
+        $sql = "SELECT {$this->schema_column_name}, "
+        $sql .= "{$this->schema_column_type} FROM INFORMATION_SCHEMA.COLUMNS ";
+        $sql .= "WHERE TABLE_SCHEMA = '{$this->getName()}' ";
+        $sql .= "AND TABLE_NAME = '$tablename';";
+        return $sql;
+    }
 }

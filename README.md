@@ -112,7 +112,7 @@ Cache Service
 -------------
 Example:
 ```
-    $app->call('cache')->set('key', 'value', 'timestamp');
+    $app->call('cache')->put('key', 'value', 'timestamp');
 ```
 
 HTTP Client
@@ -135,7 +135,7 @@ Database Service
 Example:
 ```
     $app->call('db')
-        ->createTableFromEntity(new User())
+        ->getTable('user')
         ->find(0, 10)
         ->toArray();
 ```
@@ -145,8 +145,8 @@ Localization Service
 Example:
 ```
     $app->call('i18n')
-        ->setLocale('pt')
-        ->translate('key');
+        ->setLocale('pt_PT')
+        ->translate('key', array(), 'en_US');
 ```
 
 Logger Service
@@ -201,7 +201,7 @@ Session Service
 Example:
 ```
     $app->call('session')
-        ->set('__lastError', 'Invalid input');
+        ->put('__lastError', 'Invalid input');
 ```
 
 Validation Service

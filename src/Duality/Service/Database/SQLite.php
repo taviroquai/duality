@@ -31,6 +31,20 @@ use Duality\Service\Database;
 class SQLite extends Database
 {
     /**
+     * Holds the information schema column name
+     * 
+     * @var string
+     */
+    protected $schema_column_name = 'name';
+
+    /**
+     * Holds the information schema column type
+     * 
+     * @var string
+     */
+    protected $schema_column_type = 'type';
+
+    /**
      * Returns a select query
      * 
      * @param string $fields The select clause
@@ -231,5 +245,18 @@ class SQLite extends Database
     {
         // Not implemented in sqlite
         return false;
+    }
+
+    /**
+     * Returns a get columns statement
+     * 
+     * @param string $tablename The table name
+     * 
+     * @return string Returns the SQL statement
+     */
+    public function getColumns($tablename)
+    {
+        $sql = "PRAGMA table_info('$tablename');";
+        return $sql;
     }
 }

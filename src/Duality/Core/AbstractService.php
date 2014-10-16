@@ -13,6 +13,7 @@
 
 namespace Duality\Core;
 
+use Duality\Core\Structure;
 use Duality\App;
 
 /**
@@ -26,6 +27,7 @@ use Duality\App;
  * @since   0.7.0
  */
 abstract class AbstractService
+extends Structure
 {
     /**
      * The dependent application container

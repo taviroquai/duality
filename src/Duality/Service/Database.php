@@ -311,6 +311,32 @@ extends AbstractService
     }
 
     /**
+     * Loads a table structure from database
+     * 
+     * @param string $tablename The table name
+     * 
+     * @return string Returns the SQL statement
+     */
+    public function getTable($tablename)
+    {
+        $stm = $this->pdo->prepare($this->getColumns($tablename));
+        $stm->execute();
+        $info = $stm->fetchAll(\PDO::FETCH_ASSOC);
+        if (empty($info)) {
+            throw new DualityException("Error table not found", 1);
+        }
+        $columns = array();
+        foreach ($info as $item) {
+            $columns[$item[$this->schema_column_name]] = 
+                $item[$this->schema_column_type];
+        }
+        $table = new Table($this);
+        $table->setName($tablename);
+        $table->setColumns($columns);
+        return $table;
+    }
+
+    /**
      * Returns a select query
      * 
      * @param string $fields The select clause
@@ -412,5 +438,14 @@ extends AbstractService
      * @return string Returns the SQL statement
      */
     public abstract function getTruncate(Table $table);
+
+    /**
+     * Returns a get columns statement
+     * 
+     * @param string $table The table name
+     * 
+     * @return string Returns the SQL statement
+     */
+    public abstract function getColumns($table);
 
 }

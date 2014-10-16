@@ -171,6 +171,7 @@ extends PHPUnit_Framework_TestCase
         );
         $app = new \Duality\App(dirname(__FILE__), $config);
         $db = $app->call('db');
+        $db->setName('duality');
 
         $table = new \Duality\Structure\Database\Table($db);
         $table->setName('dummy');
@@ -201,6 +202,8 @@ extends PHPUnit_Framework_TestCase
         $table->importArray($data);
         $table->remove(1);
         $table->reset();
+
+        $db->getTable('dummy');
 
         $sql = $db->getDropTable($table);
         $db->getPDO()->exec($sql);
