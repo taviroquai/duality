@@ -114,7 +114,7 @@ extends PHPUnit_Framework_TestCase
         $result = $db->getSelect('*', (string) $table, 'dummy = ?', 10, 0);
         $this->assertEquals($expected, $result);
 
-        $expected = 'CREATE TABLE dummy (id INTEGER PRIMARY KEY, dummy integer);';
+        $expected = 'CREATE TABLE IF NOT EXISTS dummy (id INTEGER PRIMARY KEY, dummy integer);';
         $result = $db->getCreateTable($table, array('id' => 'auto', 'dummy' => 'integer'));
         $this->assertEquals($expected, $result);
 
@@ -155,6 +155,55 @@ extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $result);
 
         $db->terminate();
+    }
+
+    /**
+     * Test database table
+     */
+    public function testTable()
+    {
+        $config = array(
+            'db' => array(
+                'dsn'   => DB_DSN,
+                'user'  => DB_USER,
+                'pass'  => DB_PASS
+            )
+        );
+        $app = new \Duality\App(dirname(__FILE__), $config);
+        $db = $app->call('db');
+
+        $table = new \Duality\Structure\Database\Table($db);
+        $table->setName('dummy');
+
+        $schema = array(
+            'id' => 'auto',
+            'email' => 'varchar(80)'
+        );
+        $sql = $db->getDropTable($table);
+        $db->getPDO()->exec($sql);
+        $sql = $db->getCreateTable($table, $schema);
+        $db->getPDO()->exec($sql);
+
+        $table->setColumns($schema);
+        $table->setPrimaryKey('id');
+        
+        $table->add(1, array('id' => 1, 'email' => 'dummy1'));
+        $table->set(2, array('id' => 1, 'email' => 'dummy2'));
+        $table->find(0, 10, 'id = ?', array(1));
+        $table->get(1);
+        $table->has(1);
+        $table->asArray();
+        $data = array(
+            1 => array('email' => 'dummy3'),
+            2 => array('email' => 'dummy4'),
+            3 => array('email' => 'dummy5')
+        );
+        $table->importArray($data);
+        $table->remove(1);
+        $table->reset();
+
+        $sql = $db->getDropTable($table);
+        $db->getPDO()->exec($sql);
     }
 
     

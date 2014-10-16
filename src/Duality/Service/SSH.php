@@ -133,12 +133,12 @@ extends AbstractService
     public function connect($host, $username, $password = '', $port = 22)
     {
         // Start connection
-        if (!($this->connection = ssh2_connect($host, $port))) {
+        if (!($this->connection = @ssh2_connect($host, $port))) {
             throw new DualityException('Cannot connect to server');
         }
         
         // Verify fingerprint
-        $fingerprint = ssh2_fingerprint(
+        $fingerprint = @ssh2_fingerprint(
             $this->connection, SSH2_FINGERPRINT_MD5 | SSH2_FINGERPRINT_HEX
         );
         if (!empty($this->ssh_fingerprint)
@@ -149,7 +149,7 @@ extends AbstractService
         
         // Try auth methods
         if (!empty($password)) {
-            if (!ssh2_auth_password($this->connection, $username, $password)) {
+            if (!@ssh2_auth_password($this->connection, $username, $password)) {
                 throw new DualityException('Autentication rejected by server');
             }
         } else {
@@ -179,7 +179,7 @@ extends AbstractService
         if (!$this->connection) {
             return '';
         }
-        if (!($stream = ssh2_exec($this->connection, $cmd))) {
+        if (!($stream = @ssh2_exec($this->connection, $cmd))) {
             throw new DualityException('SSH command failed');
         }
         stream_set_blocking($stream, true);

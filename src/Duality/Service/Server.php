@@ -201,7 +201,7 @@ extends AbstractService
     protected function validateStringAction($cb)
     {   
         // Translate
-        list($controllerClass, $method) = explode('@', $cb);
+        @list($controllerClass, $method) = explode('@', $cb);
         
         // Validate class name
         if (!class_exists($controllerClass)) {

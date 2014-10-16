@@ -14,7 +14,7 @@ extends PHPUnit_Framework_TestCase
         $remote = new \Duality\Service\SSH($app);
         $remote->init();
 
-        $remote->connectSSH('localhos');
+        $remote->connectSSH('localhos', 'dummy');
     }
 
     /**

@@ -145,7 +145,7 @@ extends DataTable
     {
         $sql = $this->database->getInsert($this, (array) $value);
         $stm = $this->database->getPDO()->prepare($sql);
-        $stm->execute($values);
+        $stm->execute(array_values((array)$value));
     }
 
     /**
@@ -160,7 +160,7 @@ extends DataTable
     {
         $sql = $this->database->getUpdate($this, (array) $value);
         $stm = $this->database->getPDO()->prepare($sql);
-        $stm->execute($values);
+        $stm->execute(array_values((array)$value));
     }
 
     /**
@@ -177,7 +177,7 @@ extends DataTable
         );
         $stm = $this->database->getPDO()->prepare($sql);
         $stm->execute(array($key));
-        return $stm->fetch(PDO::FETCH_ASSOC);
+        return $stm->fetch(\PDO::FETCH_ASSOC);
     }
 
     /**
@@ -190,11 +190,13 @@ extends DataTable
     public function has($key)
     {
         $sql = $this->database->getSelect(
-            'count(*)', $this->getName(), 'id = ?', 0, 1
+            'count(' . $this->primaryKey . ') as count', 
+            $this->getName(), $this->primaryKey . ' = ?', 0, 1
         );
         $stm = $this->database->getPDO()->prepare($sql);
         $stm->execute(array($key));
-        return (boolean) $stm->rowCount();
+        $result = (int) $stm->fetchColumn(0);
+        return (boolean) $result;
     }
 
     /**
@@ -204,10 +206,10 @@ extends DataTable
      */
     public function asArray()
     {
-        $sql = $this->database->getSelect('*', $this->getName(), 'id = ?');
+        $sql = $this->database->getSelect('*', $this->getName());
         $stm = $this->database->getPDO()->prepare($sql);
-        $stm->execute(array($key));
-        return $stm->fetchAll(PDO::FETCH_ASSOC);
+        $stm->execute();
+        return $stm->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     /**
@@ -220,7 +222,7 @@ extends DataTable
     public function importArray($data)
     {
         foreach ($data as $key => $item) {
-            if ($this->has($key)) {
+            if (!$this->has($key)) {
                 $sql = $this->database->getInsert($this, $item);
             } else {
                 $sql = $this->database->getUpdate($this, $item);
@@ -239,7 +241,7 @@ extends DataTable
      */
     public function remove($key)
     {
-        $sql = $this->database->getDelete($this->getName());
+        $sql = $this->database->getDelete($this, array($this->primaryKey => $key));
         $stm = $this->database->getPDO()->prepare($sql);
         $stm->execute(array($key));
     }
@@ -251,7 +253,7 @@ extends DataTable
      */
     public function reset()
     {
-        $sql = $this->database->getTruncate($this->getName());
+        $sql = $this->database->getTruncate($this);
         $stm = $this->database->getPDO()->prepare($sql);
         $stm->execute();
     }

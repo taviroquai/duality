@@ -210,7 +210,8 @@ extends AbstractService
      */
     public function isEquals($value, $params)
     {
-        return $value === empty($params[0]) ? '' : $params[0];
+        $params[0] = empty($params[0]) ? '' : $params[0];
+        return $value === $params[0];
     }
 
     /**

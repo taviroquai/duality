@@ -118,8 +118,8 @@ extends Container
     {
         foreach ($this->getServices() as $name => $service) {
             $instance = $this->call($name);
-            if (is_callable(array($instance, 'terminate'))) {
-                $instance->terminate();
+            if (is_subclass_of($instance, 'Duality\Core\AbstractService', TRUE)) {
+                call_user_func(array($instance, 'terminate'));
             }
         }
         if ($this->getBuffer()) {
@@ -134,14 +134,9 @@ extends Container
      * 
      * @return void
      */
-    public function loadService($name)
+    protected function loadService($name)
     {
         $me =& $this;
-
-        // Verify if default service exists
-        if (!isset($this->defaults[$name])) {
-            throw new DualityException("Default service not found: " . $name, 15);
-        }
 
         // Finally, register and init service
         $class = $this->defaults[$name];
@@ -241,7 +236,9 @@ extends Container
      */
     public function call($name, $params = array(), $cache = true)
     {
-        if (!$this->services->has($name)) {
+        if (!$this->services->has($name)
+            && isset($this->defaults[$name])
+        ) {
             $this->loadService($name);
         }
         if ($cache) {

@@ -198,10 +198,10 @@ extends AbstractService
         $this->pdo->beginTransaction();
 
         // Create tables
-        foreach ($this->schema['create'] as $name => $item) {
+        foreach ($this->schema['create'] as $name => $schema) {
             $table = $this->tables[$name];
             $this->pdo->exec($this->getDropTable($table));
-            $sql = $this->getCreateTable($table, $item);
+            $sql = $this->getCreateTable($table, $schema);
             $this->pdo->exec($sql);
         }
 
@@ -220,19 +220,19 @@ extends AbstractService
         $this->pdo->beginTransaction();
 
         // Update tables
-        foreach ($this->schema['update'] as $item) {
-            if (isset($this->tables[$item['table']])) {
-                $table = $this->tables[$item['table']];
+        foreach ($this->schema['update'] as $schema) {
+            if (isset($this->tables[$schema['table']])) {
+                $table = $this->tables[$schema['table']];
                 $columns = $table->getColumns();
-                if (isset($item['drop'])) {
-                    $sql = $this->getDropColumn($table, $item['drop']);
-                } elseif (isset($item['add'])) {
-                    $sql = $this->getAddColumn($table, $item['add'], $item['type']);
-                } elseif (isset($item['modify']) 
-                    && isset($columns[$item['modify']])
+                if (isset($schema['drop'])) {
+                    $sql = $this->getDropColumn($table, $schema['drop']);
+                } elseif (isset($schema['add'])) {
+                    $sql = $this->getAddColumn($table, $schema['add'], $schema['type']);
+                } elseif (isset($schema['modify']) 
+                    && isset($columns[$schema['modify']])
                 ) {
                     $sql = $this->getModifyColumn(
-                        $table, $columns[$item['modify']], $item['type']
+                        $table, $columns[$schema['modify']], $schema['type']
                     );
                 }
                 if (!empty($sql)) {
@@ -256,17 +256,17 @@ extends AbstractService
         $this->pdo->beginTransaction();
 
         // Seed tables
-        foreach ($this->schema['seed'] as $item) {
-            if (isset($this->tables[$item['table']])) {
-                $table = $this->tables[$item['table']];
-                if (isset($item['truncate']) && $item['truncate']) {
+        foreach ($this->schema['seed'] as $schema) {
+            if (isset($this->tables[$schema['table']])) {
+                $table = $this->tables[$schema['table']];
+                if (isset($schema['truncate']) && $schema['truncate']) {
                     $sql = $this->getTruncate($table);
                 }
-                if (isset($item['values'])) {
-                    $sql = $this->getInsert($table, $item['values']);
+                if (isset($schema['values'])) {
+                    $sql = $this->getInsert($table, $schema['values']);
                     $stm = $this->pdo->prepare($sql);
                     $values = array();
-                    foreach ($item['values'] as $k => $v) {
+                    foreach ($schema['values'] as $k => $v) {
                         $values[] = $this->parseValue($v);
                     }
                     $stm->execute($values);

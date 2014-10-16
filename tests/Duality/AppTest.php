@@ -82,58 +82,14 @@ extends PHPUnit_Framework_TestCase
     /**
      * Test application register service
      */
-    public function testAppRegisterInvalidService()
+    public function testAppRegisterService()
     {
         $app = new \Duality\App(dirname(__FILE__), array());
-        $app->register('dummy', function() {});
-    }
-
-    /**
-     * Test load invalid default service
-     * 
-     * @expectedException \Duality\Core\DualityException
-     */
-    public function testAppInvalidLoadService()
-    {
-        $app = new \Duality\App(dirname(__FILE__), null);
-        $app->loadService('dummy');
-    }
-
-    /**
-     * Test load invalid service
-     * 
-     * @expectedException \Duality\Core\DualityException
-     */
-    public function testAppLoadInvalidService()
-    {
-        $app = new \Duality\App(dirname(__FILE__), null);
-        $app->register('dummy', function () {});
-        $app->loadService('service');
-    }
-
-    /**
-     * Test load database service with invalid configuration
-     * 
-     * @expectedException \Duality\Core\DualityException
-     */
-    public function testAppLoadServiceInvalidConfig()
-    {
-        $app = new \Duality\App(dirname(__FILE__), null);
-        $app->loadService('logger');
-    }
-
-    /**
-     * Test load database service with valid configuration
-     */
-    public function testAppLoadAndTerminateService()
-    {
-        $config = array(
-            'logger' => array(
-                'buffer' => DATA_PATH.'/log.txt'
-            )
-        );
-        $app = new \Duality\App(dirname(__FILE__), $config);
-        $app->loadService('logger');
+        $app->register('dummy', function() use ($app) {
+            $service = new \Duality\Service\Validator($app);
+            $service->init();
+            return $service;
+        });
     }
 
     /**

@@ -64,7 +64,7 @@ class MySql extends Database
      */
     public function getCreateTable(Table $table, $config)
     {
-        $sql = "CREATE TABLE " . strtolower((string) $table) . " (";
+        $sql = "CREATE TABLE IF NOT EXISTS " . strtolower((string) $table) . " (";
 
         foreach ($config as $field => $definition) {
             if ($definition == 'auto') {
@@ -195,7 +195,7 @@ class MySql extends Database
         $values = array();
         foreach ($item as $field => $value) {
             $values[] = $this->parseValue($value);
-            $sql .= $field. " = ?";
+            $sql .= $field. " = ?,";
         }
         $sql = rtrim($sql, ',');
         $sql .= ";";
