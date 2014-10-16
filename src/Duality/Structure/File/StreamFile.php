@@ -42,7 +42,7 @@ class StreamFile extends File
      */
     public function __construct($path)
     {
-        $this->setPath($path);
+        parent::__construct($path);
     }
 
     /**
@@ -58,11 +58,11 @@ class StreamFile extends File
     {
         if (!is_resource($this->handler)) {
             $this->handler = @fopen($this->path, $options);
-            if (!is_resource($this->handler)) {
-                throw new DualityException(
-                    "Could not open stream: ".$this->getPath(), 5
-                );
-            }
+        }
+        if (!is_resource($this->handler)) {
+            throw new DualityException(
+                "Could not open stream: ".$this->getPath(), 5
+            );
         }
     }
 
@@ -89,14 +89,13 @@ class StreamFile extends File
      */
     public function load(\Closure $callback = null)
     {
-        if (!is_resource($this->handler)) {
-            throw new DualityException("Stream not opened: ".$this->getPath(), 6);
-        }
-        rewind($this->handler);
-        while ($chunck = fread($this->handler, 4096)) {
-            $this->content .= $chunck;
-            if (!is_null($callback)) {
-                $callback($chunck);
+        if (is_resource($this->handler)) {
+            rewind($this->handler);
+            while ($chunck = fread($this->handler, 4096)) {
+                $this->content .= $chunck;
+                if (!is_null($callback)) {
+                    $callback($chunck);
+                }
             }
         }
     }
@@ -110,11 +109,11 @@ class StreamFile extends File
      */
     public function save()
     {
-        if (!is_resource($this->handler)) {
-            $this->open();
+        if (is_resource($this->handler)) {
+            rewind($this->handler);
+            return fwrite($this->handler, $this->content);
         }
-        rewind($this->handler);
-        return fwrite($this->handler, $this->content);
+        return false;
     }
 
     /**
@@ -128,9 +127,9 @@ class StreamFile extends File
      */
     public function write($data)
     {
-        if (!is_resource($this->handler)) {
-            $this->open();
+        if (is_resource($this->handler)) {
+            return fwrite($this->handler, $data);
         }
-        return fwrite($this->handler, $data);
+        return false;
     }
 }

@@ -106,9 +106,6 @@ extends Structure
      */
     public function setUrl(Url $url)
     {
-        if (!filter_var((string) $url, FILTER_VALIDATE_URL)) {
-            throw new DualityException("Invalid url", 11);
-        }
         $this->url = $url;
         return $this;
     }
@@ -228,7 +225,7 @@ extends Structure
     public function setCookies($cookies)
     {
         if (!is_array($cookies)) {
-            throw new Exception("Cookies must be an array", 9);
+            throw new DualityException("Cookies must be an array", 9);
         }
         foreach ($cookies as $item) {
             if (!is_array($item)) {
@@ -236,15 +233,8 @@ extends Structure
                     "Cookie must be an associative array", 10
                 );
             }
-            setcookie(
-                $item['name'],
-                $item['value'],
-                $item['expire'],
-                $item['path'],
-                $item['domain'],
-                $item['secure']
-            );
         }
+        $this->cookies = $cookies;
         return $this;
     }
 
@@ -293,7 +283,7 @@ extends Structure
     public function setTimestamp($timestamp)
     {
         if (!is_numeric($timestamp) || (int)$timestamp !== $timestamp) {
-            throw new Exception("Invalid connection timestamp", 12);
+            throw new DualityException("Invalid connection timestamp", 12);
         }
         $this->timestamp = $timestamp;
         return $this;

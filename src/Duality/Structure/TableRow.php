@@ -13,7 +13,10 @@
 
 namespace Duality\Structure;
 
+use Duality\Core\DualityException;
 use Duality\Core\Structure;
+use Duality\Structure\Storage;
+use Duality\Structure\Table;
 
 /**
  * Table row class
@@ -38,16 +41,17 @@ extends Structure
     /**
      * Holds the table data
      * 
-     * @var array Holds the row data
+     * @var \Duality\Structure\Storage Holds the row data
      */
     protected $data;
 
     /**
      * Creates a new table row
      */
-    public function __construct()
+    public function __construct(Table $table)
     {
-        $this->data = array();
+        $this->data = new Storage;
+        $this->setTable($table);
     }
 
     /**
@@ -71,9 +75,6 @@ extends Structure
      */
     public function getTable()
     {
-        if (!is_subclass_of($this->table, 'Duality\Structure\Table')) {
-            throw new DualityException("Row is orphan", 3);
-        }
         return $this->table;
     }
 
@@ -89,12 +90,9 @@ extends Structure
      */
     public function addData(Property $property, $data)
     {
-        if (!$this->getTable()->columnExists($property)) {
-            throw new DualityException(
-                "Row property does not exists: " . $property, 1
-            );
+        if ($this->getTable()->columnExists($property)) {
+            $this->data->set((string) $property, $data);
         }
-        $this->data[(string) $property] = $data;
     }
 
     /**
@@ -108,11 +106,10 @@ extends Structure
      */
     public function getData(Property $property)
     {
-        if (!$this->getTable()->columnExists($property)) {
-            throw new DualityException(
-                "Row property does not exists: " . $property, 2
-            );
+        $result = null;
+        if ($this->getTable()->columnExists($property)) {
+            $result = $this->data->get((string) $property);
         }
-        return $this->data[(string) $property];
+        return $result;
     }
 }

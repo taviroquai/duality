@@ -95,9 +95,6 @@ extends Structure
         $this->setName('url');
         if (!empty($url)) {
             $parts = parse_url($url);
-            if (empty($parts)) {
-                throw new DualityException("Error parsing URL: " . $url, 13);
-            }
             $this->scheme = empty($parts['scheme']) ? '' : $parts['scheme'];
             $this->user = empty($parts['user']) ? '' : $parts['user'];
             $this->pass = empty($parts['pass']) ? '' : $parts['path'];

@@ -26,7 +26,7 @@ use Duality\Structure\Storage;
  * @link    http://github.com/taviroquai/duality
  * @since   0.7.0
  */
-abstract class Table 
+class Table 
 extends Structure
 {
     /**
@@ -78,7 +78,7 @@ extends Structure
         if (empty($position)) {
             $position = count($this->rows->asArray());
         }
-        $this->rows->set($position, $row);
+        $this->insertRow($row, $position);
     }
 
     /**
@@ -137,11 +137,9 @@ extends Structure
     public function toArray()
     {
         $out = array();
-        $columns = $this->getColumns();
-        
-        foreach ($this->getRows() as $row) {
+        foreach ($this->rows->asArray() as $row) {
             $trow = array();
-            foreach ($columns as $column) {
+            foreach ($this->columns->asArray() as $column) {
                 $trow[(string) $column] = (string) $row->getData($column);
             }
             $out[] = $trow;
@@ -157,16 +155,15 @@ extends Structure
     public function toCSV()
     {
         $out = "";
-        $columns = $this->getColumns()->asArray();
-        foreach ($columns as $column) {
+        foreach ($this->columns->asArray() as $column) {
             $out .= (string) $column;
             $out .= ',';
         }
         $out = rtrim($out, ',');
         $out .= PHP_EOL;
 
-        foreach ($this->getRows()->asArray() as $row) {
-            foreach ($columns as $column) {
+        foreach ($this->rows->asArray() as $row) {
+            foreach ($this->columns->asArray() as $column) {
                 $out .= (string) $row->getData($column);
                 $out .= ',';
             }

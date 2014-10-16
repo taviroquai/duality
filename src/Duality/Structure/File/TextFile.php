@@ -34,7 +34,7 @@ class TextFile extends File
      */
     public function __construct($path)
     {
-        $this->setPath($path);
+        parent::__construct($path);
     }
 
 }

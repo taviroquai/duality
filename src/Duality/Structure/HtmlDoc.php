@@ -115,6 +115,7 @@ extends Structure
     {
         $doc = new HtmlDoc();
         $template = new TextFile($path);
+        $template->load();
         $template->getContent();
         $doc->loadFile($template);
         return $doc;

@@ -123,7 +123,7 @@ extends DataTable
         
         $this->rows->reset();
         while ($trow = $stm->fetch(\PDO::FETCH_ASSOC)) {
-            $row = new TableRow;
+            $row = new TableRow($this);
             $row->setTable($this);
             foreach ($this->getColumns() as $column) {
                 $row->addData($column, $trow[(string) $column]);

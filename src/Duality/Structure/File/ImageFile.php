@@ -26,7 +26,8 @@ use Duality\Structure\File;
  * @link    http://github.com/taviroquai/duality
  * @since   0.7.0
  */
-class ImageFile extends File
+class ImageFile
+extends File
 {
     /**
      * Creates a new image
@@ -35,16 +36,10 @@ class ImageFile extends File
      */
     public function __construct($path)
     {
-        if (!is_string($path)
-            || empty($path)
-            || !file_exists($path)
-        ) {
-            throw new \Exception('Invalid image file path');
+        parent::__construct($path);
+        if (!is_array(@getimagesize($this->path))) {
+            throw new DualityException('Duality Error: invalid image');
         }
-        if (!is_array(getimagesize($path))) {
-            throw new \Exception('Invalid image');
-        }
-        $this->setPath($path);
     }
     
     /**
@@ -62,7 +57,7 @@ class ImageFile extends File
 
         // generate thumb name and save image
         if (is_dir($target)) {
-            $target = rtrim($target, '/').'/'.basename($this->filename);
+            $target = rtrim($target, '/').'/'.basename($this->path);
         }
         $parts = explode('.', $target);
         switch (end($parts)) {

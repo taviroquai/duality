@@ -115,7 +115,7 @@ class Request extends Http
      */
     public function getHeaderItem($key)
     {
-        return $this->hasHeader($key) ? $this->headers[$key] : null;
+        return $this->hasHeader($key) ? $this->headers->get($key) : null;
     }
 
     /**
@@ -127,6 +127,6 @@ class Request extends Http
      */
     public function hasHeader($key)
     {
-        return isset($this->headers[$key]);
+        return $this->headers->has($key);
     }
 }

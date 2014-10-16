@@ -51,6 +51,19 @@ extends Structure
     protected $content;
 
     /**
+     * Creates a new image
+     * 
+     * @param string $path The image file path
+     */
+    public function __construct($path)
+    {
+        if (!is_string($path) || empty($path)) {
+            throw new DualityException('Duality Error: invalid file');
+        }
+        $this->setPath($path);
+    }
+
+    /**
      * Sets the file path
      * 
      * @param string $path Give the file path
@@ -95,14 +108,29 @@ extends Structure
     /**
      * Loads file contents
      * 
+     * @param \Closure $callback Give the after load callback
+     * 
      * @return string Returns the file contents
      */
-    public function getContent()
+    public function load(\Closure $callback = null)
     {
         if (is_null($this->content)) {
             $this->content = (string) file_get_contents($this->path);
+            if (!is_null($callback)) {
+                $callback($this->content);
+            }
         }
         return $this->content;
+    }
+
+    /**
+     * Gets the file contents
+     * 
+     * @return string The file contents
+     */
+    public function getContent()
+    {
+        return (string) $this->content;
     }
 
     /**
@@ -114,7 +142,7 @@ extends Structure
      */
     public function setContent($content)
     {
-        $this->content = $content;
+        $this->content = (string) $content;
     }
 
     /**
@@ -126,21 +154,8 @@ extends Structure
      */
     public function save()
     {
-        if ($this->exists()) {
-            if (!is_writable(dirname($this->path)) 
-                || !is_writable($this->path)
-            ) {
-                throw new DualityException(
-                    "Could not save file: ".$this->getPath(), 4
-                );
-            }
-        } else {
-            if (!is_writable(dirname($this->path))) {
-                throw new DualityException(
-                    "Could not save file: ".$this->getPath(), 4
-                );
-            }
+        if ($this->exists() && is_writable($this->path)) {
+            file_put_contents($this->getPath(), $this->content);    
         }
-        file_put_contents($this->getPath(), $this->getContent());
     }
 }
