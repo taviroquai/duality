@@ -261,7 +261,7 @@ class MySql extends Database
      */
     public function getColumns($tablename)
     {
-        $sql = "SELECT {$this->schema_column_name}, "
+        $sql = "SELECT {$this->schema_column_name}, ";
         $sql .= "{$this->schema_column_type} FROM INFORMATION_SCHEMA.COLUMNS ";
         $sql .= "WHERE TABLE_SCHEMA = '{$this->getName()}' ";
         $sql .= "AND TABLE_NAME = '$tablename';";
