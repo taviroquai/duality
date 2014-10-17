@@ -116,15 +116,13 @@ extends Container
      */
     public function __destruct()
     {
-        foreach ($this->getServices() as $name => $service) {
+        foreach ($this->cache->asArray() as $name => $service) {
             $instance = $this->call($name);
-            if (is_subclass_of($instance, 'Duality\Core\AbstractService', TRUE)) {
+            if (is_a($instance, 'Duality\Core\AbstractService', TRUE)) {
                 call_user_func(array($instance, 'terminate'));
             }
         }
-        if ($this->getBuffer()) {
-            $this->getBuffer()->close();
-        }
+        $this->getBuffer()->close();
     }
 
     /**

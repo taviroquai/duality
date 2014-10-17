@@ -52,7 +52,7 @@ class StreamFile extends File
      * 
      * @throws \Duality\Core\DualityException When cannot open file
      * 
-     * @return void
+     * @return boolean
      */
     public function open($options = 'w+b')
     {
@@ -89,9 +89,11 @@ class StreamFile extends File
      */
     public function load(\Closure $callback = null)
     {
-        if (is_resource($this->handler)) {
+        if (is_resource($this->handler) && filesize($this->getPath()) > 0) {
             rewind($this->handler);
-            while ($chunck = fread($this->handler, 4096)) {
+            $length = filesize($this->getPath()) < 4096 ? 
+                filesize($this->getPath()) : 4096;
+            while ($chunck = fread($this->handler, $length)) {
                 $this->content .= $chunck;
                 if (!is_null($callback)) {
                     $callback($chunck);

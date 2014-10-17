@@ -18,4 +18,13 @@ extends PHPUnit_Framework_TestCase
         $file->save();
     }
 
+    /**
+     * Test invalid file path
+     * 
+     * @expectedException \Duality\Core\DualityException
+     */
+    public function testInvalidPath()
+    {
+        new \Duality\Structure\File\TextFile(null);
+    }
 }

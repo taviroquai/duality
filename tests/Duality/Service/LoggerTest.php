@@ -15,6 +15,18 @@ extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test unreadable buffer
+     * 
+     * @expectedException \Duality\Core\DualityException
+     */
+    public function testLoggerUnreadBuffer()
+    {
+        $app = new \Duality\App(dirname(__FILE__), null);
+        $dummy = fopen(DATA_PATH.'/log.txt', 'w+b');
+        $app->call('logger');
+    }
+
+    /**
      * Test logger service
      */
     public function testLocalization()

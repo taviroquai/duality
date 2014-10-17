@@ -78,7 +78,7 @@ extends PHPUnit_Framework_TestCase
         $app = new \Duality\App(dirname(__FILE__), $config);
         $this->assertEquals($expected, $app->getConfigItem($key));
     }
-
+    
     /**
      * Test application register service
      */
@@ -90,6 +90,8 @@ extends PHPUnit_Framework_TestCase
             $service->init();
             return $service;
         });
+        $this->assertInstanceOf('\Duality\Service\Validator', $app->call('dummy'));
+        $app->__destruct();
     }
 
     /**

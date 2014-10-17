@@ -50,14 +50,4 @@ abstract class Container
      * @return \Duality\Core\InterfaceService The service closure
      */
     public abstract function call($name);
-
-    /**
-     * Return registered services
-     *
-     * @return array Returns all services
-     */
-    public function getServices()
-    {
-        return (array) $this->services->asArray();
-    }
 }

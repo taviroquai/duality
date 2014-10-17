@@ -321,11 +321,50 @@ extends AbstractService
      */
     public function send(Response $response, $withHeaders = true)
     {
-        if ($withHeaders) {
-            $response->sendHeaders();
+        $sapi_type = php_sapi_name();
+        $no_support = array('cli', 'cli-server');
+        if ($withHeaders && !in_array($sapi_type, $no_support)) {
+            $this->sendHeaders($response);
+            $this->sendCookies($response);
         }
 
         $this->app->getBuffer()->write($response->getContent());
+    }
+
+    /**
+     * Sends HTTP Headers if supported by SAPI
+     * 
+     * @return \Duality\Service\Server This instance
+     */
+    public function sendHeaders(Response $response)
+    {
+        http_response_code($response->getStatus());
+        foreach ($response->getHeaders() as $k => $v) {
+            header($k.': '.$v);
+        }
+        return $this;
+    }
+
+    /**
+     * Sets an HTTP cookie
+     * 
+     * @throws DualityException When cookie is invalid
+     * 
+     * @return \Duality\Service\Server This instance
+     */
+    public function sendCookies(Response $response)
+    {
+        foreach ($response->getCookies() as $item) {
+            setcookie(
+                $item['name'],
+                $item['value'],
+                $item['expire'],
+                $item['path'],
+                $item['domain'],
+                $item['secure']
+            );
+        }
+        return $this;
     }
 
     /**

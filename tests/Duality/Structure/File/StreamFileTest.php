@@ -20,6 +20,22 @@ extends PHPUnit_Framework_TestCase
         $file->write('Dummy stream test');
         $file->save();
         $file->close();
+
+        $file = new \Duality\Structure\File\StreamFile(DATA_PATH.'/original.jpg');
+        $file->open('r');
+        $file->load(function($chunck) {});
+        $file->close();
+    }
+
+    /**
+     * Test forbidden file
+     * 
+     * @expectedException \Duality\Core\DualityException
+     */
+    public function testForbiddenFile()
+    {
+        $file = new \Duality\Structure\File\StreamFile(DATA_PATH.'/forbidden');
+        $file->open('w');
     }
 
 }
