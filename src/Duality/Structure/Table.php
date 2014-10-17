@@ -66,6 +66,21 @@ extends Structure
     }
 
     /**
+     * Remove column
+     * 
+     * @param string $name The name of the column to be removed
+     * 
+     * @since 0.14.2
+     * 
+     * @return \Duality\Structure\Table This table
+     */
+    public function removeColumn($name)
+    {
+        $this->columns->remove($name);
+        return $this;
+    }
+
+    /**
      * Adds a row to the table
      * 
      * @param \Duality\Structure\TableRow $row      The row to add

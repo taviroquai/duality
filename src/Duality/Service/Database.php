@@ -227,7 +227,9 @@ extends AbstractService
                 if (isset($schema['drop'])) {
                     $sql = $this->getDropColumn($table, $schema['drop']);
                 } elseif (isset($schema['add'])) {
-                    $sql = $this->getAddColumn($table, $schema['add'], $schema['type']);
+                    $sql = $this->getAddColumn(
+                        $table, $schema['add'], $schema['type']
+                    );
                 } elseif (isset($schema['modify']) 
                     && isset($columns[$schema['modify']])
                 ) {
@@ -327,8 +329,8 @@ extends AbstractService
         }
         $columns = array();
         foreach ($info as $item) {
-            $columns[$item[$this->schema_column_name]] = 
-                $item[$this->schema_column_type];
+            $columns[$item[$this->schema_column_name]]
+                = $item[$this->schema_column_type];
         }
         $table = new Table($this);
         $table->setName($tablename);
@@ -347,7 +349,9 @@ extends AbstractService
      * 
      * @return string The final SQL string
      */
-    public abstract function getSelect($fields, $from, $where = '', $limit = 0, $offset = 0);
+    public abstract function getSelect(
+        $fields, $from, $where = '', $limit = 0, $offset = 0
+    );
 
     /**
      * Returns a create table statement
@@ -383,7 +387,8 @@ extends AbstractService
     /**
      * Returns a drop column statement
      * 
-     * @param \Duality\Structure\Database\Table $table      The database table
+     * @param \Duality\Structure\Database\Table $table    The database table
+     * @param string                            $property The column name
      * 
      * @return string Returns the SQL statement
      */
@@ -393,12 +398,14 @@ extends AbstractService
      * Returns a add column statement
      * 
      * @param \Duality\Structure\Database\Table $table      The database table
-     * @param string                            $property   The column name
+     * @param \Duality\Structure\Property       $property   The column name
      * @param string                            $definition The table definition
      * 
      * @return string Returns the SQL statement
      */
-    public abstract function getModifyColumn(Table $table, Property $property, $definition);
+    public abstract function getModifyColumn(
+        Table $table, Property $property, $definition
+    );
 
     /**
      * Returns an INSERT statement

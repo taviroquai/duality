@@ -93,7 +93,7 @@ extends AbstractService
             || empty($params['info'])
         ) {
             throw new DualityException(
-                "Error Validation: required params are rules, value, fail and info", 1
+                "Error Validation: required rules, value, fail and info", 1
             );
         }
         

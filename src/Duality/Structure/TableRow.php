@@ -47,6 +47,8 @@ extends Structure
 
     /**
      * Creates a new table row
+     * 
+     * @param \Duality\Structure\Table $table The row table
      */
     public function __construct(Table $table)
     {

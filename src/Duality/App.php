@@ -94,7 +94,8 @@ extends Container
         }
         $this->path = (string) $path;
 
-        $config['services'] = empty($config['services']) ? array() : $config['services'];
+        $config['services'] = empty($config['services']) ?
+            array() : $config['services'];
         $config['services'] = array_merge($this->defaults, $config['services']);
         $this->config = (array) $config;
 
@@ -118,7 +119,7 @@ extends Container
     {
         foreach ($this->cache->asArray() as $name => $service) {
             $instance = $this->call($name);
-            if (is_a($instance, 'Duality\Core\AbstractService', TRUE)) {
+            if (is_a($instance, 'Duality\Core\AbstractService', true)) {
                 call_user_func(array($instance, 'terminate'));
             }
         }

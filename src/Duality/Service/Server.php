@@ -334,6 +334,8 @@ extends AbstractService
     /**
      * Sends HTTP Headers if supported by SAPI
      * 
+     * @param \Duality\Structure\Http\Response $response The response to be sent
+     * 
      * @return \Duality\Service\Server This instance
      */
     public function sendHeaders(Response $response)
@@ -347,6 +349,8 @@ extends AbstractService
 
     /**
      * Sets an HTTP cookie
+     * 
+     * @param \Duality\Structure\Http\Response $response The response to be sent
      * 
      * @throws DualityException When cookie is invalid
      * 
@@ -378,9 +382,10 @@ extends AbstractService
             return false;
         }
 
-        $url = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . 
-            "://"
-            . (empty($_SERVER['HTTP_HOST']) ? $this->getHostname() : $_SERVER['HTTP_HOST'])
+        $url = (empty($_SERVER['HTTPS']) ? 'http' 
+            : 'https') . "://"
+            . (empty($_SERVER['HTTP_HOST']) ? 
+                $this->getHostname() : $_SERVER['HTTP_HOST'])
             . (empty($_SERVER['REQUEST_URI']) ? '/' : $_SERVER['REQUEST_URI']);
         
         $request = new Request(new Url($url));

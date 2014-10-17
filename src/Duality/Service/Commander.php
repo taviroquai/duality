@@ -71,7 +71,7 @@ implements InterfaceCommander
     /**
      * Sets the input arguments
      * 
-     * @param string Give the input line
+     * @param string $argv Give the input line
      * 
      * @return void
      */

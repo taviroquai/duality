@@ -53,8 +53,8 @@ extends AbstractService
     /**
      * Default application action
      * 
-     * @param \Duality\Structure\Http\Request  $req   Give the current request
-     * @param \Duality\Structure\Http\Response $res   Give the current response
+     * @param \Duality\Structure\Http\Request  $req    Give the current request
+     * @param \Duality\Structure\Http\Response $res    Give the current response
      * @param array                            $params Give the URI params
      * 
      * @return void
