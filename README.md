@@ -15,23 +15,35 @@ Usage demo repository at [Duality Demo](http://github.com/taviroquai/duality-dem
 
 Features
 --------
-1. OOP, Composer, phpunit and PSR-2
+1. Developed using high quality standards as OOP, PSR-2, Composer, phpunit, codesniffer and phpDocumentor
 2. Structures and Services (duality universe philosophy)
-3. App DI Container. Flexibility to integrate services.
-4. Auth service
-5. Cache service
-6. HTTP Client
-7. Command line for non-web tasks
-8. Database service
-9. Localization service
-10. Logger service
-11. Mail service (PHPMailer)
-12. Paginator service
-13. SSH service
-14. HTTP Server service
-15. Session service
-16. Validation service
-17. No imposition on templating library
+3. App DI Container. Flexibility to integrate other services.
+4. No imposition on templating library
+
+Structures
+----------
+1. Table and database table - provides a mechanism to deal with tables
+2. File - Image, Text and Stream
+3. HTTP request and response
+4. Entity - basic model in MVC
+5. HtmlDoc - basic structure for HTML templating
+6. URL - extended funcionality for URLs
+
+Services
+--------
+1. Auth service - Uses Session service
+2. Cache service - based on APCu
+3. HTTP Client - based on cURL to make HTTP requests
+4. Command line for non-web tasks - ie. database tasks
+5. Database service - MySql and SQLite. TODO: PostgreSQL
+6. Localization service - based on Intl php extension
+7. Logger service - based on file stream
+8. Mail service - PHPMailer
+9. Paginator service - easy to deal with page numbers and page urls
+10. SSH service - easy to run commands on remote machines
+11. HTTP Server service - easy to deal with URI routes and HTTP request/responses
+12. Session service - Native and Array
+13. Validation service - easy to deal with custom input validation
 
 
 Some Performance Stats (using demo repository)
@@ -46,42 +58,36 @@ Server Software:        Apache/2.4.7
 Server Hostname:        localhost    
 Server Port:            80    
 
-Document Path:          /duality-demo/json    
-Document Length:        139 bytes    
+Document Path:          /duality-demo/    
+Document Length:        2317 bytes    
 
 Concurrency Level:      20    
-Time taken for tests:   0.725 seconds    
+Time taken for tests:   1.210 seconds    
 Complete requests:      500    
 Failed requests:        0    
-Total transferred:      167000 bytes    
-HTML transferred:       69500 bytes    
-Requests per second:    689.25 #/sec (mean)    
-Time per request:       29.017 ms (mean)    
-Time per request:       1.451 ms (mean, across all concurrent requests)    
-Transfer rate:          224.81 Kbytes/sec received    
+Total transferred:      1264500 bytes    
+HTML transferred:       1158500 bytes    
+Requests per second:    413.21 #/sec (mean)    
+Time per request:       48.402 ms (mean)    
+Time per request:       2.420 ms (mean, across all concurrent requests)    
+Transfer rate:          1020.50 Kbytes/sec received    
  
 ```
 *Note: includes access to database*    
 
 
-OOP, Composer and phpunit
+OOP, PSR-2, Composer, phpunit, codesniffer and phpDocumentor
 -------------------------
 Duality micro framework is developed using the most recent technologies
-as PHP Object Oriented Programming approach, Composer as dependency manager
-and phpunit to maintain code quality. All code should consider PSR-2 conventions.
+as PHP Object Oriented Programming approach. Composer as dependency manager.
+Codesniffer and phpunit to maintain code quality. PhpDocumentor to validate doc blocks.
+All code should consider PSR-2 conventions.
 
 Structures and Services
 --------------------------
 All code is organized into to categories: structures and services
 Structures define data limits and validation
 Services are Core/User code that respondes to requests
-
-By convention there are 3 folder:
-
-    ./config - where you should put local app.php configuration file
-    ./data - where you should save user data
-        ./schema.php - where you should put database schema changes
-    ./src - where you should put application code
 
 In the demo, you will find a cmd.php that runs on the console like:
 
@@ -99,6 +105,84 @@ Usage example:
         return new MyService();
     }, $cacheable = true);
     $app->call('service');
+```
+
+Table structure
+------------
+Example:
+```
+    $table = $app->call('db')->getTable('users');
+    $table->find(0, 10)->removeColumn('password');
+    $items = $table->toArray();
+```
+
+File structure
+------------
+Example:
+```
+    $file = new \Duality\Structure\File\ImageFile('path/to/image.jpg');
+    $file->saveThumb('path/to/thumb.jpg', $size = 60);
+
+    $file = new \Duality\Structure\File\StreamFile('path/to/stream');
+    $file->open('r+b');
+    $file->load(function($chunk) {
+        // Whatever... chunk is a 4096 bits
+    });
+    $file->close();
+```
+
+HTTP structure
+------------
+Example:
+```
+    $server = $app->call('server');
+    $server->getResponse()->setHeaders(
+        array('Content-Type', 'text/html')
+    );
+    $server->getResponse()->setCookies(array(
+        array(
+            'name'      => 'duality',
+            'value'     => 'dummy',
+            'expire'    => time(),
+            'path'      => '/',
+            'domain'    => 'duality.com',
+            'secure'    => true
+        )
+    ));
+    $server->send($server->getResponse());
+```
+
+Entity structure
+------------
+Example:
+```
+    class MyModel extends \Duality\Structure\Entity
+    {
+        protected $config = array(
+            'properties' => array('id', 'name')
+        );
+    }
+```
+
+HtmlDoc structure
+------------
+Example:
+```
+    $doc = HtmlDoc::createFromFilePath('./data/template.html');
+    $doc->appendTo(
+        '//div[@class="page-header"]',
+        '<h1 id="title">Welcome to Duality!</h1>'
+    );
+    echo $doc->save();
+```
+
+URL structure
+------------
+Example:
+```
+    $url = new \Duality\Structure\Url('https://user@domain.com:8080/uri?query#fragment');
+    // url is now validated and splitten in parts
+    echo $url; // Reconstructs full URL
 ```
 
 Auth Service
@@ -225,10 +309,6 @@ Example:
     $app->call('validator')->validateAll($rules);
     $messages = $app->call('validator')->getMessages();
 ```
-
-No Templating Library
----------------------
-Its up to you!
 
 Future (Roadmap)
 ----------------

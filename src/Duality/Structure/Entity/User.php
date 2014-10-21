@@ -28,5 +28,13 @@ use Duality\Structure\Entity;
 class User
 extends Entity
 {
-
+    /**
+     * Holds the entity configuration for extended functionality
+     * 
+     * @var array The list of configuration items
+     */
+    protected $config = array(
+        'name' => 'users',
+        'properties' => array('id', 'email', 'password')
+    );
 }

@@ -31,6 +31,15 @@ abstract class Entity
 extends Structure
 {
     /**
+     * Holds the entity configuration for extended functionality
+     * 
+     * @var array The list of configuration items
+     */
+    protected $config = array(
+        'properties' => array('id')
+    );
+
+    /**
      * Holds the entity properties
      * 
      * @var \Duality\Structure\Storage The list of properties
@@ -50,7 +59,16 @@ extends Structure
     public function __construct()
     {
         $this->properties = new Storage;
-        $this->addProperty(new Property($this->defaultIdProperty));
+        if (!empty($this->config['name'])) {
+            $this->setName($this->config['name']);
+        }
+        if (!empty($this->config['properties'])
+            && is_array($this->config['properties'])
+        ) {
+            foreach ($this->config['properties'] as $item) {
+                $this->addProperty(new Property($item));
+            }
+        }
     }
 
     /**
