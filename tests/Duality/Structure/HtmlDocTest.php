@@ -13,9 +13,9 @@ extends PHPUnit_Framework_TestCase
 
         $doc = new \Duality\Structure\HtmlDoc();
         $doc->loadFile($file);
-        $doc->save();
+        $doc->createFromFilePath(DATA_PATH.'/doc.html');
         $doc->setTitle('Duality dummy doc title');
         $doc->appendTo('body', '<p>Dummy content</p>');
-        $doc->createFromFilePath(DATA_PATH.'/doc.html');
+        echo $doc;
     }
 }

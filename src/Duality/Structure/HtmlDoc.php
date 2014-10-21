@@ -120,4 +120,14 @@ extends Structure
         $doc->loadFile($template);
         return $doc;
     }
+
+    /**
+     * Converts to string
+     * 
+     * @return void
+     */
+    public function __toString()
+    {
+        return $this->save();
+    }
 }
