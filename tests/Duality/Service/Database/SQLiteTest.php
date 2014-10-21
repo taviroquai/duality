@@ -100,6 +100,7 @@ extends PHPUnit_Framework_TestCase
 
         $db->AddTable($table);
         $db->getTables();
+        $db->getTable('notfound');
         $db->getPDO();
         $entity = new \Duality\Structure\Entity\User();
         $db->createTableFromEntity($entity);
@@ -152,6 +153,10 @@ extends PHPUnit_Framework_TestCase
 
         $expected = false;
         $result = $db->getTruncate($table);
+        $this->assertEquals($expected, $result);
+
+        $expected = false;
+        $result = $db->getDropColumn($table, $property);
         $this->assertEquals($expected, $result);
 
         $db->terminate();

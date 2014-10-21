@@ -10,7 +10,7 @@ extends PHPUnit_Framework_TestCase
      */
 	public function testAppInvalidPath()
 	{
-		$app = new \Duality\App(null, null);
+		new \Duality\App(null, null);
 	}
 
     /**
@@ -92,6 +92,7 @@ extends PHPUnit_Framework_TestCase
         });
         $this->assertInstanceOf('\Duality\Service\Validator', $app->call('dummy'));
         $app->__destruct();
+        unset($app);
     }
 
     /**

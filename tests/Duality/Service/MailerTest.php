@@ -17,7 +17,7 @@ extends PHPUnit_Framework_TestCase
                     'pass' => 'password',
                     'encr' => 'tls',
                     'port' => 587,
-                    'dbgl' => 0
+                    'dbgl' => 1
                 )
             )
         );
@@ -25,7 +25,14 @@ extends PHPUnit_Framework_TestCase
         $mailer = $app->call('mailer');
 
         // SMTP
-        $mailer->setSMTP('smtp.gmail.com');
+        $mailer->setSMTP(
+            'smtp.gmail.com',
+            'username',
+            'password',
+            'tls',
+            587,
+            1
+        );
 
         // Prepare
         $mailer->to('dummy@isp.com')
@@ -35,13 +42,13 @@ extends PHPUnit_Framework_TestCase
             ->from('dummy5@isp.com', 'Dummy Duality Test')
             ->subject('Dummy Subject')
             ->body('<p>Dummy Body</p>', 'dummy body')
-            ->attach(array('./tests/data/log.txt'));
+            ->attach(array('./tests/data/log.txt'))
+            ->pretend(true);
 
-        /*
-        $mailer->send(function($result, $mail) {
-            var_dump($result);
+        $me = & $this;
+        $mailer->send(function($result, $mail) use ($me) {
+            $me->assertTrue($result);
         });
-        */
 
         $mailer->terminate();
 

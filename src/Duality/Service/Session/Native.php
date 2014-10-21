@@ -47,7 +47,7 @@ implements InterfaceStorage
      */
     public function terminate()
     {
-        if (session_id() == '') {
+        if (session_id() !== '') {
             session_write_close();
         }
     }

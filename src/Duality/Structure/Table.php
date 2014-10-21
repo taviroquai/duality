@@ -115,9 +115,11 @@ extends Structure
     /**
      * Gets all table properties
      * 
+     * @param boolean $cache The cached information
+     * 
      * @return array Returns all columns
      */
-    public function getColumns()
+    public function getColumns($cache = true)
     {
         return $this->columns->asArray();
     }

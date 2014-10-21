@@ -39,6 +39,13 @@ implements InterfaceMailer
     protected $current;
 
     /**
+     * Holds the pretend simulation option
+     * 
+     * @var boolean Pretend to send but do not send
+     */
+    protected $pretend;
+
+    /**
      * Holds smtp configuration
      * 
      * @var \Duality\Core\InterfaceStorage The current smtp configuration
@@ -52,6 +59,7 @@ implements InterfaceMailer
      */
     public function init()
     {
+        $this->pretend = false;
         $this->current = new Storage;
         $this->smtp = new Storage;
 
@@ -59,8 +67,8 @@ implements InterfaceMailer
             array(
                 'from'          => array('email' => '', 'name' => ''),
                 'to'            => array(),
-                'cc'            => '',
-                'bcc'           => '',
+                'cc'            => false,
+                'bcc'           => false,
                 'reply'         => array('email' => '', 'name' => ''),
                 'subject'       => '',
                 'body'          => '',
@@ -71,7 +79,7 @@ implements InterfaceMailer
         
         $this->smtp->importArray(
             array(
-                'host' => '',
+                'host' => false,
                 'user' => '',
                 'pass' => '',
                 'encr' => '',
@@ -100,6 +108,19 @@ implements InterfaceMailer
      */
     public function terminate()
     {
+        return $this;
+    }
+
+    /**
+     * Set pretend option. If true, does not send email
+     * 
+     * @param boolean $pretend Set the pretend option
+     * 
+     * @return Duality\Service\Mailer This instance
+     */
+    public function pretend($option)
+    {
+        $this->pretend = (boolean) $option;
         return $this;
     }
 
@@ -266,7 +287,7 @@ implements InterfaceMailer
         $mail = new \PHPMailer;
 
         // Setup SMTP
-        if (!$this->smtp->get('host')) {
+        if ($this->smtp->get('host')) {
             if ($this->smtp->get('dbgl')) {
                 $mail->SMTPDebug    = $this->smtp->get('dbgl');
             }
@@ -301,20 +322,20 @@ implements InterfaceMailer
             $replyName      = $reply['name'];
             $mail->addReplyTo($replyEmail, $replyName);
         }
-        if (!$this->current->get('cc')) {
-            $mail->addCC($this->current->set('cc')); 
+        if ($this->current->get('cc')) {
+            $mail->addCC($this->current->get('cc')); 
         }
-        if (!$this->current->set('bcc')) {
-            $mail->addBCC($this->current->set('bcc'));
+        if ($this->current->get('bcc')) {
+            $mail->addBCC($this->current->get('bcc'));
         }
 
         // Set attachments      
-        foreach ($this->current->set('attachments') as $item) {
+        foreach ($this->current->get('attachments') as $item) {
             $mail->addAttachment($item);
         }
         
-        // Finally, sent mail
-        $result = $mail->send();
+        // Finally, sent mail or pretend
+        $result = !$this->pretend ? $mail->send() : true;
         return $callback($result, $mail);
     }
 

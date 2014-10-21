@@ -84,9 +84,9 @@ class MySql extends Database
             if ($definition == 'auto') {
                 $definition = 'INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY';
             }
-            $sql .= $field . " " . $definition . ",";
+            $sql .= $field . " " . $definition . ", ";
         }
-        $sql = rtrim($sql, ',');
+        $sql = rtrim($sql, ', ');
         $sql .= ');';
         return $sql;
     }

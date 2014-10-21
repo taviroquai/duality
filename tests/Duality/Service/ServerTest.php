@@ -16,7 +16,6 @@ extends PHPUnit_Framework_TestCase
         );
         $app = new \Duality\App(dirname(__FILE__), $config);
         $server = $app->call('server');
-        $server->getRequestFromGlobals();
 
         $url = new \Duality\Structure\Url('http://localhost/dummy');
         $url->setHost('localhost');
@@ -34,6 +33,29 @@ extends PHPUnit_Framework_TestCase
         $server->createUrl('/dummy');
 
         $server->terminate();
+    }
+
+    /**
+     * Test server global request
+     */
+    public function testGlobalRequest()
+    {
+        $config = array(
+            'server' => array(
+                'url' => '/',
+                'hostname' => 'localhost'
+            )
+        );
+        $app = new \Duality\App(dirname(__FILE__), $config);
+        $server = $app->call('server');
+        $request = $server->getRequestFromGlobals(array(), array());
+
+        $request = $server->getRequestFromGlobals(array('REQUEST_METHOD' => 'GET'), array());
+
+        $server->getRequestFromGlobals(
+            array('REQUEST_METHOD' => 'GET', 'HTTP_X_REQUESTED_WITH' => 'xmlhttprequest'),
+            array()
+        );
     }
 
     /**
@@ -58,6 +80,39 @@ extends PHPUnit_Framework_TestCase
         $server->addRoute($pattern, '\Duality\Service\Controller\Base@doIndex');
 
         $server->listen();
+    }
+
+    /**
+     * Test send HTTP headers
+     * 
+     * @runInSeparateProcess
+     */
+    public function testHttpHeaders()
+    {
+        $config = array(
+            'server' => array(
+                'url' => '/',
+                'hostname' => 'localhost'
+            )
+        );
+        $app = new \Duality\App(dirname(__FILE__), $config);
+        $server = $app->call('server');
+        $response = $server->getResponse();
+        $response->setHeaders(
+            array('Content-Type', 'text/html')
+        );
+        $response->setCookies(array(
+            array(
+                'name'      => 'duality',
+                'value'     => 'dummy',
+                'expire'    => time(),
+                'path'      => '/',
+                'domain'    => 'duality.com',
+                'secure'    => true
+            )
+        ));
+        $server->sendHeaders($server->getResponse());
+        $server->sendCookies($server->getResponse());
     }
 
     /**

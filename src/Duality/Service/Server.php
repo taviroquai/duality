@@ -90,7 +90,6 @@ extends AbstractService
         $this->baseURL = new Url($url);
 
         // Create default request and response
-        // $this->setRequest($this->getRequestFromGlobals());
         $this->setResponse($this->createResponse());
 
         // Create default routes
@@ -374,42 +373,48 @@ extends AbstractService
     /**
      * Parses HTTP properties from PHP global environment
      * 
-     * @return Request The resulting request instance
+     * @param array $server The global $_SERVER variable
+     * 
+     * @return Request|false The resulting request instance
      */
-    public function getRequestFromGlobals()
+    public function getRequestFromGlobals($server, $params)
     {
-        if (empty($_SERVER['REQUEST_METHOD'])) {
+        if (empty($server['REQUEST_METHOD'])) {
             return false;
         }
 
-        $url = (empty($_SERVER['HTTPS']) ? 'http' 
+        $url = (empty($server['HTTPS']) ? 'http' 
             : 'https') . "://"
-            . (empty($_SERVER['HTTP_HOST']) ? 
-                $this->getHostname() : $_SERVER['HTTP_HOST'])
-            . (empty($_SERVER['REQUEST_URI']) ? '/' : $_SERVER['REQUEST_URI']);
+            . (empty($server['HTTP_HOST']) ? 
+                $this->getHostname() : $server['HTTP_HOST'])
+            . (empty($server['REQUEST_URI']) ? '/' : $server['REQUEST_URI']);
         
         $request = new Request(new Url($url));
-        $request->setMethod($_SERVER['REQUEST_METHOD']);
+        $request->setMethod($server['REQUEST_METHOD']);
         $request->setContent(file_get_contents('php://input'));
-        $request->setTimestamp($_SERVER['REQUEST_TIME']);
+        $request->setTimestamp(
+            empty($server['REQUEST_TIME']) ? time() : $server['REQUEST_TIME']
+        );
         $headers = array(
-            'Http-Accept'           => $_SERVER['HTTP_ACCEPT'],
-            'Http-Accept-Language'  => !empty($_SERVER['HTTP_ACCEPT_LANGUAGE']) ?
-                $_SERVER['HTTP_ACCEPT_LANGUAGE'] : 'en-US',
-            'Http-Accept-Charset'   => !empty($_SERVER['HTTP_ACCEPT_CHARSET']) ? 
-                $_SERVER['HTTP_ACCEPT_CHARSET'] : 
-                !empty($_SERVER['HTTP_ACCEPT_ENCODING']) ? 
-                $_SERVER['HTTP_ACCEPT_ENCODING'] : 'utf-8',
-            'Http-Host'             => empty($_SERVER['REMOTE_HOST']) ? 
-                $_SERVER['REMOTE_ADDR'] : $_SERVER['REMOTE_HOST'],
-            'Referer'               => empty($_SERVER['REFERER']) ? '' : 
-                $_SERVER['REFERER']
+            'Http-Accept'           => empty($server['HTTP_ACCEPT']) ? 
+                'text/html' : $server['HTTP_ACCEPT'],
+            'Http-Accept-Language'  => !empty($server['HTTP_ACCEPT_LANGUAGE']) ?
+                $server['HTTP_ACCEPT_LANGUAGE'] : 'en-US',
+            'Http-Accept-Charset'   => !empty($server['HTTP_ACCEPT_CHARSET']) ? 
+                $server['HTTP_ACCEPT_CHARSET'] : 
+                !empty($server['HTTP_ACCEPT_ENCODING']) ? 
+                $server['HTTP_ACCEPT_ENCODING'] : 'utf-8',
+            'Http-Host'             => empty($server['REMOTE_HOST']) ? 
+                empty($server['REMOTE_ADDR']) ? '' : $server['REMOTE_ADDR']
+                : $server['REMOTE_HOST'],
+            'Referer'               => empty($server['REFERER']) ? 
+                '' : $server['REFERER']
         );
         $request->setHeaders($headers);
-        $request->setParams($_REQUEST);
+        $request->setParams($params);
 
-        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) 
-            && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest'
+        if (!empty($server['HTTP_X_REQUESTED_WITH']) 
+            && strtolower($server['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest'
         ) {
             $request->setAjax(true);
         }

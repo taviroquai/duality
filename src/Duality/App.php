@@ -95,8 +95,7 @@ extends Container
         $this->path = (string) $path;
 
         $config['services'] = empty($config['services']) ?
-            array() : $config['services'];
-        $config['services'] = array_merge($this->defaults, $config['services']);
+            $this->defaults : array_merge($this->defaults, $config['services']);
         $this->config = (array) $config;
 
         $this->services = new Storage;
@@ -137,8 +136,8 @@ extends Container
     {
         $me =& $this;
 
-        // Finally, register and init service
-        $class = $this->defaults[$name];
+        // Register and init service
+        $class = $this->config['services'][$name];
         $this->register(
             $name, function () use ($class, $me) {
                 $instance = new $class($me);

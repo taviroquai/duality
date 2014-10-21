@@ -88,7 +88,7 @@ extends AbstractService
     {
         $result = true;
         if (empty($params['rules'])
-            || empty($params['value'])
+            || !isset($params['value'])
             || empty($params['fail']) 
             || empty($params['info'])
         ) {

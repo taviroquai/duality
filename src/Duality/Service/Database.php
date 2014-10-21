@@ -221,25 +221,28 @@ extends AbstractService
 
         // Update tables
         foreach ($this->schema['update'] as $schema) {
+            $sql = false;
+
+            // validate table to update
             if (isset($this->tables[$schema['table']])) {
                 $table = $this->tables[$schema['table']];
-                $columns = $table->getColumns();
+                $columns = $table->getColumns(false);
                 if (isset($schema['drop'])) {
                     $sql = $this->getDropColumn($table, $schema['drop']);
                 } elseif (isset($schema['add'])) {
                     $sql = $this->getAddColumn(
                         $table, $schema['add'], $schema['type']
                     );
-                } elseif (isset($schema['modify']) 
-                    && isset($columns[$schema['modify']])
-                ) {
+                } elseif (isset($schema['modify'])) {
                     $sql = $this->getModifyColumn(
                         $table, $columns[$schema['modify']], $schema['type']
                     );
                 }
-                if (!empty($sql)) {
-                    $this->pdo->exec($sql);
-                }
+            }
+
+            // Finally run query if exists
+            if (!empty($sql)) {
+                $this->pdo->exec($sql);
             }
         }
 
@@ -261,8 +264,10 @@ extends AbstractService
         foreach ($this->schema['seed'] as $schema) {
             if (isset($this->tables[$schema['table']])) {
                 $table = $this->tables[$schema['table']];
-                if (isset($schema['truncate']) && $schema['truncate']) {
-                    $sql = $this->getTruncate($table);
+                if (isset($schema['truncate'])
+                    && $sql = $this->getTruncate($table)
+                ) {
+                    $this->pdo->exec($sql);
                 }
                 if (isset($schema['values'])) {
                     $sql = $this->getInsert($table, $schema['values']);
@@ -272,8 +277,6 @@ extends AbstractService
                         $values[] = $this->parseValue($v);
                     }
                     $stm->execute($values);
-                } else {
-                    $this->pdo->exec($sql);
                 }
             }
         }
@@ -306,7 +309,6 @@ extends AbstractService
                 break;
             case 'int': $value = (int) $value;
                 break;
-            default: $value = $catchFn[1];
             }
         }
         return $value;
@@ -317,7 +319,7 @@ extends AbstractService
      * 
      * @param string $tablename The table name
      * 
-     * @return string Returns the SQL statement
+     * @return string|false Returns the table or false on failure
      */
     public function getTable($tablename)
     {
@@ -325,7 +327,7 @@ extends AbstractService
         $stm->execute();
         $info = $stm->fetchAll(\PDO::FETCH_ASSOC);
         if (empty($info)) {
-            throw new DualityException("Error table not found", 1);
+            return false;
         }
         $columns = array();
         foreach ($info as $item) {

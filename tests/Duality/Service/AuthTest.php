@@ -10,7 +10,7 @@ extends PHPUnit_Framework_TestCase
     {
         $config = array(
             'services' => array(
-                'session' => '\Duality\Structure\Session\Dummy'
+                'session' => '\Duality\Service\Session\Dummy'
             )
         );
         $app = new \Duality\App(dirname(__FILE__), $config);

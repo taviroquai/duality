@@ -70,6 +70,28 @@ extends DataTable
     }
 
     /**
+     * Gets all table properties
+     * 
+     * @param boolean $cache The cached information
+     * 
+     * @return array Returns all columns
+     */
+    public function getColumns($cache = true)
+    {
+        if (!$cache) {
+            $this->columns->reset();
+            $result = $this->database->getPDO()->query(
+                $this->database->getColumns($this)
+            );
+            while($item = $result->fetch(\PDO::FETCH_ASSOC)) {
+                $property = new \Duality\Structure\Property($item['name']);
+                $this->addColumn($property);
+            }
+        }
+        return parent::getColumns();
+    }
+
+    /**
      * Sets table properties from an array
      * 
      * @param array $columns Import columns from an associative array

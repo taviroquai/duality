@@ -25,5 +25,6 @@ extends PHPUnit_Framework_TestCase
         $table->columnExists($column);
         $table->toCSV();
         $table->toArray();
+        $table->removeColumn('dummy');
     }
 }
