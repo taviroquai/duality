@@ -100,7 +100,7 @@ It also can provide a variety of common services used in web development, as:
 auth, cache, http client, db, i18n, mailer, paginator, http server, session and validator
 
 Usage example:
-```
+```php
     $app->register('service', function() {
         return new MyService();
     }, $cacheable = true);
@@ -110,7 +110,7 @@ Usage example:
 Table structure
 ------------
 Example:
-```
+```php
     $table = $app->call('db')->getTable('users');
     $table->find(0, 10)->removeColumn('password');
     $items = $table->toArray();
@@ -119,7 +119,7 @@ Example:
 File structure
 ------------
 Example:
-```
+```php
     $file = new \Duality\Structure\File\ImageFile('path/to/image.jpg');
     $file->saveThumb('path/to/thumb.jpg', $size = 60);
 
@@ -134,7 +134,7 @@ Example:
 HTTP structure
 ------------
 Example:
-```
+```php
     $server = $app->call('server');
     $server->getResponse()->setHeaders(
         array('Content-Type', 'text/html')
@@ -155,7 +155,7 @@ Example:
 Entity structure
 ------------
 Example:
-```
+```php
     class MyModel extends \Duality\Structure\Entity
     {
         protected $config = array(
@@ -167,7 +167,7 @@ Example:
 HtmlDoc structure
 ------------
 Example:
-```
+```php
     $doc = HtmlDoc::createFromFilePath('./data/template.html');
     $doc->appendTo(
         '//div[@class="page-header"]',
@@ -179,7 +179,7 @@ Example:
 URL structure
 ------------
 Example:
-```
+```php
     $url = new \Duality\Structure\Url('https://user@domain.com:8080/uri?query#fragment');
     // url is now validated and splitten in parts
     echo $url; // Reconstructs full URL
@@ -188,21 +188,27 @@ Example:
 Auth Service
 ------------
 Example:
-```
-    $app->call('auth')->login($user, $pass, $storageCallback);
+```php
+    $app->call('auth')->login($user, $pass, function($user, $pass) use ($app) {
+        $users = $app->call('db')
+            ->getTable('users')
+            ->find(0, 1, 'email = ? and pass = ?', array($user, $pass))
+            ->toArray();
+        return (boolean) count($users);
+    });
 ```
 
 Cache Service
 -------------
 Example:
-```
+```php
     $app->call('cache')->put('key', 'value', 'timestamp');
 ```
 
 HTTP Client
 -----------
 Example:
-```
+```php
     $client = new Client($app);
     $client->execute(Client::createRequest('http://google.com'));
 ```
@@ -217,7 +223,7 @@ Example:
 Database Service
 ----------------
 Example:
-```
+```php
     $app->call('db')
         ->getTable('user')
         ->find(0, 10)
@@ -227,7 +233,7 @@ Example:
 Localization Service
 --------------------
 Example:
-```
+```php
     $app->call('i18n')
         ->setLocale('pt_PT')
         ->translate('key', array(), 'en_US');
@@ -236,14 +242,14 @@ Example:
 Logger Service
 --------------
 Example:
-```
+```php
     $app->call('logger')->log('my notice');
 ```
 
 Mailer Service (PHPMailer by default)
 -------------------------------------
 Example:
-```
+```php
     $app->call('mailer')
         ->setSMTP('smtp.google.com', 'user', 'pass')
         ->to('admin@domain.com')
@@ -255,7 +261,7 @@ Example:
 Paginator Service
 -----------------
 Example:
-```
+```php
     $app->call('paginator')
         ->config($url, $totalItems, $itemsPerPage)
         ->getNextPageLink();
@@ -264,7 +270,7 @@ Example:
 SSH Service
 -----------
 Example:
-```
+```php
     $remote = new SSH($app);
     $remote->connect($host, $user, $pass);
     $remote->execute('ls');
@@ -273,34 +279,33 @@ Example:
 HTTP Server Service
 -------------------
 Example:
-```
-    $app->call('server')
-        ->addRoute('/^\/$/i', function(&$req, &$res) use ($app) {
-            $res->setContent('Hello Duality!');
-        });
+```php
+    $app->call('server')->setHome(function(&$req, &$res) use ($app) {
+        $res->setContent('Hello Duality!');
+    });
 ```
 
 Session Service
 ---------------
 Example:
-```
-    $app->call('session')
-        ->put('__lastError', 'Invalid input');
+```php
+    $app->call('session')->put('__lastError', 'Invalid input');
+    $error = $app->call('session')->pull('__lastError');
 ```
 
 Validation Service
 ---------------
 Example:
-```
+```php
     $rules = array(
         'email' => array(
-            'value' => $req->getParam('email'),
+            'value' => $request->getParam('email'),
             'rules' => 'required|email',
             'fail'  => 'Invalid email address',
             'info'  => 'Email is valid'
         ),
         'pass'  => array(
-            'value' => $req->getParam('pass'),
+            'value' => $request->getParam('pass'),
             'rules' => 'required|password',
             'fail'  => 'Invalid password: minimum 6 characters, with numbers, small and capital letters.',
             'info'  => 'Password is valid'  
