@@ -114,7 +114,7 @@ implements InterfaceMailer
     /**
      * Set pretend option. If true, does not send email
      * 
-     * @param boolean $pretend Set the pretend option
+     * @param boolean $option Set the pretend option
      * 
      * @return Duality\Service\Mailer This instance
      */

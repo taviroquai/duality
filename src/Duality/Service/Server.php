@@ -374,6 +374,7 @@ extends AbstractService
      * Parses HTTP properties from PHP global environment
      * 
      * @param array $server The global $_SERVER variable
+     * @param array $params The global $_REQUEST/$_GET/$_POST variable
      * 
      * @return Request|false The resulting request instance
      */
