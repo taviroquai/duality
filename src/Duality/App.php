@@ -78,7 +78,8 @@ extends Container
         'server'    => 'Duality\Service\Server',
         'locale'    => 'Duality\Service\Localization',
         'cmd'       => 'Duality\Service\Commander',
-        'client'    => 'Duality\Service\Client'
+        'client'    => 'Duality\Service\Client',
+        'performance' => 'Duality\Service\Performance'
     );
 
     /**

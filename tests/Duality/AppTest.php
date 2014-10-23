@@ -47,7 +47,8 @@ extends PHPUnit_Framework_TestCase
                 'server'    => 'Duality\Service\Server',
                 'locale'    => 'Duality\Service\Localization',
                 'cmd'       => 'Duality\Service\Commander',
-                'client'    => 'Duality\Service\Client'
+                'client'    => 'Duality\Service\Client',
+                'performance' => 'Duality\Service\Performance'
             )
         );
         $app = new \Duality\App(dirname(__FILE__), $expected);
