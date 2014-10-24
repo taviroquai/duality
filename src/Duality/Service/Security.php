@@ -38,7 +38,7 @@ implements InterfaceSecurity
     public function init()
     {
         if ($this->app->call('server')->getRequest()
-            && !empty($this->app->call('server')->getRequest()->getMethod())
+            && $this->app->call('server')->getRequest()->getMethod()
         ) {
             $params = $this->app->call('server')->getRequest()->getParams();
             foreach ($params as $key => &$value) {
