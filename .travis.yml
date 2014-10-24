@@ -21,7 +21,7 @@ before_install:
 
 install:
   # install php packages required for running a web server from drush on php 5.3
-  - sudo apt-get install -y --force-yes php5-apcu php5-intl
+  - sudo apt-get install -y --force-yes php5-apc php5-intl
 
 # execute any number of scripts before the test run, custom env's are available as variables
 before_script:
