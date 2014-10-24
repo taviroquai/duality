@@ -33,6 +33,9 @@ before_script:
 # use the $DB env variable to determine the phpunit.xml to use
 script: phpunit --coverage-text
 
+# Show log
+after_failure: cat tests/data/log.txt
+
 # configure notifications (email, IRC, campfire etc)
 # notifications:
   # irc: "irc.freenode.org#travis"
