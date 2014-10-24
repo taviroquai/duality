@@ -20,6 +20,9 @@ before_install:
   - sudo apt-get update > /dev/null
   - sudo chmod -R 777 tests/data
   - sudo chmod 444 tests/data/forbidden
+  - locale -a
+  - sudo locale-gen pt_PT
+  - sudo locale-gen pt_PT.UTF-8
 
 install:
   # install php packages required for running a web server from drush on php 5.4
