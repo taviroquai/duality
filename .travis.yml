@@ -19,6 +19,7 @@ env:
 before_install:
   - sudo apt-get update > /dev/null
   - sudo chmod -R 777 tests/data
+  - phpenv config-rm xdebug.ini
 
 install:
   # install php packages required for running a web server from drush on php 5.4
