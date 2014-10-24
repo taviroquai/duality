@@ -67,6 +67,7 @@ extends AbstractService
 
     /**
      * Holds the calendar
+     * TODO: Release 2.0 (PHP5.5)
      * 
      * @var \IntlCalendar Holds the locale calendar
      */
@@ -74,6 +75,7 @@ extends AbstractService
 
     /**
      * Holds the time zone
+     * TODO: Release 2.0 (PHP5.5)
      * 
      * @var \IntlTimeZone Holds the current timezone
      */
@@ -158,12 +160,16 @@ extends AbstractService
         );
 
         // Create a time zone
-        $this->timezone = \IntlTimeZone::createTimeZone($timezone);
+        // TODO: Release 2.0 (PHP5.5)
+        //$this->timezone = \IntlTimeZone::createTimeZone($timezone);
 
         // Create a calendar
+        // TODO: Release 2.0 (PHP5.5)
+        /*
         $this->calendar = \IntlCalendar::createInstance(
             $this->timezone, $this->current
         );
+        */
 
         // Create a DateTimeFormater
         $this->datetimeFormatter = new \IntlDateFormatter(
@@ -258,6 +264,7 @@ extends AbstractService
 
     /**
      * Returns the calendar
+     * TODO: Release 2.0 (PHP5.5)
      * 
      * @return \IntlCalendar The current calendar instance
      */
@@ -268,6 +275,7 @@ extends AbstractService
 
     /**
      * Returns the time zone
+     * TODO: Release 2.0 (PHP5.5)
      * 
      * @return \IntlTimeZone The current timezone instance
      */
