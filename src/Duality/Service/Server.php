@@ -311,7 +311,7 @@ extends AbstractService
     }
 
     /**
-     * Echos HTTP response
+     * Writes HTTP response to application buffer
      * 
      * @param \Duality\Structure\Http $response    Give the server response
      * @param boolean                 $withHeaders Send headers or not

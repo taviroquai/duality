@@ -71,7 +71,7 @@ implements InterfaceErrorHandler
     public function terminate()
     {
         if ($this->error) {
-            echo 'Ops! Something went wrong...';
+            $this->app->getBuffer()->write('Ops! Something went wrong...');
         }
         if ($this->stream) {
             $this->stream->close();

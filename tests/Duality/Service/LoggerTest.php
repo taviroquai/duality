@@ -6,6 +6,8 @@ extends PHPUnit_Framework_TestCase
     /**
      * Test invalid logger configuration
      * 
+     * @runInSeparateProcess
+     * 
      * @expectedException \Duality\Core\DualityException
      */
     public function testLoggerWithoutConfig()
@@ -16,6 +18,8 @@ extends PHPUnit_Framework_TestCase
 
     /**
      * Test unreadable buffer
+     * 
+     * @runInSeparateProcess
      * 
      * @expectedException \Duality\Core\DualityException
      */
@@ -28,6 +32,8 @@ extends PHPUnit_Framework_TestCase
 
     /**
      * Test logger service
+     * 
+     * @runInSeparateProcess
      */
     public function testLocalization()
     {

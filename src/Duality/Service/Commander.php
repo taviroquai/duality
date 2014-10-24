@@ -121,7 +121,7 @@ implements InterfaceCommander
             }
         }
         if ($notfound) {
-            echo 'Command not found'.PHP_EOL;
+            $this->app->getBuffer()->write('Command not found'.PHP_EOL);
         }
     }
 

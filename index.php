@@ -6,7 +6,6 @@ ini_set('display_errors', true);
 require_once './vendor/autoload.php';
 
 // Tell what our application uses
-use Duality\Service\Server;
 use Duality\App;
 
 // Setup configuration
@@ -20,9 +19,11 @@ $config = array(
 // Create a new application container
 $app = new App(dirname(__FILE__), $config);
 
-// Create a new server and initiate defaults
-$server = new Server($app);
-$server->init();
+// Create a new server
+$server = $app->call('server');
+
+// Load HTTP request from globals
+$server->setRequest($server->getRequestFromGlobals($_SERVER, $_REQUEST));
 
 // Define default route
 $server->setHome(function(&$req, &$res, $matches) {
