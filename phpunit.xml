@@ -9,7 +9,6 @@
         <testsuite name="Duality Test Suite">
             <directory>./tests</directory>
             <exclude>./tests/Duality/Core</exclude>
-            <exclude>./tests/Duality/Structure</exclude>
             <exclude>./tests/Duality/Service</exclude>
             <exclude>./tests/Duality/Service/Database/MySql.php</exclude>
         </testsuite>
