@@ -16,11 +16,19 @@ php:
 env:
   - DB=sqlite
 
+before_install:
+  - sudo apt-get update > /dev/null
+
+install:
+  # install php packages required for running a web server from drush on php 5.3
+  - sudo apt-get install -y --force-yes php5-apcu php5-intl
+
 # execute any number of scripts before the test run, custom env's are available as variables
 before_script:
   # - echo "USE mysql;\nUPDATE user SET password=PASSWORD('toor') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
   # - if [[ "$DB" == "mysql" ]]; then mysql -e "create database IF NOT EXISTS test_architect;" -uroot -ptoor; fi
   - composer install
+  - 
 
 # omitting "script:" will default to phpunit
 # use the $DB env variable to determine the phpunit.xml to use
