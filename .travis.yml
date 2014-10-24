@@ -1,0 +1,31 @@
+# see http://about.travis-ci.org/docs/user/languages/php/ for more hints
+language: php
+
+# list any PHP version you want to test against
+php:
+  # using major version aliases
+
+  # aliased to a recent 5.3.x version
+  - 5.3
+  # aliased to a recent 5.4.x version
+  - 5.4
+  # aliased to a recent 5.5.x version
+  - 5.5
+
+# optionally specify a list of environments, for example to test different RDBMS
+env:
+  - DB=sqlite
+
+# execute any number of scripts before the test run, custom env's are available as variables
+before_script:
+  # - echo "USE mysql;\nUPDATE user SET password=PASSWORD('toor') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
+  # - if [[ "$DB" == "mysql" ]]; then mysql -e "create database IF NOT EXISTS test_architect;" -uroot -ptoor; fi
+  - composer install
+
+# omitting "script:" will default to phpunit
+# use the $DB env variable to determine the phpunit.xml to use
+script: phpunit --coverage-text
+
+# configure notifications (email, IRC, campfire etc)
+# notifications:
+  # irc: "irc.freenode.org#travis"
