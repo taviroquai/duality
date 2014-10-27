@@ -13,7 +13,6 @@
             <exclude>./tests/Duality/Service/Database</exclude>
             <exclude>./tests/Duality/Service/Session</exclude>
             <exclude>./tests/Duality/Service/LocalizationTest.php</exclude>
-            <exclude>./tests/Duality/Service/PerformanceTest.php</exclude>
             <exclude>./tests/Duality/Service/SSHTest.php</exclude>
             <exclude>./tests/Duality/Service/SecurityTest.php</exclude>
             <exclude>./tests/Duality/Service/ServerTest.php</exclude>
