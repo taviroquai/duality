@@ -5,6 +5,8 @@ extends PHPUnit_Framework_TestCase
 {
     /**
      * Test failed config
+     *
+     * @requires extension ssh2
      * 
      * @expectedException \Duality\Core\DualityException
      */
@@ -20,6 +22,8 @@ extends PHPUnit_Framework_TestCase
     /**
      * Test failed config
      * 
+     * @requires extension ssh2
+     * 
      * @expectedException \Duality\Core\DualityException
      */
     public function testInvalidUser()
@@ -33,6 +37,8 @@ extends PHPUnit_Framework_TestCase
 
     /**
      * Test failed config
+     * 
+     * @requires extension ssh2
      * 
      * @expectedException \Duality\Core\DualityException
      */
@@ -48,6 +54,8 @@ extends PHPUnit_Framework_TestCase
     /**
      * Test failed config
      * 
+     * @requires extension ssh2
+     * 
      * @expectedException \Duality\Core\DualityException
      */
     public function testInvalidFingerprint()
@@ -61,6 +69,8 @@ extends PHPUnit_Framework_TestCase
 
     /**
      * Test failed config
+     * 
+     * @requires extension ssh2
      */
     public function testInvalidConnection()
     {
@@ -73,6 +83,8 @@ extends PHPUnit_Framework_TestCase
 
     /**
      * Test failed config
+     * 
+     * @requires extension ssh2
      */
     public function testInvalidcommand()
     {
@@ -86,6 +98,8 @@ extends PHPUnit_Framework_TestCase
 
     /**
      * Test SSH service
+     * 
+     * @requires extension ssh2
      */
     public function testSSH()
     {
