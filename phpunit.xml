@@ -8,9 +8,11 @@
     <testsuites>
         <testsuite name="Duality Test Suite">
             <directory>./tests</directory>
+            <exclude>./tests/Duality/Service/Cache</exclude>
             <exclude>./tests/Duality/Service/Controller</exclude>
             <exclude>./tests/Duality/Service/Database</exclude>
             <exclude>./tests/Duality/Service/Session</exclude>
+            <exclude>./tests/Duality/Service/LocalizationTest.php</exclude>
             <exclude>./tests/Duality/Service/LoggerTest.php</exclude>
             <exclude>./tests/Duality/Service/MailerTest.php</exclude>
             <exclude>./tests/Duality/Service/PaginatorTest.php</exclude>
