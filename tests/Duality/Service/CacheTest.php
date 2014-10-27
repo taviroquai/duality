@@ -5,7 +5,7 @@ extends PHPUnit_Framework_TestCase
 {
     /**
      * Test cache service
-     * @requires extension php-apc
+     * @requires extension apc
      */
     public function testCache()
     {

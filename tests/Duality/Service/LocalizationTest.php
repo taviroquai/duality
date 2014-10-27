@@ -6,6 +6,8 @@ extends PHPUnit_Framework_TestCase
     /**
      * Test localization service
      * 
+     * @requires extension intl
+     * 
      * @expectedException \Duality\Core\DualityException
      */
     public function testLocalizationWithoutConfig()
@@ -16,6 +18,8 @@ extends PHPUnit_Framework_TestCase
 
     /**
      * Test localization service with invalid directory
+     * 
+     * @requires extension intl
      * 
      * @expectedException \Duality\Core\DualityException
      */
@@ -35,6 +39,8 @@ extends PHPUnit_Framework_TestCase
     /**
      * Test localization service with missing translations messages
      * 
+     * @requires extension intl
+     * 
      * @expectedException \Duality\Core\DualityException
      */
     public function testLocalizationInvalidMessagesFile()
@@ -52,6 +58,8 @@ extends PHPUnit_Framework_TestCase
 
     /**
      * Test invalid locale code
+     * 
+     * @requires extension intl
      */
     public function testLocalizationInvalidCode()
     {
@@ -69,6 +77,8 @@ extends PHPUnit_Framework_TestCase
 
     /**
      * Test localization service
+     * 
+     * @requires extension intl
      * 
      * @expectedException \Duality\Core\DualityException
      */
@@ -88,6 +98,8 @@ extends PHPUnit_Framework_TestCase
 
     /**
      * Test localization service
+     * 
+     * @requires extension intl
      */
     public function testLocalization()
     {
