@@ -54,12 +54,6 @@ extends PHPUnit_Framework_TestCase
         );
         $app = new \Duality\App(dirname(__FILE__).'/../../..', $config);
         $locale = $app->call('locale');
-        $filename = $app->getPath()
-            . DIRECTORY_SEPARATOR
-            . $app->getConfigItem('locale.dir')
-            . DIRECTORY_SEPARATOR
-            . \Locale::canonicalize('pt_PT');
-        var_dump($filename); var_dump(file_exists($filename));
         $locale->setLocale('pt_PT');
     }
 
