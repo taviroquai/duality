@@ -42,7 +42,7 @@ extends PHPUnit_Framework_TestCase
         //$this->markTestSkipped('Do not use Duality error_handler.');
         $config = array(
             'logger' => array(
-                'buffer'   => './tests/data/log.txt'
+                'buffer'   => 'tests/data/log.txt'
             )
         );
         $app = new \Duality\App(dirname(__FILE__).'/../../..', $config);
