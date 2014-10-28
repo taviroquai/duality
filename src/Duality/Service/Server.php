@@ -339,7 +339,7 @@ extends AbstractService
      */
     public function sendHeaders(Response $response)
     {
-        http_response_code($response->getStatus());
+        header(':', true, $response->getStatus());
         foreach ($response->getHeaders() as $k => $v) {
             header($k.': '.$v);
         }
