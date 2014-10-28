@@ -3,6 +3,11 @@ Duality
 
 Micro PHP Framework
 
+[![Build Status](https://travis-ci.org/taviroquai/duality.svg?branch=master)](https://travis-ci.org/laravel/framework)
+[![Total Downloads](https://poser.pugx.org/taviroquai/duality/downloads.svg)](https://packagist.org/packages/laravel/framework)
+[![Latest Stable Version](https://poser.pugx.org/taviroquai/duality/v/stable.svg)](https://packagist.org/packages/laravel/framework)
+[![Latest Unstable Version](https://poser.pugx.org/taviroquai/duality/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
+[![License](https://poser.pugx.org/taviroquai/duality/license.svg)](https://packagist.org/packages/laravel/framework)
 
 Why?
 -----
