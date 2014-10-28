@@ -58,7 +58,10 @@ implements InterfaceErrorHandler
                 "Error Config: log_file configuration not found", 1
             );
         }
-        $this->stream = new StreamFile($this->app->getConfigItem('logger.buffer'));
+        $filename = $this->app->getPath()
+            . DIRECTORY_SEPARATOR
+            . $this->app->getConfigItem('logger.buffer');
+        $this->stream = new StreamFile($filename);
         $this->stream->open('a+b');
         set_error_handler(array($this, 'error'));
     }

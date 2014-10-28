@@ -12,8 +12,8 @@ extends PHPUnit_Framework_TestCase
      */
     public function testLocalizationWithoutConfig()
     {
-        $app = new \Duality\App(dirname(__FILE__), null);
-        $auth = $app->call('locale');
+        $app = new \Duality\App(dirname(__FILE__).'/../../..', null);
+        $app->call('locale');
     }
 
     /**
@@ -32,8 +32,8 @@ extends PHPUnit_Framework_TestCase
                 'timezone'  => 'Europe/Lisbon'
             )
         );
-        $app = new \Duality\App(dirname(__FILE__), $config);
-        $auth = $app->call('locale');
+        $app = new \Duality\App(dirname(__FILE__).'/../../..', $config);
+        $app->call('locale');
     }
 
     /**
@@ -48,37 +48,13 @@ extends PHPUnit_Framework_TestCase
         $config = array(
             'locale' => array(
                 'default'   => 'en_US',
-                'dir'       => './tests/data/lang',
+                'dir'       => 'tests/data/lang',
                 'timezone'  => 'Europe/Lisbon'
             )
         );
-        $app = new \Duality\App(dirname(__FILE__), $config);
-
-        $code = 'pt_PT';
-        var_dump($code);
+        $app = new \Duality\App(dirname(__FILE__).'/../../..', $config);
         $locale = $app->call('locale');
-        $current = \Locale::canonicalize($code);
-        var_dump($current);
-        var_dump(is_dir($app->getConfigItem('locale.dir').DIRECTORY_SEPARATOR.$current));
-        // Validate locale and translations directory
-        if (\Locale::acceptFromHttp($code) === null
-            || !is_dir($app->getConfigItem('locale.dir').DIRECTORY_SEPARATOR.$current)
-        ) {
-            $current = \Locale::canonicalize(
-                $app->getConfigItem('locale.default')
-            );
-        }
-
-        // Define default locale
-        var_dump($current);
-        \Locale::setDefault($current);
-        $directory = $app->getConfigItem('locale.dir').DIRECTORY_SEPARATOR.$current;
-        var_dump($directory.DIRECTORY_SEPARATOR.'messages.php');
-        if (!file_exists($directory.DIRECTORY_SEPARATOR.'messages.php')) {
-            throw new \Duality\Core\DualityException(
-                "Error locale: invalid messages file ".$current, 3
-            );
-        }
+        $locale->setLocale('pt_PT');
     }
 
     /**
@@ -91,11 +67,11 @@ extends PHPUnit_Framework_TestCase
         $config = array(
             'locale' => array(
                 'default'   => 'en_US',
-                'dir'       => './tests/data/lang',
+                'dir'       => 'tests/data/lang',
                 'timezone'  => 'Europe/Lisbon'
             )
         );
-        $app = new \Duality\App(dirname(__FILE__), $config);
+        $app = new \Duality\App(dirname(__FILE__).'/../../..', $config);
         $locale = $app->call('locale');
         $locale->setLocale('dummy');
     }
@@ -112,11 +88,11 @@ extends PHPUnit_Framework_TestCase
         $config = array(
             'locale' => array(
                 'default'   => 'en_US',
-                'dir'       => './tests/data/lang',
+                'dir'       => 'tests/data/lang',
                 'timezone'  => 'Europe/Lisbon'
             )
         );
-        $app = new \Duality\App(dirname(__FILE__), $config);
+        $app = new \Duality\App(dirname(__FILE__).'/../../..', $config);
         $locale = $app->call('locale');
         $result = $locale->t('key', array(), 'dummy');
     }
@@ -131,11 +107,11 @@ extends PHPUnit_Framework_TestCase
         $config = array(
             'locale' => array(
                 'default'   => 'en_US',
-                'dir'       => './tests/data/lang',
+                'dir'       => 'tests/data/lang',
                 'timezone'  => 'Europe/Lisbon'
             )
         );
-        $app = new \Duality\App(dirname(__FILE__), $config);
+        $app = new \Duality\App(dirname(__FILE__).'/../../..', $config);
         $locale = $app->call('locale');
 
         $locale->getDisplayLanguage();

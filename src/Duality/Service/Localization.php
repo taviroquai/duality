@@ -94,8 +94,13 @@ extends AbstractService
         if ($this->app->getConfigItem('locale.default') == null) {
             throw new DualityException("Error: locale configuration missing", 2);
         }
+        $this->directory = $this->app->getPath()
+                . DIRECTORY_SEPARATOR
+                . $this->directory;
         if ($this->app->getConfigItem('locale.dir')) {
-            $this->directory = $this->app->getConfigItem('locale.dir');
+            $this->directory = $this->app->getPath()
+                . DIRECTORY_SEPARATOR
+                . $this->app->getConfigItem('locale.dir');
         }
         if (!is_dir($this->directory) || !is_readable($this->directory)) {
             throw new DualityException(
@@ -133,22 +138,27 @@ extends AbstractService
         $this->current = \Locale::canonicalize($code);
 
         // Validate locale and translations directory
-        if ($this->current === null
-            || !is_dir($this->directory.DIRECTORY_SEPARATOR.$this->current)
-        ) {
+        $directory = $this->directory
+            . DIRECTORY_SEPARATOR
+            . $this->current;
+        if ($this->current === null || !is_dir($directory)) {
             $this->current = \Locale::canonicalize(
                 $this->app->getConfigItem('locale.default')
             );
         }
 
-        // Define default locale
-        \Locale::setDefault($this->current);
-        $directory = $this->directory.DIRECTORY_SEPARATOR.$this->current;
+        // Validate messages file
+        $directory = $this->directory
+            . DIRECTORY_SEPARATOR
+            . $this->current;
         if (!file_exists($directory.DIRECTORY_SEPARATOR.'messages.php')) {
             throw new DualityException(
                 "Error locale: invalid messages file ".$this->current, 3
             );
         }
+
+        // Define default locale
+        \Locale::setDefault($this->current);
         $this->storage->importArray(
             include($directory.DIRECTORY_SEPARATOR.'messages.php')
         );
