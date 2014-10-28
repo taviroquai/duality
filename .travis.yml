@@ -6,7 +6,7 @@ php:
   # using major version aliases
 
   # aliased to a recent 5.3.x version
-  # - 5.3
+  - 5.3
   # aliased to a recent 5.4.x version
   - 5.4
   # aliased to a recent 5.5.x version
@@ -31,7 +31,7 @@ install:
 # execute any number of scripts before the test run, custom env's are available as variables
 before_script:
   # - echo "USE mysql;\nUPDATE user SET password=PASSWORD('toor') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
-  # - if [[ "$DB" == "mysql" ]]; then mysql -e "create database IF NOT EXISTS test_architect;" -uroot -ptoor; fi
+  # - if [[ "$DB" == "mysql" ]]; then mysql -e "create database IF NOT EXISTS duality;" -uroot -ptoor; fi
   - composer install
 
 # omitting "script:" will default to phpunit

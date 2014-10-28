@@ -130,8 +130,7 @@ extends AbstractService
      */
     public function setLocale($code, $timezone = 'Europe/Lisbon')
     {
-        $code = \Locale::canonicalize($code);
-        $this->current = $code;
+        $this->current = \Locale::canonicalize($code);
 
         // Validate locale and translations directory
         if (\Locale::acceptFromHttp($code) === null

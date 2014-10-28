@@ -53,7 +53,9 @@ extends PHPUnit_Framework_TestCase
             )
         );
         $app = new \Duality\App(dirname(__FILE__), $config);
-        $app->call('locale')->setLocale('pt_PT');
+        $locale = $app->call('locale');
+        $locale->setLocale('pt_PT');
+        var_dump($locale);
     }
 
     /**

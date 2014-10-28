@@ -6,7 +6,7 @@ extends PHPUnit_Framework_TestCase
     /**
      * Test SQLite database service with invalid config
      * 
-     * @requires extension sqlite
+     * @requires extension pdo
      * 
      * @expectedException \Duality\Core\DualityException
      */
@@ -22,7 +22,7 @@ extends PHPUnit_Framework_TestCase
     /**
      * Test SQLite database service
      * 
-     * @requires extension sqlite
+     * @requires extension pdo
      */
     public function testSQLite()
     {
@@ -40,7 +40,7 @@ extends PHPUnit_Framework_TestCase
     /**
      * Test missing schema configuration
      * 
-     * @requires extension sqlite
+     * @requires extension pdo
      * 
      * @expectedException \Duality\Core\DualityException
      */
@@ -62,7 +62,7 @@ extends PHPUnit_Framework_TestCase
     /**
      * Test schema
      * 
-     * @requires extension sqlite
+     * @requires extension pdo
      */
     public function testCreateSchema()
     {
@@ -90,7 +90,7 @@ extends PHPUnit_Framework_TestCase
     /**
      * Test SQLite database methods
      * 
-     * @requires extension sqlite
+     * @requires extension pdo
      */
     public function testMethods()
     {
@@ -175,7 +175,7 @@ extends PHPUnit_Framework_TestCase
     /**
      * Test database table
      * 
-     * @requires extension sqlite
+     * @requires extension pdo
      */
     public function testTable()
     {
