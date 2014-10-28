@@ -61,6 +61,11 @@ implements InterfaceErrorHandler
         $filename = $this->app->getPath()
             . DIRECTORY_SEPARATOR
             . $this->app->getConfigItem('logger.buffer');
+        if (!file_exists($filename)) {
+            throw new DualityException(
+                "Error Config: log_file not found", 2
+            );
+        }
         $this->stream = new StreamFile($filename);
         $this->stream->open('a+b');
         set_error_handler(array($this, 'error'));

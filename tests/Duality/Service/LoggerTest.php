@@ -33,11 +33,30 @@ extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test invalid log file
+     * 
+     * @runInSeparateProcess
+     * 
+     * @expectedException \Duality\Core\DualityException
+     */
+    public function testInvalidFile()
+    {
+        //$this->markTestSkipped('Do not use Duality error_handler.');
+        $config = array(
+            'logger' => array(
+                'buffer'   => 'dummy'
+            )
+        );
+        $app = new \Duality\App(dirname(__FILE__).'/../../..', $config);
+        $logger = $app->call('logger');
+    }
+
+    /**
      * Test logger service
      * 
      * @runInSeparateProcess
      */
-    public function testLocalization()
+    public function testLogger()
     {
         //$this->markTestSkipped('Do not use Duality error_handler.');
         $config = array(
