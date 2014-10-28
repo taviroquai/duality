@@ -54,10 +54,31 @@ extends PHPUnit_Framework_TestCase
         );
         $app = new \Duality\App(dirname(__FILE__), $config);
         $locale = $app->call('locale');
-        var_dump(\Locale::acceptFromHttp('pt_PT'));
-        var_dump(\Locale::canonicalize('pt_PT'));
-        $locale->setLocale('pt_PT');
-        
+
+        $code = 'pt_PT';
+        $current = \Locale::canonicalize($code);
+        var_dump($current);
+        var_dump(\Locale::acceptFromHttp($code));
+        var_dump($app->getConfigItem('locale.dir').DIRECTORY_SEPARATOR.$current);
+        // Validate locale and translations directory
+        if (\Locale::acceptFromHttp($code) === null
+            || !is_dir($app->getConfigItem('locale.dir').DIRECTORY_SEPARATOR.$current)
+        ) {
+            $current = \Locale::canonicalize(
+                $app->getConfigItem('locale.default')
+            );
+        }
+
+        // Define default locale
+        var_dump($current);
+        \Locale::setDefault($current);
+        $directory = $app->getConfigItem('locale.dir').DIRECTORY_SEPARATOR.$current;
+        var_dump($directory.DIRECTORY_SEPARATOR.'messages.php');
+        if (!file_exists($directory.DIRECTORY_SEPARATOR.'messages.php')) {
+            throw new \Duality\Core\DualityException(
+                "Error locale: invalid messages file ".$current, 3
+            );
+        }
     }
 
     /**
