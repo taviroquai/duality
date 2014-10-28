@@ -12,7 +12,7 @@ extends PHPUnit_Framework_TestCase
      */
     public function testLoggerWithoutConfig()
     {
-        $this->markTestSkipped('Do not use Duality error_handler.');
+        //$this->markTestSkipped('Do not use Duality error_handler.');
         $app = new \Duality\App(dirname(__FILE__), null);
         $app->call('logger');
     }
@@ -26,7 +26,7 @@ extends PHPUnit_Framework_TestCase
      */
     public function testLoggerUnreadBuffer()
     {
-        $this->markTestSkipped('Do not use Duality error_handler.');
+        //$this->markTestSkipped('Do not use Duality error_handler.');
         $app = new \Duality\App(dirname(__FILE__), null);
         $dummy = fopen(DATA_PATH.'/log.txt', 'w+b');
         $app->call('logger');
@@ -39,7 +39,7 @@ extends PHPUnit_Framework_TestCase
      */
     public function testLocalization()
     {
-        $this->markTestSkipped('Do not use Duality error_handler.');
+        //$this->markTestSkipped('Do not use Duality error_handler.');
         $config = array(
             'logger' => array(
                 'buffer'   => './tests/data/log.txt'
