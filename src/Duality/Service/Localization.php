@@ -133,7 +133,7 @@ extends AbstractService
         $this->current = \Locale::canonicalize($code);
 
         // Validate locale and translations directory
-        if (\Locale::acceptFromHttp($code) === null
+        if ($this->current === null
             || !is_dir($this->directory.DIRECTORY_SEPARATOR.$this->current)
         ) {
             $this->current = \Locale::canonicalize(

@@ -53,13 +53,13 @@ extends PHPUnit_Framework_TestCase
             )
         );
         $app = new \Duality\App(dirname(__FILE__), $config);
-        $locale = $app->call('locale');
 
         $code = 'pt_PT';
+        var_dump($code);
+        $locale = $app->call('locale');
         $current = \Locale::canonicalize($code);
         var_dump($current);
-        var_dump(\Locale::acceptFromHttp($code));
-        var_dump($app->getConfigItem('locale.dir').DIRECTORY_SEPARATOR.$current);
+        var_dump(is_dir($app->getConfigItem('locale.dir').DIRECTORY_SEPARATOR.$current));
         // Validate locale and translations directory
         if (\Locale::acceptFromHttp($code) === null
             || !is_dir($app->getConfigItem('locale.dir').DIRECTORY_SEPARATOR.$current)
