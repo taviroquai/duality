@@ -55,6 +55,7 @@ extends PHPUnit_Framework_TestCase
         $app = new \Duality\App(dirname(__FILE__), $config);
         $locale = $app->call('locale');
         var_dump(\Locale::acceptFromHttp('pt_PT'));
+        var_dump(\Locale::canonicalize('pt_PT'));
         $locale->setLocale('pt_PT');
         
     }
