@@ -78,7 +78,6 @@ Time per request:       2.420 ms (mean, across all concurrent requests)
 Transfer rate:          1020.50 Kbytes/sec received    
  
 ```
-*Note: includes access to database*    
 
 
 OOP, PSR-2, Composer, phpunit, codesniffer and phpDocumentor
