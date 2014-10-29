@@ -343,16 +343,17 @@ extends AbstractService
     /**
      * Returns a select query
      * 
-     * @param string $fields The select clause
-     * @param string $from   The from clause
-     * @param string $where  The where condition - use ? for parameters
-     * @param string $limit  The number of rows to limit
-     * @param string $offset The offset number
+     * @param string $fields  The select clause
+     * @param string $from    The from clause
+     * @param string $where   The where condition - use ? for parameters
+     * @param string $groupby The groupby clause
+     * @param string $limit   The number of rows to limit
+     * @param string $offset  The offset number
      * 
      * @return string The final SQL string
      */
     public abstract function getSelect(
-        $fields, $from, $where = '', $limit = 0, $offset = 0
+        $fields, $from, $where = '', $groupby = '', $limit = 0, $offset = 0
     );
 
     /**

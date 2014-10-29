@@ -69,7 +69,7 @@ extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $result);
 
         $expected = 'SELECT * FROM dummy WHERE dummy = ? LIMIT 10 OFFSET 0;';
-        $result = $db->getSelect('*', (string) $table, 'dummy = ?', 10, 0);
+        $result = $db->getSelect('*', (string) $table, 'dummy = ?', '', 10, 0);
         $this->assertEquals($expected, $result);
 
         $expected = 'CREATE TABLE IF NOT EXISTS dummy (id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY, dummy integer);';

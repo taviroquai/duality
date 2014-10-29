@@ -47,16 +47,18 @@ class MySql extends Database
     /**
      * Returns a select query
      * 
-     * @param string $fields The select clause
-     * @param string $from   The from clause
-     * @param string $where  The where condition - use ? for parameters
-     * @param string $limit  The number of rows to limit
-     * @param string $offset The offset number
+     * @param string $fields  The select clause
+     * @param string $from    The from clause
+     * @param string $where   The where condition - use ? for parameters
+     * @param string $groupby The groupby clause
+     * @param string $limit   The number of rows to limit
+     * @param string $offset  The offset number
      * 
      * @return string The final SQL string
      */
-    public function getSelect($fields, $from, $where = '', $limit = 0, $offset = 0)
-    {
+    public function getSelect(
+        $fields, $from, $where = '', $groupby = '', $limit = 0, $offset = 0
+    ) {
         $sql = "SELECT $fields FROM ".strtolower((string) $from);
         if (!empty($where)) {
             $sql .= " WHERE ".$where;

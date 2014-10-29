@@ -122,7 +122,7 @@ extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $result);
 
         $expected = 'SELECT * FROM dummy WHERE dummy = ? LIMIT 10 OFFSET 0;';
-        $result = $db->getSelect('*', (string) $table, 'dummy = ?', 10, 0);
+        $result = $db->getSelect('*', (string) $table, 'dummy = ?', '', 10, 0);
         $this->assertEquals($expected, $result);
 
         $expected = 'CREATE TABLE IF NOT EXISTS dummy (id INTEGER PRIMARY KEY, dummy integer);';
@@ -208,6 +208,14 @@ extends PHPUnit_Framework_TestCase
         $table->add(1, array('id' => 1, 'email' => 'dummy1'));
         $table->set(2, array('id' => 1, 'email' => 'dummy2'));
         $table->find(0, 10, 'id = ?', array(1));
+
+        $filter = new \Duality\Structure\Database\Filter($table);
+        $filter->columns('id')
+            ->where('id = ?', array(1))
+            ->group('id')
+            ->limit(0, 10);
+        $table->filter($filter);
+
         $table->get(1);
         $table->has(1);
         $table->asArray();

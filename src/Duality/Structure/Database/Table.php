@@ -14,6 +14,7 @@
 namespace Duality\Structure\Database;
 
 use Duality\Core\InterfaceStorage;
+use Duality\Structure\Property;
 use Duality\Structure\TableRow;
 use Duality\Structure\Table as DataTable;
 use Duality\Structure\Entity;
@@ -84,7 +85,7 @@ extends DataTable
                 $this->database->getColumns($this)
             );
             while($item = $result->fetch(\PDO::FETCH_ASSOC)) {
-                $property = new \Duality\Structure\Property($item['name']);
+                $property = new Property($item['name']);
                 $this->addColumn($property);
             }
         }
@@ -102,7 +103,7 @@ extends DataTable
     {
         $this->columns->reset();
         foreach ($columns as $name => $item) {
-            $property = new \Duality\Structure\Property($name);
+            $property = new Property($name);
             $this->addColumn($property);
         }
     }
@@ -149,6 +150,45 @@ extends DataTable
             $row->setTable($this);
             foreach ($this->getColumns() as $column) {
                 $row->addData($column, $trow[(string) $column]);
+            }
+            $this->addRow($row);
+        }
+        return $this;
+    }
+
+    /**
+     * Loads table values with limit
+     * 
+     * @param int    $offset The items offset (OFFSET clause)
+     * @param int    $limit  The number of items (LIMIT clause)
+     * @param string $where  The condition (WHERE clause)
+     * @param array  $values The condition values as array
+     * @param string $select The columns string (SELECT clause)
+     * 
+     * @return Table The resulting table
+     */
+    public function filter(Filter $filter) {
+        $sql = $this->database->getSelect(
+            $filter->getSelect(),
+            $this->getName(),
+            $filter->getWhere(),
+            $filter->getGroupBy(),
+            $filter->getOffset(),
+            $filter->getLimit()
+        );
+        $stm = $this->database->getPDO()->prepare($sql);
+        $stm->execute($filter->getWhereValues());
+        
+        $this->rows->reset();
+        $columns = explode(',', $filter->getSelect());
+        while ($trow = $stm->fetch(\PDO::FETCH_ASSOC)) {
+            $row = new TableRow($this);
+            $row->setTable($this);
+            foreach ($columns as $column) {
+                $row->addData(
+                    new Property($column),
+                    $trow[(string) $column]
+                );
             }
             $this->addRow($row);
         }
