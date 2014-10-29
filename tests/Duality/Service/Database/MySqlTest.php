@@ -6,7 +6,7 @@ extends PHPUnit_Framework_TestCase
     /**
      * Test MySql database service with invalid config
      * 
-     * @requires extension mysql
+     * @requires extension pdo
      * 
      * @expectedException \Duality\Core\DualityException
      */
@@ -22,7 +22,7 @@ extends PHPUnit_Framework_TestCase
     /**
      * Test MySql database service
      * 
-     * @requires extension mysql
+     * @requires extension pdo
      */
     public function testMySql()
     {
@@ -42,7 +42,7 @@ extends PHPUnit_Framework_TestCase
     /**
      * Test MySql database methods
      * 
-     * @requires extension mysql
+     * @requires extension pdo
      */
     public function testMethods()
     {

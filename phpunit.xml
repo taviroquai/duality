@@ -8,7 +8,6 @@
     <testsuites>
         <testsuite name="Duality Test Suite">
             <directory>./tests</directory>
-            <exclude>./tests/Duality/Service/Database/MySqlTest.php</exclude>
         </testsuite>
     </testsuites>
     <filter>
