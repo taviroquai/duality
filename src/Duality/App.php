@@ -236,7 +236,7 @@ extends Container
     public function call($name, $params = array(), $cache = true)
     {
         if (!$this->services->has($name)
-            && isset($this->defaults[$name])
+            && isset($this->config['services'][$name])
         ) {
             $this->loadService($name);
         }
