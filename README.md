@@ -79,6 +79,25 @@ Transfer rate:          1020.50 Kbytes/sec received
  
 ```
 
+**Loaded Classes (16)**
+```
+    Duality\App
+    Duality\Core\Container
+    Duality\Structure\Storage
+    Duality\Core\InterfaceStorage
+    Duality\Structure\File\StreamFile
+    Duality\Structure\File
+    Duality\Core\Structure
+    Duality\Service\Server
+    Duality\Core\AbstractService
+    Duality\Structure\Url
+    Duality\Structure\Http\Response
+    Duality\Structure\Http
+    Duality\Structure\Http\Request
+    Duality\Service\Controller\Base
+    Duality\Structure\HtmlDoc
+    Duality\Structure\File\TextFile
+```
 
 OOP, PSR-2, Composer, phpunit, codesniffer and phpDocumentor
 -------------------------
