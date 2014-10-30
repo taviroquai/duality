@@ -133,7 +133,7 @@ extends DataTable
      * @param array  $values The condition values as array
      * @param string $select The columns string (SELECT clause)
      * 
-     * @return Table The resulting table
+     * @return \Duality\Structure\Database\Table This table
      */
     public function find(
         $offset = 0, $limit = 10, $where = '', $values = array(), $select = '*'
@@ -159,13 +159,11 @@ extends DataTable
     /**
      * Loads table values with limit
      * 
-     * @param int    $offset The items offset (OFFSET clause)
-     * @param int    $limit  The number of items (LIMIT clause)
-     * @param string $where  The condition (WHERE clause)
-     * @param array  $values The condition values as array
-     * @param string $select The columns string (SELECT clause)
+     * @param \Duality\Structure\Database\Filter $filter The filter object
      * 
-     * @return Table The resulting table
+     * @return \Duality\Structure\Database\Table This table
+     * 
+     * @since 0.18.0
      */
     public function filter(Filter $filter) {
         $sql = $this->database->getSelect(
