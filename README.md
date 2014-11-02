@@ -10,3 +10,5 @@ Micro PHP Framework
 [![License](https://poser.pugx.org/taviroquai/duality/license.svg)](https://packagist.org/packages/taviroquai/duality)
 
 Documentation in [Wiki](https://github.com/taviroquai/duality/wiki)
+
+Looking for a complete application demo? Go [here](https://github.com/taviroquai/duality-demo).
