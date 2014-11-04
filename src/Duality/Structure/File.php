@@ -148,14 +148,10 @@ extends Structure
     /**
      * Saves the file to media
      * 
-     * @throws \Duality\Core\DualityException When could not save file
-     * 
-     * @return void
+     * @return int|false The number of bytes saved of false
      */
     public function save()
     {
-        if ($this->exists() && is_writable($this->path)) {
-            file_put_contents($this->getPath(), $this->content);    
-        }
+        return @file_put_contents($this->getPath(), $this->content);    
     }
 }

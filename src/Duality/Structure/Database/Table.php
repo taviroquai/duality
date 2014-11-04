@@ -71,6 +71,16 @@ extends DataTable
     }
 
     /**
+     * Gets the table primary key
+     * 
+     * @return string The primary key field
+     */
+    public function getPrimaryKey()
+    {
+        return $this->primaryKey;
+    }
+
+    /**
      * Gets all table properties
      * 
      * @param boolean $cache The cached information
@@ -205,7 +215,7 @@ extends DataTable
     {
         $sql = $this->database->getInsert($this, (array) $value);
         $stm = $this->database->getPDO()->prepare($sql);
-        $stm->execute(array_values((array)$value));
+        $result = $stm->execute(array_values((array)$value));
     }
 
     /**
@@ -220,7 +230,9 @@ extends DataTable
     {
         $sql = $this->database->getUpdate($this, (array) $value);
         $stm = $this->database->getPDO()->prepare($sql);
-        $stm->execute(array_values((array)$value));
+        $value = array_values((array)$value);
+        $value[] = $key;
+        $stm->execute($value);
     }
 
     /**
@@ -264,12 +276,18 @@ extends DataTable
      * 
      * @return array Returns all stored values
      */
-    public function asArray()
+    public function toArray()
     {
         $sql = $this->database->getSelect('*', $this->getName());
         $stm = $this->database->getPDO()->prepare($sql);
         $stm->execute();
-        return $stm->fetchAll(\PDO::FETCH_ASSOC);
+
+        $items = array();
+        $temp = $stm->fetchAll(\PDO::FETCH_ASSOC);
+        foreach ($temp as $item) {
+            $items[$item['id']] = $item;
+        }
+        return $items;
     }
 
     /**
@@ -284,11 +302,14 @@ extends DataTable
         foreach ($data as $key => $item) {
             if (!$this->has($key)) {
                 $sql = $this->database->getInsert($this, $item);
+                $item = array_values((array)$item);
             } else {
                 $sql = $this->database->getUpdate($this, $item);
+                $item = array_values((array)$item);
+                $item[] = $key;
             }
             $stm = $this->database->getPDO()->prepare($sql);
-            $stm->execute((array) $key);    
+            $stm->execute((array) $item);    
         }
     }
 

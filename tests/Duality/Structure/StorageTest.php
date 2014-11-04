@@ -1,5 +1,7 @@
 <?php
 
+use Duality\Structure\Storage;
+
 class StorageTest 
 extends PHPUnit_Framework_TestCase
 {
@@ -8,7 +10,13 @@ extends PHPUnit_Framework_TestCase
      */
     public function testStorage()
     {
-        $storage = new \Duality\Structure\Storage();
-        $storage->insert(0, 'dummy');
+        $storage = new Storage();
+        $result = $storage->asArray();
+        $this->assertEquals(array(), $result);
+
+        $expected = 'dummy';
+        $storage->insert(0, $expected);
+        $result = $storage->get(0);
+        $this->assertEquals($expected, $result);
     }
 }

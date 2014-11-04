@@ -8,14 +8,24 @@ extends PHPUnit_Framework_TestCase
      */
     public function testTextFile()
     {
-        $file = new \Duality\Structure\File\TextFile(DATA_PATH.'/log.txt');
+        $path = DATA_PATH.'/log.txt';
+        $file = new \Duality\Structure\File\TextFile($path);
 
-        $file->getPath();
-        $file->exists();
+        $result = $file->getPath();
+        $this->assertEquals($path, $result);
+
+        $result = $file->exists();
+        $this->assertEquals(file_exists($path), $result);
+
         $file->loadAttributes();
         $file->load(function($content) {});
-        $file->setContent('Text file dummy content');
-        $file->save();
+        $expected = 'Text file dummy content';
+        $file->setContent($expected);
+        $this->assertEquals($expected, $file->getContent());
+        
+        $expected = strlen($file->getContent());
+        $result = $file->save();
+        $this->assertEquals($expected, $result);
     }
 
     /**

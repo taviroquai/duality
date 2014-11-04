@@ -18,14 +18,35 @@ extends PHPUnit_Framework_TestCase
         $app = new \Duality\App(dirname(__FILE__), $config);
         $session = $app->call('session');
 
-        $session->add('dummy', 'dummy');
-        $session->set('dummy', 'dummy');
-        $session->get('dummy');
-        $session->has('dummy');
-        $session->asArray();
+        $expected = 'dummy';
+        $session->add('dummy', $expected);
+        $session->set('dummy', $expected);
+        $result = $session->get('dummy');
+        $this->assertEquals($expected, $result);
+
+        $expected = TRUE;
+        $result = $session->has('dummy');
+        $this->assertEquals($expected, $result);
+
+        $expected = array('dummy' => 'dummy');        
+        $result = $session->asArray();
+        $this->assertEquals($expected, $result);
+
+        $expected = array();
         $session->remove('dummy');
-        $session->importArray(array('dummy', 'dummy'));
+        $result = $session->asArray();
+        $this->assertEquals($expected, $result);
+
+        $expected = array('dummy', 'dummy');
+        $session->importArray($expected);
+        $result = $session->asArray();
+        $this->assertEquals($expected, $result);
+
+        $expected = array();
         $session->reset();
+        $result = $session->asArray();
+        $this->assertEquals($expected, $result);
+        
         $session->terminate();
     }
 }

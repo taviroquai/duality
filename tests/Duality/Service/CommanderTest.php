@@ -15,11 +15,19 @@ extends PHPUnit_Framework_TestCase
             echo 'response';
         });
 
+        $expected = "Command not found\n";
         $cmd->setInput('');
+        ob_start();
         $cmd->listen();
+        $result = ob_get_clean();
+        $this->assertEquals($expected, $result);
 
+        $expected = 'response';
         $cmd->setInput('dummy.php dummy');
+        ob_start();
         $cmd->listen();
+        $result = ob_get_clean();
+        $this->assertEquals($expected, $result);
 
         $cmd->terminate();
     }

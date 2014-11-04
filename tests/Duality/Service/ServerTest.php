@@ -1,5 +1,8 @@
 <?php
 
+use Duality\Structure\Url;
+use Duality\Structure\Http\Request;
+
 class ServerTest 
 extends PHPUnit_Framework_TestCase
 {
@@ -17,20 +20,41 @@ extends PHPUnit_Framework_TestCase
         $app = new \Duality\App(dirname(__FILE__), $config);
         $server = $app->call('server');
 
-        $url = new \Duality\Structure\Url('http://localhost/dummy');
+        $url = new Url('http://localhost/dummy');
         $url->setHost('localhost');
-        $request = new \Duality\Structure\Http\Request($url);
+        $request = new Request($url);
         $request->setParams(array('key' => 'value'));
         $request->setMethod('GET');
         $server->setRequest($request);
 
+        $expected = <<<EOF
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Duality default controller - Replace me!</title>
+    </head>
+    <body><h1>Duality default controller - Replace me!</h1></body>
+</html>
+EOF;
         $server->setHome('\Duality\Service\Controller\Base@doIndex');
+        ob_start();
         $server->listen();
+        $result = ob_get_clean();
+        $this->assertEquals($expected, $result);
 
-        $server->getResponse();
-        $server->setHostname('dummy');
-        $server->getHostname();
-        $server->createUrl('/dummy');
+        $result = $server->getResponse();
+        $this->assertInstanceOf('\Duality\Structure\Http\Response', $result);
+
+        $expected = 'dummy';
+        $server->setHostname($expected);
+        $result = $server->getHostname();
+        $this->assertEquals($expected, $result);
+
+        $expected = 'http://dummy/dummy';
+        $result = $server->createUrl('/dummy');
+        $this->assertEquals($expected, $result);
 
         $server->terminate();
     }
@@ -48,14 +72,18 @@ extends PHPUnit_Framework_TestCase
         );
         $app = new \Duality\App(dirname(__FILE__), $config);
         $server = $app->call('server');
+
         $request = $server->getRequestFromGlobals(array(), array());
+        $this->assertEquals(FALSE, $request);
 
         $request = $server->getRequestFromGlobals(array('REQUEST_METHOD' => 'GET'), array());
+        $this->assertInstanceOf('\Duality\Structure\Http\Request', $request);
 
-        $server->getRequestFromGlobals(
+        $request = $server->getRequestFromGlobals(
             array('REQUEST_METHOD' => 'GET', 'HTTP_X_REQUESTED_WITH' => 'xmlhttprequest'),
             array()
         );
+        $this->assertInstanceOf('\Duality\Structure\Http\Request', $request);
     }
 
     /**
@@ -79,7 +107,21 @@ extends PHPUnit_Framework_TestCase
         $pattern = '/\/uri/';
         $server->addRoute($pattern, '\Duality\Service\Controller\Base@doIndex');
 
+        $expected = <<<EOF
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Duality default controller - Replace me!</title>
+    </head>
+    <body><h1>Duality default controller - Replace me!</h1></body>
+</html>
+EOF;
+        ob_start();
         $server->listen();
+        $result = ob_get_clean();
+        $this->assertEquals($expected, $result);
     }
 
     /**

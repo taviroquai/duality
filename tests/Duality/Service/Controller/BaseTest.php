@@ -1,5 +1,7 @@
 <?php
 
+use Duality\Service\Controller\Base as BaseController;
+
 class BaseTest 
 extends PHPUnit_Framework_TestCase
 {
@@ -12,7 +14,7 @@ extends PHPUnit_Framework_TestCase
         $app = $this->getMockBuilder('\Duality\App')
             ->setConstructorArgs(array(dirname(__FILE__), null))
             ->getMock();
-        $controller = new \Duality\Service\Controller\Base($app);
+        $controller = new BaseController($app);
         $this->assertInstanceOf($expected, $controller);
     }
 
@@ -24,7 +26,7 @@ extends PHPUnit_Framework_TestCase
         $app = $this->getMockBuilder('\Duality\App')
             ->setConstructorArgs(array(dirname(__FILE__), null))
             ->getMock();
-        $controller = new \Duality\Service\Controller\Base($app);
+        $controller = new BaseController($app);
 
         $controller->init();
         $controller->terminate();
@@ -38,7 +40,7 @@ extends PHPUnit_Framework_TestCase
         $app = $this->getMockBuilder('\Duality\App')
             ->setConstructorArgs(array(dirname(__FILE__), null))
             ->getMock();
-        $controller = new \Duality\Service\Controller\Base($app);
+        $controller = new BaseController($app);
 
         $url = $this->getMockBuilder('\Duality\Structure\Url')
             ->setConstructorArgs(array('http://google.com/'))
@@ -47,9 +49,22 @@ extends PHPUnit_Framework_TestCase
         $request = $this->getMockBuilder('\Duality\Structure\Http\Request')
             ->setConstructorArgs(array($url))
             ->getMock();
-        $response = $this->getMock('\Duality\Structure\Http\Response');
+        $response = new \Duality\Structure\Http\Response;
 
+        $expected = <<<EOF
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Duality default controller - Replace me!</title>
+    </head>
+    <body><h1>Duality default controller - Replace me!</h1></body>
+</html>
+EOF;
         $controller->doIndex($request, $response);
+        $result = $response->getContent();
+        $this->assertEquals($expected, $result);
     }
 
     /**
@@ -61,7 +76,7 @@ extends PHPUnit_Framework_TestCase
         $app = $this->getMockBuilder('\Duality\App')
             ->setConstructorArgs(array(dirname(__FILE__), null))
             ->getMock();
-        $controller = new \Duality\Service\Controller\Base($app);
+        $controller = new BaseController($app);
         $this->assertEquals($expected, (string) $controller);
     }
 }

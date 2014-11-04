@@ -114,19 +114,33 @@ extends PHPUnit_Framework_TestCase
         $app = new \Duality\App(dirname(__FILE__).'/../../..', $config);
         $locale = $app->call('locale');
 
-        $locale->getDisplayLanguage();
-        $locale->getNumber(1001.11);
-        $locale->parseNumber('1.001,11');
-        $locale->getCurrency(1001.11);
-        $locale->getNumberFormatter();
-        $locale->getDateFormatter();
-        $locale->getCalendar();
-        $locale->getTimeZone();
-        $locale->t('key');
+        $result = $locale->getDisplayLanguage();
+        $this->assertEquals('English', $result);
+
+        $result = $locale->getNumber(1001.11);
+        $this->assertEquals('1,001.11', $result);
+
+        $result = $locale->parseNumber('1.001,11');
+        $this->assertEquals(1.001, $result);
+
+        $result = $locale->getCurrency(1001.11);
+        $this->assertEquals('€1,001.11', $result);
+
+        $result = $locale->getNumberFormatter();
+        $this->assertInstanceOf('\NumberFormatter', $result);
+
+        $result = $locale->getDateFormatter();
+        $this->assertInstanceOf('\IntlDateFormatter', $result);
+
+        $result = $locale->t('key');
+        $this->assertEquals('value', $result);
 
         $expected = 'valor';
         $result = $locale->t('key', array(), 'es_ES');
         $this->assertEquals($expected, $result);
+
+        $locale->getCalendar();
+        $locale->getTimeZone();
 
         $locale->terminate();
     }

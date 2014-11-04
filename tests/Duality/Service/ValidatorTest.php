@@ -1,5 +1,8 @@
 <?php
 
+use Duality\Structure\Http\Request;
+use Duality\Structure\Url;
+
 class ValidatorTest 
 extends PHPUnit_Framework_TestCase
 {
@@ -17,7 +20,7 @@ extends PHPUnit_Framework_TestCase
         $app = new \Duality\App(dirname(__FILE__), $config);
         $server = $app->call('server');
 
-        $request = new \Duality\Structure\Http\Request(new \Duality\Structure\Url('http://localhost/dummy'));
+        $request = new Request(new Url('http://localhost/dummy'));
         $request->setParams(array('key' => 'value'));
         $request->setMethod('GET');
         $server->setRequest($request);
@@ -34,9 +37,20 @@ extends PHPUnit_Framework_TestCase
         );
 
         $validator->validateAll($rules);
-        $validator->ok();
-        $validator->getMessages();
-        $validator->getMessage('key');
+
+        $expected = false;
+        $result = $validator->ok();
+        $this->assertEquals($expected, $result);
+
+        $expected = array(
+            'key' => 'Invalid email address'
+        );
+        $result = $validator->getMessages();
+        $this->assertEquals($expected, $result);
+
+        $expected = 'Invalid email address';
+        $result = $validator->getMessage('key');
+        $this->assertEquals($expected, $result);
 
         $validator->terminate();
     }

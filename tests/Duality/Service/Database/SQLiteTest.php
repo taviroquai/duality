@@ -1,5 +1,11 @@
 <?php
 
+use Duality\Structure\Property;
+use Duality\Structure\Entity\User;
+use Duality\Service\Database\SQLite;
+use Duality\Structure\Database\Table;
+use Duality\Structure\Database\Filter;
+
 class SQLiteTest 
 extends PHPUnit_Framework_TestCase
 {
@@ -104,7 +110,7 @@ extends PHPUnit_Framework_TestCase
         $app = new \Duality\App(dirname(__FILE__), $config);
         $db = $app->call('db');
 
-        $table = new \Duality\Structure\Database\Table($db);
+        $table = new Table($db);
         $table->setName('dummy');
         $table->setColumns(array('dummy' => 'integer'));
 
@@ -112,10 +118,10 @@ extends PHPUnit_Framework_TestCase
         $db->getTables();
         $db->getTable('notfound');
         $db->getPDO();
-        $entity = new \Duality\Structure\Entity\User();
+        $entity = new User();
         $db->createTableFromEntity($entity);
 
-        $property = new \Duality\Structure\Property('dummy');
+        $property = new Property('dummy');
 
         $expected = 'SELECT * FROM dummy;';
         $result = $db->getSelect('*', (string) $table);
@@ -149,7 +155,7 @@ extends PHPUnit_Framework_TestCase
         $result = $db->getInsert($table, array('dummy' => 'value'));
         $this->assertEquals($expected, $result);
 
-        $expected = 'UPDATE dummy SET dummy = ?;';
+        $expected = 'UPDATE dummy SET dummy = ? WHERE ' . $table->getPrimaryKey() . ' = ?;';
         $result = $db->getUpdate($table, array('dummy' => 'value'));
         $this->assertEquals($expected, $result);
 
@@ -161,7 +167,7 @@ extends PHPUnit_Framework_TestCase
         // $result = $db->getTruncate($table);
         // $this->assertEquals($expected, $result);
 
-        $expected = false;
+        $expected = 'DELETE FROM dummy';
         $result = $db->getTruncate($table);
         $this->assertEquals($expected, $result);
 
@@ -190,7 +196,7 @@ extends PHPUnit_Framework_TestCase
         $db = $app->call('db');
         $db->setName('duality');
 
-        $table = new \Duality\Structure\Database\Table($db);
+        $table = new Table($db);
         $table->setName('dummy');
 
         $schema = array(
@@ -202,37 +208,87 @@ extends PHPUnit_Framework_TestCase
         $sql = $db->getCreateTable($table, $schema);
         $db->getPDO()->exec($sql);
 
+        $expected = array();
         $table->setColumns($schema);
+        $result = $table->toArray();
+        $this->assertEquals($expected, $result);
+
         $table->setPrimaryKey('id');
         
-        $table->add(1, array('id' => 1, 'email' => 'dummy1'));
-        $table->set(2, array('id' => 1, 'email' => 'dummy2'));
-        $table->find(0, 10, 'id = ?', array(1));
+        $expected = array(1 => array('id' => 1, 'email' => 'dummy1'));
+        $table->add(1, array('email' => 'dummy1'));
+        $result = $table->toArray();
+        $this->assertEquals($expected, $result);
 
-        $filter = new \Duality\Structure\Database\Filter($table);
+        $expected = array(
+            1 => array('id' => 1, 'email' => 'dummy2')
+        );
+        $table->set(1, array('id' => 1, 'email' => 'dummy2'));
+        $result = $table->toArray();
+        $this->assertEquals($expected, $result);
+
+        $expected = array(
+            1 => array('id' => 1, 'email' => 'dummy2')
+        );
+        $table->find(0, 10, 'id = ?', array(1));
+        $result = $table->toArray();
+        $this->assertEquals($expected, $result);
+
+        $expected = array(
+            1 => array('id' => 1, 'email' => 'dummy2')
+        );
+        $filter = new Filter($table);
         $filter->columns('id')
             ->where('id = ?', array(1))
             ->group('id')
             ->limit(0, 10);
         $table->filter($filter);
+        $result = $table->toArray();
+        $this->assertEquals($expected, $result);
 
-        $table->get(1);
-        $table->has(1);
-        $table->asArray();
+        $expected = array('id' => 1, 'email' => 'dummy2');
+        $result = $table->get(1);
+        $this->assertEquals($expected, $result);
+
+        $result = $table->has(1);
+        $this->assertTrue($result);
+
+        $expected = array(
+            1 => array('id' => 1, 'email' => 'dummy2')
+        );
+        $result = $table->toArray();
+        $this->assertEquals($expected, $result);
+
+        $expected = array(
+            1 => array('id' => 1, 'email' => 'dummy3'),
+            2 => array('id' => 2, 'email' => 'dummy4')
+        );
         $data = array(
             1 => array('email' => 'dummy3'),
-            2 => array('email' => 'dummy4'),
-            3 => array('email' => 'dummy5')
+            2 => array('email' => 'dummy4')
         );
         $table->importArray($data);
-        $table->remove(1);
-        $table->reset();
+        $result = $table->toArray();
+        $this->assertEquals($expected, $result);
 
-        $db->getTable('dummy');
+        $expected = $expected = array(
+            2 => array('id' => 2, 'email' => 'dummy4')
+        );
+        $table->remove(1);
+        $result = $table->toArray();
+        $this->assertEquals($expected, $result);
+
+        $expected = array();
+        $table->reset();
+        $result = $table->toArray();
+        $this->assertEquals($expected, $result);
+
+        $result = $db->getTable('dummy');
+        $this->assertInstanceOf('\Duality\Structure\Database\Table', $result);
 
         $sql = $db->getDropTable($table);
         $db->getPDO()->exec($sql);
+        $result = $db->getTable('dummy');
+        $this->assertFalse($result);
     }
-
-    
 }

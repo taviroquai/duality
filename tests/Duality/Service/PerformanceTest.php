@@ -18,8 +18,15 @@ extends PHPUnit_Framework_TestCase
         }
 
         $total = $performance->getCurrentTime();
-        $performance->asArray();
-        $performance->reset();
+
+        $expected = 11;
+        $result = count($performance->asArray());
+        $this->assertEquals($expected, $result);
+
+        $expected = 0;
+        $result = $performance->reset();
+        $this->assertEquals($expected, $result);
+
         $performance->terminate();
     }
 }

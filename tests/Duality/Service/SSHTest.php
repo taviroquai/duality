@@ -1,5 +1,7 @@
 <?php
 
+use Duality\Service\SSH;
+
 class SSHTest 
 extends PHPUnit_Framework_TestCase
 {
@@ -13,7 +15,7 @@ extends PHPUnit_Framework_TestCase
     public function testInvalidHost()
     {
         $app = new \Duality\App(dirname(__FILE__), null);
-        $remote = new \Duality\Service\SSH($app);
+        $remote = new SSH($app);
         $remote->init();
 
         $remote->connectSSH('localhos', 'dummy');
@@ -29,7 +31,7 @@ extends PHPUnit_Framework_TestCase
     public function testInvalidUser()
     {
         $app = new \Duality\App(dirname(__FILE__), null);
-        $remote = new \Duality\Service\SSH($app);
+        $remote = new SSH($app);
         $remote->init();
 
         $remote->connectSSH('localhost', 'dummy');
@@ -45,7 +47,7 @@ extends PHPUnit_Framework_TestCase
     public function testInvalidAuth()
     {
         $app = new \Duality\App(dirname(__FILE__), null);
-        $remote = new \Duality\Service\SSH($app);
+        $remote = new SSH($app);
         $remote->init();
 
         $remote->connectSSH('localhost', 'duality', 'wrong');
@@ -61,7 +63,7 @@ extends PHPUnit_Framework_TestCase
     public function testInvalidFingerprint()
     {
         $app = new \Duality\App(dirname(__FILE__), null);
-        $remote = new \Duality\Service\SSH($app);
+        $remote = new SSH($app);
         $remote->init();
 
         $remote->connectSSH('localhost', 'duality', 'dummy', 22, null, 'dummy');
@@ -75,7 +77,7 @@ extends PHPUnit_Framework_TestCase
     public function testInvalidConnection()
     {
         $app = new \Duality\App(dirname(__FILE__), null);
-        $remote = new \Duality\Service\SSH($app);
+        $remote = new SSH($app);
         $remote->init();
 
         $remote->execute('ls');
@@ -89,7 +91,7 @@ extends PHPUnit_Framework_TestCase
     public function testInvalidcommand()
     {
         $app = new \Duality\App(dirname(__FILE__), null);
-        $remote = new \Duality\Service\SSH($app);
+        $remote = new SSH($app);
         $remote->init();
 
         $remote->connectSSH('localhost', 'duality', 'dummy');
@@ -104,7 +106,7 @@ extends PHPUnit_Framework_TestCase
     public function testSSH()
     {
         $app = new \Duality\App(dirname(__FILE__), null);
-        $remote = new \Duality\Service\SSH($app);
+        $remote = new SSH($app);
         $remote->init();
 
         $remote->connectSSH('localhost','duality','dummy');

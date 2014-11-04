@@ -1,5 +1,9 @@
 <?php
 
+use Duality\Structure\Property;
+use Duality\Structure\TableRow;
+use Duality\Structure\Table;
+
 class TableTest 
 extends PHPUnit_Framework_TestCase
 {
@@ -8,23 +12,38 @@ extends PHPUnit_Framework_TestCase
      */
     public function testTable()
     {
-        $table = new \Duality\Structure\Table();
+        $table = new Table();
 
-        $column = new \Duality\Structure\Property('dummy');
+        $column = new Property('dummy');
         $table->addColumn($column);
 
-        $row = new \Duality\Structure\TableRow($table);
-
+        $row = new TableRow($table);
         $row->setTable($table);
-        $row->addData($column, 'value');
-        $row->getData($column);
 
+        $expected = 'value';
+        $row->addData($column, $expected);
+        $result = $row->getData($column);
+        $this->assertEquals($expected, $result);
+
+        $expected = array(array('dummy' => $expected));
         $table->addRow($row);
-        $table->getColumns();
-        $table->getRows();
-        $table->columnExists($column);
-        $table->toCSV();
-        $table->toArray();
+        $this->assertEquals($table->toArray(), $expected);
+
+        $expected = array('dummy' => $column);
+        $result = $table->getColumns();
+        $this->assertEquals($expected, $result);
+
+        $expected = TRUE;
+        $result = $table->columnExists($column);
+        $this->assertEquals($expected, $result);
+
+        $expected = "dummy\nvalue\n";
+        $result = $table->toCSV();
+        $this->assertEquals($expected, $result);
+
+        $expected = array(array());
         $table->removeColumn('dummy');
+        $result = $table->toArray();
+        $this->assertEquals($expected, $result);
     }
 }

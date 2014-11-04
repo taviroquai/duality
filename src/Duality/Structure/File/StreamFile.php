@@ -52,7 +52,7 @@ class StreamFile extends File
      * 
      * @throws \Duality\Core\DualityException When cannot open file
      * 
-     * @return boolean
+     * @return void
      */
     public function open($options = 'w+b')
     {
@@ -69,13 +69,14 @@ class StreamFile extends File
     /**
      * Closes the stream
      * 
-     * @return void
+     * @return boolean The close result
      */
     public function close()
     {
         if (is_resource($this->handler)) {
-            fclose($this->handler);
+            return fclose($this->handler);
         }
+        return false;
     }
 
     /**
@@ -107,7 +108,7 @@ class StreamFile extends File
      * 
      * @throws \Duality\Core\DualityException When the stream is not opened
      * 
-     * @return boolean The save result
+     * @return int|false The number of saved bytes or false
      */
     public function save()
     {
@@ -125,7 +126,7 @@ class StreamFile extends File
      * 
      * @throws \Duality\Core\DualityException When the stream is not opened
      * 
-     * @return boolean The write result
+     * @return int|false The write result
      */
     public function write($data)
     {

@@ -125,16 +125,6 @@ extends Structure
     }
 
     /**
-     * Gets all table rows
-     * 
-     * @return array Returns the table rows
-     */
-    public function getRows()
-    {
-        return $this->rows->asArray();
-    }
-
-    /**
      * Check whether a property exists or not
      * 
      * @param \Duality\Structure\Property $property Give property to identify

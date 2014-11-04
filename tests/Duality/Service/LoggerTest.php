@@ -77,6 +77,10 @@ extends PHPUnit_Framework_TestCase
         $logger->log('dummy', E_USER_ERROR);
 
         // Terminate
+        $expected = 'Ops! Something went wrong...';
+        ob_start();
         $logger->terminate();
+        $result = ob_get_clean();
+        $this->assertEquals($expected, $result);
     }
 }

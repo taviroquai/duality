@@ -9,6 +9,8 @@ extends PHPUnit_Framework_TestCase
     public function testSession()
     {
         $app = new \Duality\App(dirname(__FILE__), null);
-        $auth = $app->call('session');
+        $session = $app->call('session');
+
+        $this->assertInstanceOf('\Duality\Service\Session\Dummy', $session);
     }
 }

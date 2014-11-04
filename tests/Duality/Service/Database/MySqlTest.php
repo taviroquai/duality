@@ -1,5 +1,9 @@
 <?php
 
+use Duality\Structure\Property;
+use Duality\Service\Database\MySql;
+use Duality\Structure\Database\Table;
+
 class MySqlTest 
 extends PHPUnit_Framework_TestCase
 {
@@ -16,7 +20,7 @@ extends PHPUnit_Framework_TestCase
             'db' => array()
         );
         $app = new \Duality\App(dirname(__FILE__), $config);
-        $db = $app->call('db');
+        $app->call('db');
     }
 
     /**
@@ -36,7 +40,7 @@ extends PHPUnit_Framework_TestCase
         $app = $this->getMockBuilder('\Duality\App')
             ->setConstructorArgs(array(dirname(__FILE__), $config))
             ->getMock();
-        $db = new \Duality\Service\Database\MySql($app);
+        $db = new MySql($app);
     }
 
     /**
@@ -56,13 +60,13 @@ extends PHPUnit_Framework_TestCase
         $app = $this->getMockBuilder('\Duality\App')
             ->setConstructorArgs(array(dirname(__FILE__), $config))
             ->getMock();
-        $db = new \Duality\Service\Database\MySql($app);
+        $db = new MySql($app);
 
-        $table = new \Duality\Structure\Database\Table($db);
+        $table = new Table($db);
         $table->setName('dummy');
         $table->setColumns(array('dummy' => 'integer'));
 
-        $property = new \Duality\Structure\Property('dummy');
+        $property = new Property('dummy');
 
         $expected = 'SELECT * FROM dummy;';
         $result = $db->getSelect('*', (string) $table);

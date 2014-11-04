@@ -1,30 +1,46 @@
 <?php
 
+use Duality\Structure\File\StreamFile;
+
 class StreamFileTest 
 extends PHPUnit_Framework_TestCase
 {
     /**
-     * Test image file
+     * Test stream file
      */
     public function testStreamFile()
     {
-        $file = new \Duality\Structure\File\StreamFile(DATA_PATH.'/log.txt');
+        $file = new StreamFile(DATA_PATH.'/log.txt');
         
+        $data = 'Dummy stream test';
         $file->load(function($chunck) {});
-        $file->write('Dummy stream test');
-        $file->save();
-        $file->close();
+        $result = $file->write($data);
+        $this->assertEquals(FALSE, $result);
+
+        $result = $file->save();
+        $this->assertEquals(FALSE, $result);
+
+        $result = $file->close();
+        $this->assertEquals(FALSE, $result);
+
 
         $file->open();
         $file->load(function($chunck) {});
-        $file->write('Dummy stream test');
-        $file->save();
-        $file->close();
+        $result = $file->write($data);
+        $this->assertEquals(TRUE, $result);
 
-        $file = new \Duality\Structure\File\StreamFile(DATA_PATH.'/original.jpg');
+        $expected = strlen($file->getContent());
+        $result = $file->save();
+        $this->assertEquals($expected, $result);
+        
+        $result = $file->close();
+        $this->assertEquals(TRUE, $result);
+
+        $file = new StreamFile(DATA_PATH.'/original.jpg');
         $file->open('r');
         $file->load(function($chunck) {});
-        $file->close();
+        $result = $file->close();
+        $this->assertEquals(TRUE, $result);
     }
 
     /**
@@ -34,7 +50,7 @@ extends PHPUnit_Framework_TestCase
      */
     public function testForbiddenFile()
     {
-        $file = new \Duality\Structure\File\StreamFile(DATA_PATH.'/forbidden');
+        $file = new StreamFile(DATA_PATH.'/forbidden');
         $file->open('w');
     }
 

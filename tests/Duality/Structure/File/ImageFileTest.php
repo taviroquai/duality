@@ -1,5 +1,7 @@
 <?php
 
+use Duality\Structure\File\ImageFile;
+
 class ImageFileTest 
 extends PHPUnit_Framework_TestCase
 {
@@ -8,21 +10,33 @@ extends PHPUnit_Framework_TestCase
      */
     public function testImageFile()
     {
-        $file = new \Duality\Structure\File\ImageFile(DATA_PATH.'/original.jpg');
-        $file->saveThumb(DATA_PATH.'/thumb.jpg');
-        $file->saveThumb(DATA_PATH.'/thumb.gif');
-        $file->saveThumb(DATA_PATH.'/thumb.png');
+        $file = new ImageFile(DATA_PATH.'/original.jpg');
+        $result = $file->saveThumb(DATA_PATH.'/thumb.jpg');
+        $this->assertEquals(TRUE, $result);
 
-        $file = new \Duality\Structure\File\ImageFile(DATA_PATH.'/car.jpg');
-        $file->saveThumb(DATA_PATH);
+        $result = $file->saveThumb(DATA_PATH.'/thumb.gif');
+        $this->assertEquals(TRUE, $result);
 
-        $file = new \Duality\Structure\File\ImageFile(DATA_PATH.'/car.gif');
-        $file->saveThumb(DATA_PATH.'/thumb.jpg');
-        $file->saveThumb(DATA_PATH.'/thumb.png');
+        $result = $file->saveThumb(DATA_PATH.'/thumb.png');
+        $this->assertEquals(TRUE, $result);
 
-        $file = new \Duality\Structure\File\ImageFile(DATA_PATH.'/car.png');
-        $file->saveThumb(DATA_PATH.'/thumb.jpg');
-        $file->saveThumb(DATA_PATH.'/thumb.gif');
+        $file = new ImageFile(DATA_PATH.'/car.jpg');
+        $result = $file->saveThumb(DATA_PATH);
+        $this->assertEquals(TRUE, $result);
+
+        $file = new ImageFile(DATA_PATH.'/car.gif');
+        $result = $file->saveThumb(DATA_PATH.'/thumb.jpg');
+        $this->assertEquals(TRUE, $result);
+
+        $result = $file->saveThumb(DATA_PATH.'/thumb.png');
+        $this->assertEquals(TRUE, $result);
+
+        $file = new ImageFile(DATA_PATH.'/car.png');
+        $result = $file->saveThumb(DATA_PATH.'/thumb.jpg');
+        $this->assertEquals(TRUE, $result);
+
+        $result = $file->saveThumb(DATA_PATH.'/thumb.gif');
+        $this->assertEquals(TRUE, $result);
     }
 
     /**
@@ -32,7 +46,7 @@ extends PHPUnit_Framework_TestCase
      */
     public function testInvalidImageFile()
     {
-        $file = new \Duality\Structure\File\ImageFile('dummy');
+        new ImageFile('dummy');
     }
 
 }

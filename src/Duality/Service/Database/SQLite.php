@@ -210,6 +210,7 @@ class SQLite extends Database
             $sql .= $field. " = ?,";
         }
         $sql = rtrim($sql, ',');
+        $sql .= " WHERE " . $table->getPrimaryKey() . ' = ?';
         $sql .= ";";
         return $sql;
     }
@@ -246,7 +247,7 @@ class SQLite extends Database
     public function getTruncate(Table $table)
     {
         // Not implemented in sqlite
-        return false;
+        return 'DELETE FROM ' . (string) $table;
     }
 
     /**

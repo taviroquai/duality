@@ -63,7 +63,7 @@ implements InterfaceStorage
      */
     public function add($key, $value)
     {
-        $this->set($key, $value);
+        $this->put($key, $value);
     }
 
     /**
@@ -138,7 +138,12 @@ implements InterfaceStorage
      */
     public function asArray()
     {
-        return array();
+        $items = array();
+        $iterator = new \APCIterator('user');
+        foreach ($iterator as $item) {
+            $items[$item['key']] = $item['value'];
+        }
+        return $items;
     }
     
     /**

@@ -1,7 +1,9 @@
 <?php
 
-class Model
-extends \Duality\Structure\Entity
+use Duality\Structure\Property;
+use Duality\Structure\Entity;
+
+class Model extends Entity
 {
 }
 
@@ -14,7 +16,15 @@ extends PHPUnit_Framework_TestCase
     public function testEntity()
     {
         $entity = new \Model();
-        $entity->addPropertiesFromArray(array('dummy'));
+
+        $name = 'dummy';
+        $expected = array(
+            new Property('id'),
+            new Property($name)
+        );
+        $entity->addPropertiesFromArray(array($name));
+        $result = $entity->getProperties();
+        $this->assertEquals($expected, $result);
     }
 
     /**

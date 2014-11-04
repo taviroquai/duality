@@ -161,7 +161,7 @@ extends AbstractService
      */
     public function getPageUrl($number)
     {
-        if ($number < 0 || $number > $this->getTotalPages()) {
+        if ($number < 1 || $number > $this->getTotalPages()) {
             return '';
         }
         return $this->url.'?page='. $number;

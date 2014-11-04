@@ -52,11 +52,11 @@ extends Structure
      * 
      * @param \Duality\File\TextFile $file Give the target file to load
      * 
-     * @return void
+     * @return boolean The load HTML result
      */
     public function loadFile(TextFile $file)
     {
-        $this->doc->loadHTML($file->getContent());
+        return $this->doc->loadHTML($file->getContent());
     }
 
     /**
@@ -109,7 +109,7 @@ extends Structure
      * 
      * @param string $path Give the file to load the HTML into DOM document
      * 
-     * @return \DOMDocument The new document
+     * @return \Duality\Structure\HtmlDoc A new HtmlDoc instance
      */
     public static function createFromFilePath($path)
     {
