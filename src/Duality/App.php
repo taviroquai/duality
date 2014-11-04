@@ -250,4 +250,154 @@ extends Container
         }
         return call_user_func_array($this->services->get($name), $params);
     }
+
+    /**
+     * Call database service alias (type hinting)
+     * 
+     * @return \Duality\Service\Database The database service
+     */
+    public function getDb()
+    {
+        return $this->call('db');
+    }
+
+    /**
+     * Call logger service alias (type hinting)
+     * 
+     * @return \Duality\Service\Logger The logger service
+     */
+    public function getLogger()
+    {
+        return $this->call('logger');
+    }
+
+    /**
+     * Call security service alias (type hinting)
+     * 
+     * @return \Duality\Service\Security The security service
+     */
+    public function getSecurity()
+    {
+        return $this->call('security');
+    }
+
+    /**
+     * Call validator service alias (type hinting)
+     * 
+     * @return \Duality\Service\Validator The validator service
+     */
+    public function getValidator()
+    {
+        return $this->call('validator');
+    }
+
+    /**
+     * Call session service alias (type hinting)
+     * 
+     * @return \Duality\Service\Session The session service
+     */
+    public function getSession()
+    {
+        return $this->call('session');
+    }
+
+    /**
+     * Call auth service alias (type hinting)
+     * 
+     * @return \Duality\Service\Auth The auth service
+     */
+    public function getAuth()
+    {
+        return $this->call('auth');
+    }
+
+    /**
+     * Call cache service alias (type hinting)
+     * 
+     * @return \Duality\Service\Cache The cache service
+     */
+    public function getCache()
+    {
+        return $this->call('cache');
+    }
+
+    /**
+     * Call mailer service alias (type hinting)
+     * 
+     * @return \Duality\Service\Mailer The mailer service
+     */
+    public function getMailer()
+    {
+        return $this->call('mailer');
+    }
+
+    /**
+     * Call paginator service alias (type hinting)
+     * 
+     * @return \Duality\Service\Paginator The paginator service
+     */
+    public function getPaginator()
+    {
+        return $this->call('paginator');
+    }
+
+    /**
+     * Call ssh service alias (type hinting)
+     * 
+     * @return \Duality\Service\SSH The ssh service
+     */
+    public function getSSH()
+    {
+        return $this->call('ssh');
+    }
+
+    /**
+     * Call http server service alias (type hinting)
+     * 
+     * @return \Duality\Service\Server The server service
+     */
+    public function getServer()
+    {
+        return $this->call('server');
+    }
+
+    /**
+     * Call locale service alias (type hinting)
+     * 
+     * @return \Duality\Service\Localization The localization service
+     */
+    public function getLocale()
+    {
+        return $this->call('locale');
+    }
+
+    /**
+     * Call cmd service alias (type hinting)
+     * 
+     * @return \Duality\Service\Commander The commander service
+     */
+    public function getCmd()
+    {
+        return $this->call('cmd');
+    }
+
+    /**
+     * Call http client alias (type hinting)
+     * 
+     * @return \Duality\Service\Client The http client service
+     */
+    public function getClient()
+    {
+        return $this->call('client');
+    }
+
+    /**
+     * Call performance alias (type hinting)
+     * 
+     * @return \Duality\Service\Performance The performance service
+     */
+    public function getPerformance()
+    {
+        return $this->call('performance');
+    }
 }

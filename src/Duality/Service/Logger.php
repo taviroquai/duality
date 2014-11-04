@@ -63,7 +63,7 @@ implements InterfaceErrorHandler
             . $this->app->getConfigItem('logger.buffer');
         if (!file_exists($filename)) {
             throw new DualityException(
-                "Error Config: log_file not found", 2
+                "Error Config: invalid log_file:" . $filename, 2
             );
         }
         $this->stream = new StreamFile($filename);

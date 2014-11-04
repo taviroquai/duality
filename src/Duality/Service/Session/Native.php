@@ -1,7 +1,7 @@
 <?php
 
 /**
- * User session service (native php sessions)
+ * Native PHP session service
  *
  * PHP Version 5.3.3
  *
@@ -13,8 +13,8 @@
 
 namespace Duality\Service\Session;
 
-use Duality\Core\AbstractService;
-use Duality\Core\InterfaceStorage;
+use Duality\Structure\Storage;
+use Duality\Service\Session;
 
 /**
  * Default session service
@@ -27,8 +27,7 @@ use Duality\Core\InterfaceStorage;
  * @since   0.7.0
  */
 class Native
-extends AbstractService
-implements InterfaceStorage
+extends Session
 {
     /**
      * Initiates the service

@@ -108,4 +108,99 @@ extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf($expected, $app->call('validator'));
     }
 
+    /**
+     * Test application service aliases
+     */
+    public function testAppCallServiceAlias()
+    {
+        $config = array(
+            'db'    => array(
+                'dsn' => 'sqlite:' . DATA_PATH . '/db.sqlite'
+            ),
+            'logger' => array(
+                'buffer' => DATA_PATH . '/log.txt'
+            ),
+            'locale' => array(
+                'default'   => 'en_US',
+                'dir'       => DATA_PATH . '/lang',
+                'timezone'  => 'Europe/Lisbon'
+            ),
+            'server'        => array(
+                'url'       => '/',
+                'hostname'  => 'localhost'
+            ),
+            'security'  => array(
+                'salt'      => 'dummy',
+                'hash'      => 'sha256'
+            ),
+            'mailer'    => array(
+                'from'  => array('email' => 'no-reply@domain.com', 'name' => 'Duality Mailer'),
+                'smtp'  => array(
+                    'host' => 'smtp.gmail.com',
+                    'user' => 'username',
+                    'pass' => 'password',
+                    'encr' => 'tls',
+                    'port' => 587,
+                    'dbgl' => 0
+                )
+            ),
+            'remote'    => array(
+                'localhost' => array(
+                    'username'  => '',
+                    'password'  => ''
+                )
+            )
+        );
+        $app = new \Duality\App(dirname(__FILE__).'/../..', $config);
+
+        $expected = '\Duality\Service\Database';
+        $this->assertInstanceOf($expected, $app->getDb());
+
+        $expected = '\Duality\Service\Logger';
+        $this->assertInstanceOf($expected, $app->getLogger());
+
+        $expected = '\Duality\Service\Security';
+        $this->assertInstanceOf($expected, $app->getSecurity());
+
+        $expected = '\Duality\Service\Validator';
+        $this->assertInstanceOf($expected, $app->getValidator());
+
+        $expected = '\Duality\Service\Session';
+        $this->assertInstanceOf($expected, $app->getSession());
+
+        $expected = '\Duality\Service\Logger';
+        $this->assertInstanceOf($expected, $app->getLogger());
+
+        $expected = '\Duality\Service\Auth';
+        $this->assertInstanceOf($expected, $app->getAuth());
+
+        $expected = '\Duality\Service\Cache';
+        $this->assertInstanceOf($expected, $app->getCache());
+
+        $expected = '\Duality\Service\Mailer';
+        $this->assertInstanceOf($expected, $app->getMailer());
+
+        $expected = '\Duality\Service\Paginator';
+        $this->assertInstanceOf($expected, $app->getPaginator());
+
+        $expected = '\Duality\Service\SSH';
+        $this->assertInstanceOf($expected, $app->getSSH());
+
+        $expected = '\Duality\Service\Server';
+        $this->assertInstanceOf($expected, $app->getServer());
+
+        $expected = '\Duality\Service\Localization';
+        $this->assertInstanceOf($expected, $app->getLocale());
+
+        $expected = '\Duality\Service\Commander';
+        $this->assertInstanceOf($expected, $app->getCmd());
+
+        $expected = '\Duality\Service\Client';
+        $this->assertInstanceOf($expected, $app->getClient());
+
+        $expected = '\Duality\Service\Performance';
+        $this->assertInstanceOf($expected, $app->getPerformance());
+
+    }
+
 }

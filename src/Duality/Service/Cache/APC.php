@@ -14,8 +14,7 @@
 namespace Duality\Service\Cache;
 
 use Duality\Core\DualityException;
-use Duality\Core\AbstractService;
-use Duality\Core\InterfaceStorage;
+use Duality\Service\Cache;
 
 /**
  * APC cache service
@@ -28,8 +27,7 @@ use Duality\Core\InterfaceStorage;
  * @since   0.7.0
  */
 class APC
-extends AbstractService
-implements InterfaceStorage
+extends Cache
 {
     /**
      * Initiates the service
@@ -63,7 +61,7 @@ implements InterfaceStorage
      */
     public function add($key, $value)
     {
-        $this->put($key, $value);
+        $this->set($key, $value);
     }
 
     /**

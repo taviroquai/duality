@@ -16,6 +16,7 @@ namespace Duality\Service;
 use Duality\Structure\Storage;
 use Duality\Core\AbstractService;
 use Duality\Core\InterfaceMailer;
+use PHPMailer;
 
 /**
  * Default mailer service
@@ -282,9 +283,7 @@ implements InterfaceMailer
      */
     public function send(\Closure $callback)
     {
-
-        // TODO: choose driver
-        $mail = new \PHPMailer;
+        $mail = new PHPMailer;
 
         // Setup SMTP
         if ($this->smtp->get('host')) {

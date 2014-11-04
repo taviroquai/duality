@@ -1,21 +1,20 @@
 <?php
 
 /**
- * Dummy session service (native php sessions)
+ * Dummy session service
  *
  * PHP Version 5.3.3
  *
  * @author  Marco Afonso <mafonso333@gmail.com>
  * @license http://opensource.org/licenses/MIT MIT
  * @link    http://github.com/taviroquai/duality
- * @since   0.7.0
+ * @since   0.19.0
  */
 
 namespace Duality\Service\Session;
 
-use Duality\Core\AbstractService;
-use Duality\Core\InterfaceStorage;
 use Duality\Structure\Storage;
+use Duality\Service\Session;
 
 /**
  * Dummy session service
@@ -25,19 +24,11 @@ use Duality\Structure\Storage;
  * @author  Marco Afonso <mafonso333@gmail.com>
  * @license http://opensource.org/licenses/MIT MIT
  * @link    http://github.com/taviroquai/duality
- * @since   0.7.0
+ * @since   0.19.0
  */
 class Dummy
-extends AbstractService
-implements InterfaceStorage
+extends Session
 {
-    /**
-     * Holds the session data
-     * 
-     * @var \Duality\Structure\Storage The session storage
-     */
-    protected $storage;
-
     /**
      * Initiates the service
      * 
