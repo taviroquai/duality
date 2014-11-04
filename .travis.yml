@@ -26,12 +26,14 @@ before_install:
 
 install:
   # install php packages required for running a web server from drush on php 5.4
+  - sudo apt-get install php5-apcu
 
 # execute any number of scripts before the test run, custom env's are available as variables
 before_script:
   # - echo "USE mysql;\nUPDATE user SET password=PASSWORD('toor') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
   # - if [[ "$DB" == "mysql" ]]; then mysql -e "create database IF NOT EXISTS duality;" -uroot -ptoor; fi
   - echo "extension = apc.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "extension = apcu.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "apc.enable_cli=1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - composer install
 
