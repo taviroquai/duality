@@ -174,9 +174,6 @@ extends PHPUnit_Framework_TestCase
         $expected = '\Duality\Service\Auth';
         $this->assertInstanceOf($expected, $app->getAuth());
 
-        $expected = '\Duality\Service\Cache';
-        $this->assertInstanceOf($expected, $app->getCache());
-
         $expected = '\Duality\Service\Mailer';
         $this->assertInstanceOf($expected, $app->getMailer());
 
@@ -200,6 +197,21 @@ extends PHPUnit_Framework_TestCase
 
         $expected = '\Duality\Service\Performance';
         $this->assertInstanceOf($expected, $app->getPerformance());
+
+    }
+
+    /**
+     * Test apc cache service alias
+     * 
+     * @requires extension apcu
+     */
+    public function testAppCallAPCuServiceAlias()
+    {
+        $config = array();
+        $app = new \Duality\App(dirname(__FILE__).'/../..', $config);
+
+        $expected = '\Duality\Service\Cache';
+        $this->assertInstanceOf($expected, $app->getCache());
 
     }
 

@@ -26,7 +26,7 @@ before_install:
 
 install:
   # install php packages required for running a web server from drush on php 5.4
-  - sudo apt-get install php5-apcu
+  - sudo pecl install apcu
 
 # execute any number of scripts before the test run, custom env's are available as variables
 before_script:
