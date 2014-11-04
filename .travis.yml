@@ -26,13 +26,13 @@ before_install:
 
 install:
   # install php packages required for running a web server from drush on php 5.4
-  - sudo apt-get install -y --force-yes php-apc php5-intl
-  - echo "apc.enable_cli=1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - sudo apt-get install -y --force-yes php5-intl
 
 # execute any number of scripts before the test run, custom env's are available as variables
 before_script:
   # - echo "USE mysql;\nUPDATE user SET password=PASSWORD('toor') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
   # - if [[ "$DB" == "mysql" ]]; then mysql -e "create database IF NOT EXISTS duality;" -uroot -ptoor; fi
+  - echo "apc.enable_cli=1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - composer install
 
 # omitting "script:" will default to phpunit
