@@ -27,7 +27,7 @@ before_install:
 install:
   # install php packages required for running a web server from drush on php 5.4
   - sudo apt-get install php-pear
-  - sudo pecl install intl
+  - printf "\n" | sudo pecl install intl
   - '[ "${TRAVIS_PHP_VERSION}" = "5.5" ] && sudo apt-get install php5-apcu || true'
 
 # execute any number of scripts before the test run, custom env's are available as variables
