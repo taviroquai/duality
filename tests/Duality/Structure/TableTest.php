@@ -37,6 +37,16 @@ extends PHPUnit_Framework_TestCase
         $result = $table->columnExists($column);
         $this->assertEquals($expected, $result);
 
+        $expected = array(
+            array('dummy' => 'value')
+        );
+        $table->reset();
+        $column = new Property('dummy');
+        $table->addColumn($column);
+        $table->importArray($expected);
+        $result = $table->toArray();
+        $this->assertEquals($expected, $result);
+
         $expected = "dummy\nvalue\n";
         $result = $table->toCSV();
         $this->assertEquals($expected, $result);

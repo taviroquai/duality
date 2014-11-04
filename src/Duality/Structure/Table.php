@@ -14,6 +14,8 @@
 namespace Duality\Structure;
 
 use Duality\Core\Structure;
+use Duality\Structure\Property;
+use Duality\Structure\TableRow;
 use Duality\Structure\Storage;
 
 /**
@@ -83,17 +85,13 @@ extends Structure
     /**
      * Adds a row to the table
      * 
-     * @param \Duality\Structure\TableRow $row      The row to add
-     * @param int                         $position The index position
+     * @param \Duality\Structure\TableRow $row The row to add
      * 
      * @return void
      */
-    public function addRow(TableRow $row, $position = null)
+    public function addRow(TableRow $row)
     {
-        if (empty($position)) {
-            $position = count($this->rows->asArray());
-        }
-        $this->insertRow($row, $position);
+        $this->insertRow($row);
     }
 
     /**
@@ -134,6 +132,38 @@ extends Structure
     public function columnExists(Property $property)
     {
         return $this->columns->has((string) $property);
+    }
+
+    /**
+     * Loads items into storage
+     * 
+     * @param array $data The data to be loaded
+     * 
+     * @return void
+     */
+    public function importArray($data)
+    {
+        foreach ($data as $key => $item) {
+            $row = new TableRow($this);
+            foreach ($this->getColumns() as $col => $prop) {
+                if (isset($item[$col])) {
+                    $property = $this->columns->get($col);
+                    $row->addData($property, $item[$col]);
+                }
+                $this->insertRow($row, $key);
+            }    
+        }
+    }
+
+    /**
+     * Resets table
+     * 
+     * @return void
+     */
+    public function reset()
+    {
+        $this->columns = new Storage;
+        $this->rows    = new Storage;
     }
 
     /**
