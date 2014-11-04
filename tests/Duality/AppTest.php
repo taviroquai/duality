@@ -203,7 +203,7 @@ extends PHPUnit_Framework_TestCase
     /**
      * Test apc cache service alias
      * 
-     * @requires extension apcu
+     * @requires extension apc
      */
     public function testAppCallAPCuServiceAlias()
     {
