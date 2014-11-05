@@ -70,7 +70,7 @@ extends Container
         'security'  => 'Duality\Service\Security',
         'validator' => 'Duality\Service\Validator',
         'session'   => 'Duality\Service\Session\Dummy',
-        'auth'      => 'Duality\Service\Auth',
+        'auth'      => 'Duality\Service\Auth\Database',
         'cache'     => 'Duality\Service\Cache\APC',
         'mailer'    => 'Duality\Service\Mailer',
         'paginator' => 'Duality\Service\Paginator',

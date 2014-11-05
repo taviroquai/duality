@@ -149,6 +149,11 @@ extends PHPUnit_Framework_TestCase
                     'username'  => '',
                     'password'  => ''
                 )
+            ),
+            'auth' => array(
+                'table' => 'dummy',
+                'user' => 'email',
+                'pass' => 'pass'
             )
         );
         $app = new \Duality\App(dirname(__FILE__).'/../..', $config);

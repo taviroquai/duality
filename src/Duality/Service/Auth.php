@@ -14,7 +14,6 @@
 namespace Duality\Service;
 
 use Duality\Core\AbstractService;
-use Duality\Core\InterfaceAuth;
 
 /**
  * Default authentication service
@@ -26,9 +25,8 @@ use Duality\Core\InterfaceAuth;
  * @link    http://github.com/taviroquai/duality
  * @since   0.7.0
  */
-class Auth 
+abstract class Auth 
 extends AbstractService
-implements InterfaceAuth
 {
     /**
      * Holds the session key
@@ -36,44 +34,16 @@ implements InterfaceAuth
      * @var string The session auth key
      */
     protected $sessionKey = '__auth';
-        
-    /**
-     * Initiates the service
-     * 
-     * @return void
-     */
-    public function init()
-    {
-        
-    }
-
-    /**
-     * Terminates the service
-     * 
-     * @return void
-     */
-    public function terminate()
-    {
-
-    }
 
     /**
      * Login using a 2-key (username, password)
      * 
-     * @param string   $username        The authentication username
-     * @param string   $password        The authentication password
-     * @param \Closure $storageCallback The storage callback
+     * @param string $username The authentication username
+     * @param string $password The authentication password
      * 
      * @return boolean The authentication result (true or false)
      */
-    public function login($username, $password, \Closure $storageCallback)
-    {
-        if (count($storageCallback($username, $password))) {
-            $this->app->call('session')->set($this->sessionKey, $username);
-            return true;    
-        }
-        return false;
-    }
+    abstract public function login($username, $password);
 
     /**
      * Check if there is a user logged
