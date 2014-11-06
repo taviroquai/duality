@@ -145,7 +145,10 @@ extends Container
                 return $instance;
             }
         );
-        $this->call($name)->init();
+        $service = $this->call($name);
+        if (is_a($service, 'Duality\Core\AbstractService', true)) {
+            $service->init();
+        }
     }
 
     /**
