@@ -177,8 +177,8 @@ extends PHPUnit_Framework_TestCase
 
         $db->terminate();
 
-        // clean up
-        unlink(end($parts = explode(':', DB_DSN)));
+        //
+        $this->cleanUp();
     }
 
     /**
@@ -294,7 +294,17 @@ extends PHPUnit_Framework_TestCase
         $result = $db->getTable('dummy');
         $this->assertFalse($result);
 
-        // clean up
-        unlink(end($parts = explode(':', DB_DSN)));
+        // Clean up
+        $this->cleanUp();
+    }
+
+    /**
+     * Clean up
+     */
+    protected function cleanUp()
+    {
+        $parts = explode(':', DB_DSN);
+        $filename = end($parts);
+        unlink($filename);
     }
 }
