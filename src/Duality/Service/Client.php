@@ -130,7 +130,8 @@ extends AbstractService
     {
         $this->init();
         $header = array();
-        if (empty($request->getHeaders())) {
+        $reqHeaders = $request->getHeaders(); 
+        if (empty($reqHeaders)) {
             $header[] = "Accept: text/html,application/xhtml+xml,application/xml;"
                 . "q=0.9,*/*;q=0.8"; 
             $header[] = "Cache-Control: max-age=0"; 
