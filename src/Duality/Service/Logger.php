@@ -131,15 +131,15 @@ implements InterfaceErrorHandler
                 . " on line $errline in file $errfile\n";
             break;
         }
+
+        // Set error
+        $this->error = true;
         
         // Add date to message
         $msg = date('Y-m-d H:i:s').": ".$msg;
 
         // write log to buffer
         $this->stream->write($msg);
-
-        // Set error
-        $this->error = true;
 
         /* Don't execute PHP internal error handler */
         return true;

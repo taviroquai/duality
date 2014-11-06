@@ -43,10 +43,8 @@ class Request extends Http
      */
     public function __construct(Url $url = null)
     {
+        parent::__construct();
         $this->setUrl($url);
-        $this->cookies = array();
-        $this->isAjax = false;
-        $this->headers = new Storage;
         $this->params = new Storage;
     }
 
@@ -94,16 +92,6 @@ class Request extends Http
     public function hasParam($key)
     {
         return $this->params->has($key);
-    }
-
-    /**
-     * Gets the request headers
-     * 
-     * @return array Returns the request headers as array
-     */
-    public function getHeaders()
-    {
-        return (array) $this->headers;
     }
 
     /**

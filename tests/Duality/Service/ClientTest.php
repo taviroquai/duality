@@ -20,8 +20,18 @@ extends PHPUnit_Framework_TestCase
 
         $url = new Url('http://google.pt/');
         $request = $client->createRequest($url);
-        $result = $client->execute($request);
-        $this->assertInstanceOf('\Duality\Structure\Http\Response', $result);
+        $response = $client->execute($request);
+        $this->assertInstanceOf('\Duality\Structure\Http\Response', $response);
+
+        $expected = 'Moved Permanently';
+        $result = $response->getCodeString();
+        $this->assertEquals($expected, $result);
+
+        $url = new Url('http://google.pt/');
+        $request = $client->createRequest($url);
+        $request->addHeader('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8');
+        $response = $client->execute($request);
+        $client->getCurlHandler();
 
         $client->terminate();
     }
