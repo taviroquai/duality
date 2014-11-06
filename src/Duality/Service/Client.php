@@ -172,7 +172,7 @@ extends AbstractService
      */
     protected function parseResult($result)
     {
-        list($header, $body) = explode("\r\n\r\n", $result, 2);
+        list($header, $body) = @explode("\r\n\r\n", $result, 2);
         $response = new Response;
         $response->setContent($body);
         foreach (explode("\r\n", $header) as $i => $line) {

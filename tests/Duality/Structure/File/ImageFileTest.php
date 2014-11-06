@@ -20,10 +20,6 @@ extends PHPUnit_Framework_TestCase
         $result = $file->saveThumb(DATA_PATH.'/thumb.png');
         $this->assertEquals(TRUE, $result);
 
-        $file = new ImageFile(DATA_PATH.'/car.jpg');
-        $result = $file->saveThumb(DATA_PATH);
-        $this->assertEquals(TRUE, $result);
-
         $file = new ImageFile(DATA_PATH.'/car.gif');
         $result = $file->saveThumb(DATA_PATH.'/thumb.jpg');
         $this->assertEquals(TRUE, $result);

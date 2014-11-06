@@ -56,9 +56,8 @@ extends File
         $thumb = $this->createThumb($thumbSize);
 
         // generate thumb name and save image
-        if (is_dir($target)) {
-            $target = rtrim($target, '/').'/'.basename($this->path);
-        }
+        $target = is_dir($target) ? 
+            rtrim($target, '/').'/'.basename($this->path) : $target;
         $parts = explode('.', $target);
         switch (end($parts)) {
         case 'gif':

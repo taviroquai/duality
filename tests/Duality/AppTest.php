@@ -115,7 +115,7 @@ extends PHPUnit_Framework_TestCase
     {
         $config = array(
             'db'    => array(
-                'dsn' => 'sqlite:' . DATA_PATH . '/db.sqlite'
+                'dsn' => DB_DSN
             ),
             'logger' => array(
                 'buffer' => DATA_PATH . '/log.txt'

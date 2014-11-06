@@ -75,11 +75,10 @@ extends AbstractService
         $options = $this->app->getConfigItem('db.options') ? 
             $this->app->getConfigItem('db.options') : array();
 
-        if (empty($options)) {
-            $options = array(
-                \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION
-            );
-        }
+        
+        $options = empty($options) ? array(
+            \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION
+        ) : $options;
         
         $this->pdo = new \PDO($dsn, $user, $pass, $options);
     }
