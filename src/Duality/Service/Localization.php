@@ -88,6 +88,10 @@ extends AbstractService
      */
     public function init()
     {
+        if (!extension_loaded('intl')) {
+            throw new DualityException("Error: intl extension not loaded", 1);
+        }
+
         $this->storage = new Storage;
         $this->storage->reset();
 

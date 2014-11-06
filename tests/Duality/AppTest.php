@@ -120,11 +120,6 @@ extends PHPUnit_Framework_TestCase
             'logger' => array(
                 'buffer' => DATA_PATH . '/log.txt'
             ),
-            'locale' => array(
-                'default'   => 'en_US',
-                'dir'       => DATA_PATH . '/lang',
-                'timezone'  => 'Europe/Lisbon'
-            ),
             'server'        => array(
                 'url'       => '/',
                 'hostname'  => 'localhost'
@@ -191,9 +186,6 @@ extends PHPUnit_Framework_TestCase
         $expected = '\Duality\Service\Server';
         $this->assertInstanceOf($expected, $app->getServer());
 
-        $expected = '\Duality\Service\Localization';
-        $this->assertInstanceOf($expected, $app->getLocale());
-
         $expected = '\Duality\Service\Commander';
         $this->assertInstanceOf($expected, $app->getCmd());
 
@@ -217,6 +209,27 @@ extends PHPUnit_Framework_TestCase
 
         $expected = '\Duality\Service\Cache';
         $this->assertInstanceOf($expected, $app->getCache());
+
+    }
+
+    /**
+     * Test locale service alias
+     * 
+     * @requires extension intl
+     */
+    public function testAppCallLocaleServiceAlias()
+    {
+        $config = array(
+            'locale' => array(
+                'default'   => 'en_US',
+                'dir'       => DATA_PATH . '/lang',
+                'timezone'  => 'Europe/Lisbon'
+            )
+        );
+        $app = new \Duality\App(dirname(__FILE__).'/../..', $config);
+
+        $expected = '\Duality\Service\Localization';
+        $this->assertInstanceOf($expected, $app->getLocale());
 
     }
 
