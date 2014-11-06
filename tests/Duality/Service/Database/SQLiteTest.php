@@ -176,6 +176,9 @@ extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $result);
 
         $db->terminate();
+
+        // clean up
+        unlink(end($parts = explode(':', DB_DSN)));
     }
 
     /**
@@ -290,5 +293,8 @@ extends PHPUnit_Framework_TestCase
         $db->getPDO()->exec($sql);
         $result = $db->getTable('dummy');
         $this->assertFalse($result);
+
+        // clean up
+        unlink(end($parts = explode(':', DB_DSN)));
     }
 }
