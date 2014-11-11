@@ -35,14 +35,14 @@ extends AbstractService
     /**
      * Default request
      * 
-     * @var string Holds the current request
+     * @var \Duality\Structure\Http\Request Holds the current request
      */
     protected $request;
 
     /**
      * Default response
      * 
-     * @var string Holds the current response
+     * @var \Duality\Structure\Http\Response Holds the current response
      */
     protected $response;
 
@@ -56,7 +56,7 @@ extends AbstractService
     /**
      * Server base URL
      * 
-     * @var string Holds the base URL used to parse routes
+     * @var \Duality\Structure\Url Holds the base URL used to parse routes
      */
     protected $baseURL;
 
@@ -224,7 +224,7 @@ extends AbstractService
     /**
      * Sets the request
      * 
-     * @param Request $request Give the current request
+     * @param \Duality\Structure\Http\Request $request Give the current request
      * 
      * @return void
      */
@@ -236,7 +236,7 @@ extends AbstractService
     /**
      * Gets the request
      * 
-     * @return Request The current request
+     * @return \Duality\Structure\Http\Request The current request
      */
     public function getRequest()
     {
@@ -246,7 +246,7 @@ extends AbstractService
     /**
      * Sets the response
      * 
-     * @param Response $response Give the current response
+     * @param \Duality\Structure\Http\Response $response Give the current response
      * 
      * @return void
      */
@@ -258,7 +258,7 @@ extends AbstractService
     /**
      * Gets the response
      * 
-     * @return Request The current request
+     * @return \Duality\Structure\Http\Response The current response
      */
     public function getResponse()
     {
@@ -297,13 +297,13 @@ extends AbstractService
      */
     public function createUrl($uri, $scheme = 'http')
     {
-        return new URL($scheme.'://'.$this->getHostname().$uri);
+        return new URL($scheme.'://'.$this->getHostname(). '/' . trim($uri, '/'));
     }
 
     /**
      * Creates an HTTP response
      * 
-     * @return \Duality\Structure\Http A default response instance
+     * @return \Duality\Structure\Http\Response A default response instance
      */
     public function createResponse()
     {
