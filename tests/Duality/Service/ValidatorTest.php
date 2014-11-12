@@ -31,10 +31,10 @@ extends PHPUnit_Framework_TestCase
         $item = new RuleItem(
             'key',
             $request->getParam('key'),
-            'required|number|alpha|email|equals|password|length:2:3'
+            'required|number|alpha|email|equals|password|length:2:3',
+            'The key is valid',
+            'The key is invalid'
         );
-        $item->setPassMessage('The key is valid');
-        $item->setFailMessage('The key is invalid');
         $validator->addRuleItem($item);
         $validator->validate();
 

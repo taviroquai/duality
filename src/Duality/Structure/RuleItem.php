@@ -77,13 +77,18 @@ implements InterfaceRuleItem
 	 * @param string $key     The item key
 	 * @param string $value   The value to validate
 	 * @param string $filters The list of filters separated by "|"
+	 * @param string $pass    The pass message
+	 * @param string $fail    The fail message
 	 */
-	public function __construct($key, $value, $filters)
-	{
+	public function __construct(
+		$key, $value, $filters, $pass = '', $fail = ''
+	) {
 		$this->result 	= null;
 		$this->key 		= $key;
 		$this->value 	= $value;
 		$this->filters	= array_filter(explode('|', $filters));
+		$this->passMsg  = empty($pass) ? $this->passMsg : $pass;
+		$this->failMsg  = empty($fail) ? $this->failMsg : $fail;
 
 		// Validate configuration
 		$this->validateConfig();
