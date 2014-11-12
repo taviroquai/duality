@@ -35,6 +35,8 @@ extends PHPUnit_Framework_TestCase
             'The key is valid',
             'The key is invalid'
         );
+        $item->setPassMessage('The key is valid');
+        $item->setFailMessage('The key is invalid');
         $validator->addRuleItem($item);
         $validator->validate();
 
