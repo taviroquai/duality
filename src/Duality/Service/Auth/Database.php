@@ -3,7 +3,7 @@
 /**
  * Database authentication service
  *
- * PHP Version 5.3.3
+ * PHP Version 5.3.4
  *
  * @author  Marco Afonso <mafonso333@gmail.com>
  * @license http://opensource.org/licenses/MIT MIT
@@ -20,7 +20,7 @@ use Duality\Service\Auth;
 /**
  * Default authentication service
  * 
- * PHP Version 5.3.3
+ * PHP Version 5.3.4
  *
  * @author  Marco Afonso <mafonso333@gmail.com>
  * @license http://opensource.org/licenses/MIT MIT

@@ -3,7 +3,7 @@
 /**
  * Interface for command line operations
  * 
- * PHP Version 5.3.3
+ * PHP Version 5.3.4
  *
  * @author  Marco Afonso <mafonso333@gmail.com>
  * @license http://opensource.org/licenses/MIT MIT
@@ -16,7 +16,7 @@ namespace Duality\Core;
 /**
  * Commander interface
  * 
- * PHP Version 5.3.3
+ * PHP Version 5.3.4
  * 
  * @author  Marco Afonso <mafonso333@gmail.com>
  * @license http://opensource.org/licenses/MIT MIT

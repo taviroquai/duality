@@ -3,7 +3,7 @@
 /**
  * Interface for data validator
  *
- * PHP Version 5.3.3
+ * PHP Version 5.3.4
  *
  * @author  Marco Afonso <mafonso333@gmail.com>
  * @license http://opensource.org/licenses/MIT MIT
@@ -13,10 +13,12 @@
 
 namespace Duality\Core;
 
+use Duality\Structure\RuleItem;
+
 /**
  * Validator interface
  * 
- * PHP Version 5.3.3
+ * PHP Version 5.3.4
  *
  * @author  Marco Afonso <mafonso333@gmail.com>
  * @license http://opensource.org/licenses/MIT MIT
@@ -26,23 +28,20 @@ namespace Duality\Core;
 interface InterfaceValidator
 {
     /**
-     * Validate rule name (key) with params
-     *
-     * @param string $key    Give the validation key as identifier
-     * @param array  $params Give validation parameters as associative array
+     * Adds a rule to be validated
      * 
-     * @return boolean
+     * @param \Duality\Structure\RuleItem The item to be validated
+     * 
+     * @return void
      */
-    public function validate($key, $params);
+    public function addRuleItem(RuleItem $item);
 
     /**
-     * Validate all rules - Each rule as a key
+     * Validates all the rules
      * 
-     * @param array $rules Give the validation rules - list of rules
-     * 
-     * @return boolean
+     * @return boolean The validation result
      */
-    public function validateAll($rules);
+    public function validate();
 
     /**
      * Get all validation messages

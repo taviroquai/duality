@@ -3,7 +3,7 @@
 /**
  * Validator service
  *
- * PHP Version 5.3.3
+ * PHP Version 5.3.4
  *
  * @author  Marco Afonso <mafonso333@gmail.com>
  * @license http://opensource.org/licenses/MIT MIT
@@ -17,11 +17,12 @@ use Duality\Core\DualityException;
 use Duality\Core\AbstractService;
 use Duality\Core\InterfaceValidator;
 use Duality\Structure\Storage;
+use Duality\Structure\RuleItem;
 
 /**
  * Default validator service
  * 
- * PHP Version 5.3.3
+ * PHP Version 5.3.4
  *
  * @author  Marco Afonso <mafonso333@gmail.com>
  * @license http://opensource.org/licenses/MIT MIT
@@ -30,13 +31,21 @@ use Duality\Structure\Storage;
  */
 class Validator
 extends AbstractService
+implements InterfaceValidator
 {
     /**
-     * Holds the messages storage
+     * Holds the messages msgStorage
      * 
      * @var \Duality\Core\InterfaceStorage Holds the messages storage
      */
-    protected $storage;
+    protected $msgStorage;
+
+    /**
+     * Holds the rules items storage
+     * 
+     * @var \Duality\Core\InterfaceStorage Holds the rules items storage
+     */
+    protected $itemsStorage;
 
     /**
      * Initiates the service
@@ -45,8 +54,8 @@ extends AbstractService
      */
     public function init()
     {
-        $this->storage = new Storage;
-        $this->storage->reset();
+        $this->msgStorage = new Storage;
+        $this->itemsStorage = new Storage;
     }
 
     /**
@@ -56,22 +65,33 @@ extends AbstractService
      */
     public function terminate()
     {
-        $this->storage->reset();
+        $this->msgStorage->reset();
+        $this->itemsStorage->reset();
     }
 
     /**
-     * Validates an array of rules
+     * Adds a rule to be validated
      * 
-     * @param array $rules Give the rules to validate
+     * @param \Duality\Structure\RuleItem The item to be validated
+     * 
+     * @return void
+     */
+    public function addRuleItem(RuleItem $item)
+    {
+        $this->itemsStorage->set($item->getKey(), $item);
+    }
+
+    /**
+     * Validates all the rules
      * 
      * @return boolean The validation result
      */
-    public function validateAll($rules)
+    public function validate()
     {
-        $this->storage->reset();
+        $this->msgStorage->reset();
         $this->result = true;
-        foreach ($rules as $key => $params) {
-            $this->result = $this->result & $this->validate($key, $params);
+        foreach ($this->itemsStorage->asArray() as $key => $item) {
+            $this->result = $this->result & $this->validateRule($item);
         }
         return $this->result;
     }
@@ -84,37 +104,19 @@ extends AbstractService
      * 
      * @return boolean The rule result
      */
-    public function validate($key, $params)
+    protected function validateRule(RuleItem $rule)
     {
         $result = true;
-        if (empty($params['rules'])
-            || !isset($params['value'])
-            || empty($params['fail']) 
-            || empty($params['info'])
-        ) {
-            throw new DualityException(
-                "Error Validation: required rules, value, fail and info", 1
-            );
-        }
         
-        $rules = explode('|', $params['rules']);
-        foreach ($rules as $item) {
+        $filters = $rule->getFilters();
+        foreach ($filters as $item) {
             $values = explode(':', $item);
             $method = 'is'.ucfirst(array_shift($values));
-            if (!method_exists($this, $method)) {
-                throw new DualityException(
-                    "Error Validation: invalid rule name: ".$method, 4
-                );
-            }
-            $tresult = call_user_func_array(
-                array($this, $method), array($params['value'], $values)
-            );
-            if (!$tresult) {
-                $this->storage->set($key, $params['fail']);
-            } else {
-                $this->storage->set($key, $params['info']);
-            }
-            $result = $result & $tresult;
+            $rule->setResult(call_user_func_array(
+                array($this, $method), array($rule->getValue(), $values)
+            ));
+            $this->msgStorage->set($rule->getKey(), $rule->getMessage());
+            $result = $result & $rule->getResult();
         }
         return $result;
     }
@@ -136,7 +138,7 @@ extends AbstractService
      */
     public function getMessages()
     {
-        return $this->storage->asArray();
+        return $this->msgStorage->asArray();
     }
 
     /**
@@ -148,7 +150,7 @@ extends AbstractService
      */
     public function getMessage($key)
     {
-        return $this->storage->get($key);
+        return $this->msgStorage->get($key);
     }
 
     /**

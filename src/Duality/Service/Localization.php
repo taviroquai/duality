@@ -3,7 +3,7 @@
 /**
  * Localization service
  *
- * PHP Version 5.3.3
+ * PHP Version 5.3.4
  *
  * @author  Marco Afonso <mafonso333@gmail.com>
  * @license http://opensource.org/licenses/MIT MIT
@@ -15,12 +15,13 @@ namespace Duality\Service;
 
 use Duality\Core\DualityException;
 use Duality\Core\AbstractService;
+use Duality\Core\InterfaceLocalization;
 use Duality\Structure\Storage;
 
 /**
  * Default localization service
  * 
- * PHP Version 5.3.3
+ * PHP Version 5.3.4
  *
  * @author  Marco Afonso <mafonso333@gmail.com>
  * @license http://opensource.org/licenses/MIT MIT
@@ -29,6 +30,7 @@ use Duality\Structure\Storage;
  */
 class Localization 
 extends AbstractService
+implements InterfaceLocalization
 {
     /**
      * Holds the directory for translations

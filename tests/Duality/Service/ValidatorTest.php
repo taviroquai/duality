@@ -2,6 +2,7 @@
 
 use Duality\Structure\Http\Request;
 use Duality\Structure\Url;
+use Duality\Structure\RuleItem;
 
 class ValidatorTest 
 extends PHPUnit_Framework_TestCase
@@ -27,28 +28,27 @@ extends PHPUnit_Framework_TestCase
 
         $validator = $app->call('validator');
 
-        $rules = array(
-            'key' => array(
-                'value' => $request->getParam('key'),
-                'rules' => 'required|number|alpha|email|equals|password|length:2:3',
-                'fail'  => 'Invalid email address',
-                'info'  => 'Email is valid'
-            )
+        $item = new RuleItem(
+            'key',
+            $request->getParam('key'),
+            'required|number|alpha|email|equals|password|length:2:3'
         );
-
-        $validator->validateAll($rules);
+        $item->setPassMessage('The key is valid');
+        $item->setFailMessage('The key is invalid');
+        $validator->addRuleItem($item);
+        $validator->validate();
 
         $expected = false;
         $result = $validator->ok();
         $this->assertEquals($expected, $result);
 
         $expected = array(
-            'key' => 'Invalid email address'
+            'key' => 'The key is invalid'
         );
         $result = $validator->getMessages();
         $this->assertEquals($expected, $result);
 
-        $expected = 'Invalid email address';
+        $expected = 'The key is invalid';
         $result = $validator->getMessage('key');
         $this->assertEquals($expected, $result);
 
@@ -62,31 +62,11 @@ extends PHPUnit_Framework_TestCase
      */
     public function testMissingRulesParam()
     {
-        $config = array(
-            'server' => array(
-                'url' => '/',
-                'hostname' => 'localhost'
-            )
+        new \Duality\Structure\RuleItem(
+            'key',
+            'dummy',
+            ''
         );
-        $app = new \Duality\App(dirname(__FILE__), $config);
-        $server = $app->call('server');
-
-        $request = new \Duality\Structure\Http\Request(new \Duality\Structure\Url('http://localhost/dummy'));
-        $request->setParams(array('key' => 'value'));
-        $request->setMethod('GET');
-        $server->setRequest($request);
-
-        $validator = $app->call('validator');
-
-        $rules = array(
-            'key' => array(
-                'value' => $request->getParam('key'),
-                'fail'  => 'Invalid email address',
-                'info'  => 'Email is valid'
-            )
-        );
-
-        $validator->validateAll($rules);
     }
 
     /**
@@ -96,31 +76,10 @@ extends PHPUnit_Framework_TestCase
      */
     public function testInvalidRule()
     {
-        $config = array(
-            'server' => array(
-                'url' => '/',
-                'hostname' => 'localhost'
-            )
+        new \Duality\Structure\RuleItem(
+            'key',
+            'dummy',
+            'dummy'
         );
-        $app = new \Duality\App(dirname(__FILE__), $config);
-        $server = $app->call('server');
-
-        $request = new \Duality\Structure\Http\Request(new \Duality\Structure\Url('http://localhost/dummy'));
-        $request->setParams(array('key' => 'value'));
-        $request->setMethod('GET');
-        $server->setRequest($request);
-
-        $validator = $app->call('validator');
-
-        $rules = array(
-            'key' => array(
-                'rules' => 'dummy',
-                'value' => $request->getParam('key'),
-                'fail'  => 'Invalid email address',
-                'info'  => 'Email is valid'
-            )
-        );
-
-        $validator->validateAll($rules);
     }
 }

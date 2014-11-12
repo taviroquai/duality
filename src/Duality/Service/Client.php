@@ -3,7 +3,7 @@
 /**
  * HTTP client service
  * 
- * PHP Version 5.3.3
+ * PHP Version 5.3.4
  *
  * @author  Marco Afonso <mafonso333@gmail.com>
  * @license http://opensource.org/licenses/MIT MIT
@@ -14,6 +14,7 @@
 namespace Duality\Service;
 
 use Duality\Core\AbstractService;
+use Duality\Core\InterfaceClient;
 use Duality\Structure\Url;
 use Duality\Structure\Http\Request;
 use Duality\Structure\Http\Response;
@@ -21,7 +22,7 @@ use Duality\Structure\Http\Response;
 /**
  * Simulates an HTTP client
  * 
- * PHP Version 5.3.3
+ * PHP Version 5.3.4
  * 
  * @author  Marco Afonso <mafonso333@gmail.com>
  * @license http://opensource.org/licenses/MIT MIT
@@ -30,6 +31,7 @@ use Duality\Structure\Http\Response;
  */
 class Client
 extends AbstractService
+implements InterfaceClient
 {
     /**
      * Holds the client user agent
