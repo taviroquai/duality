@@ -45,13 +45,15 @@ extends Auth
     {
         if (!$this->app->getConfigItem('auth.host')) {
             throw new DualityException(
-                "Error Config: ldap host configuration not found", 1
+                "Error Config: ldap host configuration not found",
+                DualityException::E_CONFIG_NOTFOUND
             );
         }
         $this->handler = @ldap_connect($this->app->getConfigItem('auth.host'));
         if (!$this->handler) {
             throw new DualityException(
-                "Error LDAP: could not connect to host", 2
+                "Error LDAP: could not connect to host",
+                DualityException::E_REMOTE_NOTCONNECTED
             );   
         }
     }

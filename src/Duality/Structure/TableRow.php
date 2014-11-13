@@ -13,7 +13,6 @@
 
 namespace Duality\Structure;
 
-use Duality\Core\DualityException;
 use Duality\Core\Structure;
 use Duality\Structure\Storage;
 use Duality\Structure\Table;
@@ -71,8 +70,6 @@ extends Structure
     /**
      * Gets the dependant table
      * 
-     * @throws \Duality\Core\DualityException When row is orphan
-     * 
      * @return \Duality\Structure\Table $table The table which belongs
      */
     public function getTable()
@@ -85,8 +82,6 @@ extends Structure
      * 
      * @param \Duality\Structure\Property $property The property
      * @param string|int                  $data     The data to be added
-     * 
-     * @throws \Duality\Core\DualityException
      * 
      * @return void
      */
@@ -101,8 +96,6 @@ extends Structure
      * Gets the row property data
      * 
      * @param \Duality\Structure\Property $property Give the property to identify
-     * 
-     * @throws \Duality\Core\DualityException When property does not exists
      * 
      * @return string|int The result data
      */

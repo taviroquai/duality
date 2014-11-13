@@ -38,7 +38,10 @@ extends File
     {
         parent::__construct($path);
         if (!is_array(@getimagesize($this->path))) {
-            throw new DualityException('Duality Error: invalid image');
+            throw new DualityException(
+                'Duality Error: invalid image',
+                DualityException::E_FILE_INVALIDTYPE
+            );
         }
     }
     

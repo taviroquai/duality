@@ -260,39 +260,6 @@ EOF;
     }
 
     /**
-     * Test invalid HTTP headers
-     * 
-     * @expectedException \Duality\Core\DualityException
-     */
-    public function testInvalidHTTPHeaders()
-    {
-        $response = new \Duality\Structure\Http\Response;
-        $response->setHeaders('dummy');
-    }
-
-    /**
-     * Test invalid HTTP cookies
-     * 
-     * @expectedException \Duality\Core\DualityException
-     */
-    public function testInvalidHTTPCookies()
-    {
-        $response = new \Duality\Structure\Http\Response;
-        $response->setCookies('dummy');
-    }
-
-    /**
-     * Test invalid HTTP cookie item
-     * 
-     * @expectedException \Duality\Core\DualityException
-     */
-    public function testInvalidHTTPCookieItem()
-    {
-        $response = new \Duality\Structure\Http\Response;
-        $response->setCookies(array('dummy'));
-    }
-
-    /**
      * Test invalid HTTP timestamp
      * 
      * @expectedException \Duality\Core\DualityException

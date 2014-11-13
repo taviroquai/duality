@@ -63,7 +63,8 @@ extends AbstractService
     {
         if (!$this->app->getConfigItem('db.dsn')) {
             throw new DualityException(
-                "Error Config: db[dsn] not found", 1
+                "Error Config: database dsn not found",
+                DualityException::E_CONFIG_NOTFOUND
             );
         }
         $dsn = $this->app->getConfigItem('db.dsn') ? 
@@ -150,7 +151,10 @@ extends AbstractService
         if (!$this->app->getConfigItem('db.schema') 
             || !file_exists($this->app->getConfigItem('db.schema'))
         ) {
-            throw new DualityException("Missing schema configuration", 1);
+            throw new DualityException(
+                "Missing schema configuration",
+                DualityException::E_CONFIG_NOTFOUND
+            );
         }
         return include($this->app->getConfigItem('db.schema'));
     }

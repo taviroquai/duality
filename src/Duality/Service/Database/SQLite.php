@@ -13,7 +13,6 @@
 
 namespace Duality\Service\Database;
 
-use Duality\Core\DualityException;
 use Duality\Structure\Property;
 use Duality\Structure\Database\Table;
 use Duality\Service\Database;

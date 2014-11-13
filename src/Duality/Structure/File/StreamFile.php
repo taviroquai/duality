@@ -61,7 +61,8 @@ class StreamFile extends File
         }
         if (!is_resource($this->handler)) {
             throw new DualityException(
-                "Could not open stream: ".$this->getPath(), 5
+                "Could not open stream: ".$this->getPath(),
+                DualityException::E_FILE_NOTREADABLE
             );
         }
     }
@@ -84,8 +85,6 @@ class StreamFile extends File
      * 
      * @param \Closure $callback Give the after load callback
      * 
-     * @throws \Duality\Core\DualityException When the stream is not opened
-     * 
      * @return void
      */
     public function load(\Closure $callback = null)
@@ -106,8 +105,6 @@ class StreamFile extends File
     /**
      * Saves the full file stream
      * 
-     * @throws \Duality\Core\DualityException When the stream is not opened
-     * 
      * @return int|false The number of saved bytes or false
      */
     public function save()
@@ -123,8 +120,6 @@ class StreamFile extends File
      * Quick write content to file
      * 
      * @param string $data Give the date to be written to stream
-     * 
-     * @throws \Duality\Core\DualityException When the stream is not opened
      * 
      * @return int|false The write result
      */

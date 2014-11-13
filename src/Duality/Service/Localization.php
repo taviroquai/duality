@@ -91,14 +91,20 @@ implements InterfaceLocalization
     public function init()
     {
         if (!extension_loaded('intl')) {
-            throw new DualityException("Error: intl extension not loaded", 1);
+            throw new DualityException(
+                "Error: intl extension not loaded",
+                DualityException::E_EXTENSION_NOTFOUND
+            );
         }
 
         $this->storage = new Storage;
         $this->storage->reset();
 
         if ($this->app->getConfigItem('locale.default') == null) {
-            throw new DualityException("Error: locale configuration missing", 2);
+            throw new DualityException(
+                "Error: locale configuration missing",
+                DualityException::E_CONFIG_NOTFOUND
+            );
         }
         $this->directory = $this->app->getPath()
                 . DIRECTORY_SEPARATOR
@@ -110,7 +116,8 @@ implements InterfaceLocalization
         }
         if (!is_dir($this->directory) || !is_readable($this->directory)) {
             throw new DualityException(
-                "Error: directory not readable: " . $this->directory, 3
+                "Error: directory not readable: " . $this->directory,
+                DualityException::E_FILE_NOTWRITABLE
             );
         }
         $timezone = null;
@@ -159,7 +166,8 @@ implements InterfaceLocalization
             . $this->current;
         if (!file_exists($directory.DIRECTORY_SEPARATOR.'messages.php')) {
             throw new DualityException(
-                "Error locale: invalid messages file ".$this->current, 3
+                "Error locale: invalid messages file ".$this->current,
+                DualityException::E_FILE_NOTFOUND
             );
         }
 
@@ -324,7 +332,10 @@ implements InterfaceLocalization
             if (\Locale::canonicalize($current) === null
                 || !is_dir($this->directory.DIRECTORY_SEPARATOR.$current)
             ) {
-                throw new DualityException("Error Locale: target code ", 2);
+                throw new DualityException(
+                    "Error Locale: target code ",
+                    DualityException::E_LOCALE_NOTFOUND
+                );
             }
         }
 

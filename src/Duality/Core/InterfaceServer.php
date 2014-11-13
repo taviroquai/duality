@@ -117,8 +117,6 @@ interface InterfaceServer
      * 
      * @param \Duality\Structure\Http\Response $response The response to be sent
      * 
-     * @throws DualityException When cookie is invalid
-     * 
      * @return \Duality\Service\Server This instance
      */
     public function sendCookies(Response $response);

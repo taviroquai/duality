@@ -55,7 +55,8 @@ implements InterfaceErrorHandler
     {
         if (!$this->app->getConfigItem('logger.buffer')) {
             throw new DualityException(
-                "Error Config: log_file configuration not found", 1
+                "Error Config: log_file configuration not found",
+                DualityException::E_CONFIG_NOTFOUND
             );
         }
         $filename = $this->app->getPath()
@@ -63,7 +64,8 @@ implements InterfaceErrorHandler
             . $this->app->getConfigItem('logger.buffer');
         if (!file_exists($filename)) {
             throw new DualityException(
-                "Error Config: invalid log_file:" . $filename, 2
+                "Error Config: invalid log_file:" . $filename,
+                DualityException::E_FILE_NOTFOUND
             );
         }
         $this->stream = new StreamFile($filename);

@@ -58,20 +58,6 @@ extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test missing rules
-     * 
-     * @expectedException \Duality\Core\DualityException
-     */
-    public function testMissingRulesParam()
-    {
-        new \Duality\Structure\RuleItem(
-            'key',
-            'dummy',
-            ''
-        );
-    }
-
-    /**
      * Test invalid rule
      * 
      * @expectedException \Duality\Core\DualityException

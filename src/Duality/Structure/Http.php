@@ -163,8 +163,6 @@ extends Structure
      * 
      * @param \Duality\Structure\Url $url Give the HTTP URL
      * 
-     * @throws DualityException When URL is not valid
-     * 
      * @return Http This instance
      */
     public function setUrl(Url $url)
@@ -195,7 +193,10 @@ extends Structure
     public function setMethod($method)
     {
         if (!in_array($method, array('GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'))) {
-            throw new DualityException("Invalid HTTP method", 7);
+            throw new DualityException(
+                "Invalid HTTP method",
+                DualityException::E_HTTP_METHODNOTFOUND
+            );
         }
         $this->method = $method;
         return $this;
@@ -252,15 +253,10 @@ extends Structure
      * 
      * @param array $headers Sets the HTTP headers
      * 
-     * @throws DualityException When headers are not an array
-     * 
      * @return Http This instance
      */
     public function setHeaders($headers)
     {
-        if (!is_array($headers)) {
-            throw new DualityException("Headers must be an associative array", 8);
-        }
         $this->headers->importArray($headers);
         return $this;
     }
@@ -294,23 +290,14 @@ extends Structure
      * 
      * @param array $cookies Give the cookie params
      * 
-     * @throws DualityException When cookie is invalid
-     * 
      * @return Http This instance
      */
     public function setCookies($cookies)
     {
-        if (!is_array($cookies)) {
-            throw new DualityException("Cookies must be an array", 9);
+        foreach ((array) $cookies as &$item) {
+            $item = (array) $item;
         }
-        foreach ($cookies as $item) {
-            if (!is_array($item)) {
-                throw new DualityException(
-                    "Cookie must be an associative array", 10
-                );
-            }
-        }
-        $this->cookies = $cookies;
+        $this->cookies = (array) $cookies;
         return $this;
     }
 
@@ -359,7 +346,10 @@ extends Structure
     public function setTimestamp($timestamp)
     {
         if (!is_numeric($timestamp) || (int)$timestamp !== $timestamp) {
-            throw new DualityException("Invalid connection timestamp", 12);
+            throw new DualityException(
+                "Invalid connection timestamp",
+                DualityException::E_HTTP_INVALIDTIMESTAMP
+            );
         }
         $this->timestamp = $timestamp;
         return $this;

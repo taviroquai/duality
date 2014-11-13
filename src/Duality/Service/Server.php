@@ -207,7 +207,8 @@ implements InterfaceServer
         // Validate class name
         if (!class_exists($controllerClass)) {
             throw new DualityException(
-                "Error Route: controller not found: ".$controllerClass, 2
+                "Error Route: controller not found: ".$controllerClass,
+                DualityException::E_SERVER_CTRLNOTFOUND
             );
         }
         $controller = new $controllerClass($this->app);
@@ -217,7 +218,8 @@ implements InterfaceServer
         // Validate callable
         if (!is_callable($action)) {
             throw new DualityException(
-                "Error Route: action not callable: ".$cb, 3
+                "Error Route: action not callable: ".$cb,
+                DualityException::E_SERVER_ACTIONNOTFOUND
             );
         }
         return $action;
@@ -353,13 +355,27 @@ implements InterfaceServer
      * 
      * @param \Duality\Structure\Http\Response $response The response to be sent
      * 
-     * @throws DualityException When cookie is invalid
+     * @throws \Duality\Core\DualityException When finds an invalid cookie
      * 
      * @return \Duality\Service\Server This instance
      */
     public function sendCookies(Response $response)
     {
+        $required = array('name', 'value', 'expire', 'path', 'domain', 'secure');
+        
         foreach ($response->getCookies() as $item) {
+
+            // Validate cookie
+            $hasKeys = array_intersect_key(array_flip($required), $item);
+            if (count($hasKeys) !== count($required)) {
+                throw new DualityException(
+                    "Error HTTP Cookie: required keys: "
+                    . "name, value, expire, path, domain and secure",
+                    DualityException::E_HTTP_INVALIDCOOKIE
+                );
+            }
+
+            // send cookie
             setcookie(
                 $item['name'],
                 $item['value'],

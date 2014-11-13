@@ -13,7 +13,6 @@
 
 namespace Duality\Structure;
 
-use Duality\Core\DualityException;
 use Duality\Core\Structure;
 use Duality\Structure\Storage;
 
@@ -103,11 +102,8 @@ extends Structure
      */
     public function addPropertiesFromArray($array)
     {
-        if (!is_array($array) || count($array) == 0) {
-            throw new DualityException("Array of properties cannot be empty", 12);
-        }
-        foreach ($array as $name) {
-            $property = new Property($name);
+        foreach ((array) $array as $name) {
+            $property = new Property((string) $name);
             $this->addProperty($property);
         }
     }

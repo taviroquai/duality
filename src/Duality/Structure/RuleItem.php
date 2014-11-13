@@ -101,17 +101,13 @@ implements InterfaceRuleItem
 	 */
 	protected function validateConfig()
 	{
-		if (empty($this->filters)) {
-			throw new DualityException(
-                "Error Validation: validation filters cannot be empty", 1
-            );
-		}
-		foreach ($this->filters as $item) {
-			$values = explode(':', $item);
+		foreach ((array) $this->filters as $item) {
+			$values = explode(':', (string) $item);
 			$method = 'is'.ucfirst(array_shift($values));
 	        if (!method_exists('\Duality\Service\Validator', $method)) {
 	            throw new DualityException(
-	                "Error Validation: invalid rule name: ".$method, 2
+	                "Error Validation: invalid rule name: ".$method,
+	                DualityException::E_VALIDATION_INVALIDFILTER
 	            );
 	        }
 		}

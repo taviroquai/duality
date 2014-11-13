@@ -135,7 +135,10 @@ implements InterfaceRemote
     {
         // Start connection
         if (!($this->connection = @ssh2_connect($host, $port))) {
-            throw new DualityException('Cannot connect to server');
+            throw new DualityException(
+                'Cannot connect to server',
+                DualityException::E_REMOTE_NOTCONNECTED
+            );
         }
         
         // Verify fingerprint
@@ -145,13 +148,19 @@ implements InterfaceRemote
         if (!empty($this->ssh_fingerprint)
             && (strcmp($this->ssh_fingerprint, $fingerprint) !== 0)
         ) {
-            throw new DualityException('Unable to verify server identity!');
+            throw new DualityException(
+                'Unable to verify server identity!',
+                DualityException::E_REMOTE_FINGERPRINTNOTFOUND
+            );
         }
         
         // Try auth methods
         if (!empty($password)) {
             if (!@ssh2_auth_password($this->connection, $username, $password)) {
-                throw new DualityException('Autentication rejected by server');
+                throw new DualityException(
+                    'Autentication rejected by server',
+                    DualityException::E_REMOTE_AUTHFAILED
+                );
             }
         } else {
             $public_key_path = sprintf($this->ssh_auth_pub, $username);
@@ -163,7 +172,10 @@ implements InterfaceRemote
                 $private_key_path,
                 $this->ssh_auth_pass
             )) {
-                throw new DualityException('Autentication rejected by server');
+                throw new DualityException(
+                    'Autentication rejected by server',
+                    DualityException::E_REMOTE_AUTHFAILED
+                );
             }    
         }
     }
@@ -181,7 +193,10 @@ implements InterfaceRemote
             return '';
         }
         if (!($stream = @ssh2_exec($this->connection, $cmd))) {
-            throw new DualityException('SSH command failed');
+            throw new DualityException(
+                'SSH command failed',
+                DualityException::E_CMD_FAILED
+            );
         }
         stream_set_blocking($stream, true);
         $data = "";

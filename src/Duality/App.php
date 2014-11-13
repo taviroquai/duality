@@ -91,7 +91,10 @@ extends Container
     public function __construct($path, $config)
     {
         if (!is_dir($path)) {
-            throw new DualityException("Error Application: path not found", 1);
+            throw new DualityException(
+                "Error Application: path not found",
+                DualityException::E_APP_PATHNOTFOUND
+            );
         }
         $this->path = (string) $path;
 

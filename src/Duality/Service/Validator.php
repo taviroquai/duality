@@ -13,7 +13,6 @@
 
 namespace Duality\Service;
 
-use Duality\Core\DualityException;
 use Duality\Core\AbstractService;
 use Duality\Core\InterfaceValidator;
 use Duality\Structure\Storage;

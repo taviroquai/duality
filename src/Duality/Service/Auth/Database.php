@@ -49,7 +49,8 @@ extends Auth
             || !$this->app->getConfigItem('auth.pass')
         ) {
             throw new DualityException(
-                "Error Config: auth configuration (table|user|pass) not found", 1
+                "Error Config: auth configuration (table|user|pass) not found",
+                DualityException::E_CONFIG_NOTFOUND
             );
         }
         $this->config = $this->app->getConfigItem('auth');

@@ -26,15 +26,4 @@ extends PHPUnit_Framework_TestCase
         $result = $entity->getProperties();
         $this->assertEquals($expected, $result);
     }
-
-    /**
-     * Test invalid properties array
-     * 
-     * @expectedException \Duality\Core\DualityException
-     */
-    public function testInvalidPropertiesArray()
-    {
-        $entity = new \Model();
-        $entity->addPropertiesFromArray('dummy');
-    }
 }

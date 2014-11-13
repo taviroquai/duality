@@ -13,7 +13,6 @@
 
 namespace Duality\Structure;
 
-use Duality\Core\DualityException;
 use Duality\Core\Structure;
 
 /**
