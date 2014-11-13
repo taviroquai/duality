@@ -294,10 +294,11 @@ extends Structure
      */
     public function setCookies($cookies)
     {
-        foreach ((array) $cookies as &$item) {
+        $cookies = (array) $cookies;
+        foreach ($cookies as $k => &$item) {
             $item = (array) $item;
         }
-        $this->cookies = (array) $cookies;
+        $this->cookies = $cookies;
         return $this;
     }
 
