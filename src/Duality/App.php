@@ -13,10 +13,11 @@
 
 namespace Duality;
 
-use \Duality\Core\DualityException;
-use \Duality\Core\Container;
-use \Duality\Structure\Storage;
-use \Duality\Structure\File\StreamFile;
+use Duality\Core\DualityException;
+use Duality\Core\Container;
+use Duality\Core\AbstractService;
+use Duality\Structure\Storage;
+use Duality\Structure\File\StreamFile;
 
 /**
  * Default application container
@@ -122,7 +123,7 @@ extends Container
     {
         foreach ($this->cache->asArray() as $name => $service) {
             $instance = $this->call($name);
-            if (is_a($instance, 'Duality\Core\AbstractService', true)) {
+            if ($instance instanceof AbstractService) {
                 call_user_func(array($instance, 'terminate'));
             }
         }

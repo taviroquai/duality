@@ -181,7 +181,15 @@ implements InterfaceServer
                     $this->defaultController;
             }
             
-            // Finally, call controller
+            // Call controller init
+            if (is_array($cb) 
+                && is_object($cb[0]) 
+                && ($cb[0] instanceof AbstractService)
+            ) {
+                $cb[0]->init();
+            }
+
+            // Finally, call action
             call_user_func_array(
                 $cb, array(&$this->request, &$this->response, $matches)
             );
@@ -202,7 +210,7 @@ implements InterfaceServer
     protected function validateStringAction($cb)
     {   
         // Translate
-        @list($controllerClass, $method) = explode('@', $cb);
+        @list($controllerClass, $method) = explode('@', $cb, 2);
         
         // Validate class name
         if (!class_exists($controllerClass)) {
@@ -212,7 +220,6 @@ implements InterfaceServer
             );
         }
         $controller = new $controllerClass($this->app);
-        $controller->init();
         $action = array($controller, $method);
 
         // Validate callable
