@@ -44,8 +44,10 @@ class Request extends Http
     public function __construct(Url $url = null)
     {
         parent::__construct();
-        $this->setUrl($url);
         $this->params = new Storage;
+        if (!empty($url)) {
+            $this->setUrl($url);
+        }
     }
 
     /**

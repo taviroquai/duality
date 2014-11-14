@@ -42,9 +42,7 @@ implements InterfaceSecurity
         ) {
             $params = $this->app->call('server')->getRequest()->getParams();
             foreach ($params as $key => &$value) {
-                if (!is_array($value)) {
-                    $this->filter($value);
-                }
+                $this->filter($value);
             }
             $this->app->call('server')->getRequest()->setParams($params);
         }
@@ -105,10 +103,15 @@ implements InterfaceSecurity
      * @param string &$data Give the data to be decrypted
      * @param int    $type  Give the type of filter
      * 
-     * @return string The resulting decrypted data
+     * @return void
      */
-    public function filter(&$data, $type = FILTER_SANITIZE_STRING)
+    public function filter(&$data, $type = FILTER_UNSAFE_RAW)
     {
-        return filter_var($data, $type);
+        if (is_array($data)) {
+            foreach ($data as $key => &$item) {
+                $this->filter($item, $type);
+            }
+        }
+        filter_var($data, $type);
     }
 }

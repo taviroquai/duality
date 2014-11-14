@@ -401,13 +401,21 @@ implements InterfaceServer
      * @param array $server The global $_SERVER variable
      * @param array $params The global $_REQUEST/$_GET/$_POST variable
      * 
-     * @return Request|false The resulting request instance
+     * @return Request The resulting request instance
      */
     public function getRequestFromGlobals($server, $params)
     {
         if (empty($server['REQUEST_METHOD'])) {
             return false;
         }
+        
+        // Filter input
+        array_filter($server, function(&$var) {
+            $var = filter_var($var, FILTER_UNSAFE_RAW);
+        });
+        array_filter($params, function(&$var) {
+            $var = filter_var($var, FILTER_UNSAFE_RAW);
+        });
 
         $url = (empty($server['HTTPS']) ? 'http' 
             : 'https') . "://"
