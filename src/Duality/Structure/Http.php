@@ -340,19 +340,11 @@ extends Structure
      * 
      * @param int $timestamp Give the HTTP timestamp
      * 
-     * @throws DualityException When timestamp is invalid
-     * 
      * @return Http This instance
      */
     public function setTimestamp($timestamp)
     {
-        if (!is_numeric($timestamp) || (int)$timestamp !== $timestamp) {
-            throw new DualityException(
-                "Invalid connection timestamp",
-                DualityException::E_HTTP_INVALIDTIMESTAMP
-            );
-        }
-        $this->timestamp = $timestamp;
+        $this->timestamp = (int) $timestamp;
         return $this;
     }
 

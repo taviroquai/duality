@@ -258,15 +258,4 @@ EOF;
         $response = new \Duality\Structure\Http\Response;
         $response->setMethod('dummy');
     }
-
-    /**
-     * Test invalid HTTP timestamp
-     * 
-     * @expectedException \Duality\Core\DualityException
-     */
-    public function testInvalidHTTPTimestamp()
-    {
-        $response = new \Duality\Structure\Http\Response;
-        $response->setTimestamp('dummy');
-    }
 }
