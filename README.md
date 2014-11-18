@@ -12,3 +12,5 @@ Micro PHP Framework
 Documentation in [Wiki](https://github.com/taviroquai/duality/wiki)
 
 Looking for a complete application demo? Go [here](https://github.com/taviroquai/duality-demo).
+
+Socials: [Twitter](https://twitter.com/dualityphp)
