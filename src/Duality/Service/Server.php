@@ -86,7 +86,7 @@ implements InterfaceServer
      */
     public function init()
     {
-        $this->hostname = $this->app->getConfigItem('server.hostname') ? 
+        $this->hostname = empty($this->app->getConfigItem('server.hostname')) ? 
             gethostname() : 
             $this->app->getConfigItem('server.hostname');
         $turl = $this->app->getConfigItem('server.url') ? 
@@ -166,10 +166,9 @@ implements InterfaceServer
             
             // Start looking for matching routes patterns
             foreach ($this->routes as $ns => $cb) {
-                
                 // Check if route matches and stop looking
                 $uri = str_replace(
-                    (string) $this->baseURL, '', $this->request->getUrl()->getUri()
+                    (string) $this->baseURL, '', $this->hostname.$this->request->getUrl()->getUri()
                 );
                 $uri = '/' . trim($uri, '/ ');
                 if ($result = preg_match($ns, $uri, $matches)) {
