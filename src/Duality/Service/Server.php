@@ -86,7 +86,7 @@ implements InterfaceServer
      */
     public function init()
     {
-        $this->hostname = empty($this->app->getConfigItem('server.hostname')) ? 
+        $this->hostname = !$this->app->getConfigItem('server.hostname') ? 
             gethostname() : 
             $this->app->getConfigItem('server.hostname');
         $turl = $this->app->getConfigItem('server.url') ? 
