@@ -3,6 +3,7 @@ Duality
 
 Micro PHP Framework
 
+[![Code Climate](https://codeclimate.com/github/taviroquai/duality/badges/gpa.svg)](https://codeclimate.com/github/taviroquai/duality)
 [![Build Status](https://travis-ci.org/taviroquai/duality.svg?branch=master)](https://travis-ci.org/taviroquai/duality)
 [![Total Downloads](https://poser.pugx.org/taviroquai/duality/downloads.svg)](https://packagist.org/packages/taviroquai/duality)
 [![Latest Stable Version](https://poser.pugx.org/taviroquai/duality/v/stable.svg)](https://packagist.org/packages/taviroquai/duality)
