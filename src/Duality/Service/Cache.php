@@ -18,6 +18,9 @@ use Duality\Core\InterfaceStorage;
 
 /**
  * Abstract cache service
+ * 
+ * Provides base functionality for Duality cache services
+ * ie. \Duality\Service\Cache\APC
  *
  * PHP Version 5.3.4
  *

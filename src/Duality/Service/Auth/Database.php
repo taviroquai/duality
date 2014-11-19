@@ -18,7 +18,9 @@ use Duality\Structure\Database\Filter;
 use Duality\Service\Auth;
 
 /**
- * Default authentication service
+ * Database authentication service
+ * 
+ * Provides operations to authenticate against Duality database
  * 
  * PHP Version 5.3.4
  *

@@ -16,6 +16,9 @@ namespace Duality\Core;
 /**
  * Mailer interface
  * 
+ * Provides an interface for all Duality mailers
+ * ie. \Duality\Service\Mailer
+ * 
  * PHP Version 5.3.4
  *
  * @author  Marco Afonso <mafonso333@gmail.com>

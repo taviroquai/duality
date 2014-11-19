@@ -13,11 +13,14 @@
 
 namespace Duality\Core;
 
-use Duality\Structure\Url;
+use Duality\Core\InterfaceUrl;
 use Duality\Structure\Http\Request;
 
 /**
  * HTTP Client interface
+ * 
+ * Provides an interface for all Duality http clients
+ * ie. \Duality\Service\Client
  * 
  * PHP Version 5.3.4
  *
@@ -47,11 +50,11 @@ interface InterfaceClient
     /**
      * Creates a client request
      * 
-     * @param string $url Give the URL to create the request
+     * @param \Duality\Core\InterfaceUrl $url Give the URL to create the request
      * 
      * @return \Duality\Structure\Http\Request The HTTP request
      */
-    public static function createRequest(Url $url = null);
+    public static function createRequest(InterfaceUrl $url = null);
 
     /**
      * Executes a request

@@ -16,6 +16,9 @@ namespace Duality\Core;
 /**
  * Paginator interface
  * 
+ * Provides an interface for all Duality paginators
+ * ie. \Duality\Service\Paginator
+ * 
  * PHP Version 5.3.4
  *
  * @author  Marco Afonso <mafonso333@gmail.com>
@@ -28,9 +31,9 @@ interface InterfacePaginator
     /**
      * Configures paginator
      * 
-     * @param string $url          Give the URL to create pagination links
-     * @param int    $total        Give the number of total items
-     * @param int    $itemsPerPage Give the number of items per page
+     * @param string \Duality\Core\InterfaceUrl Give the URL
+     * @param int    $total                     Give the number of total items
+     * @param int    $itemsPerPage              Give the number of items/page
      * 
      * @return void
      */

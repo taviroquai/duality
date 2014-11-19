@@ -18,7 +18,10 @@ use Duality\Structure\Http\Response;
 use Duality\Core\AbstractService;
 
 /**
- * Abstract user controller service
+ * Default controller service
+ * 
+ * Provides a default controller for HTTP server
+ * Used by \Duality\Core\InterfaceServer
  * 
  * PHP Version 5.3.4
  *

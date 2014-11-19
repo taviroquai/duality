@@ -13,11 +13,14 @@
 
 namespace Duality\Service;
 
-use Duality\Structure\Storage;
 use Duality\Core\AbstractService;
+use Duality\Core\InterfacePerformance;
+use Duality\Structure\Storage;
 
 /**
  * Performance service
+ * 
+ * Provides operations for measuring performance
  * 
  * PHP Version 5.3.4
  *
@@ -28,6 +31,7 @@ use Duality\Core\AbstractService;
  */
 class Performance
 extends AbstractService
+implements InterfacePerformance
 {
     /**
      * Holds the performance data

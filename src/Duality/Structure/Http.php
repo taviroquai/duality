@@ -15,9 +15,14 @@ namespace Duality\Structure;
 
 use Duality\Core\DualityException;
 use Duality\Core\Structure;
+use Duality\Structure\Storage;
 
 /**
  * HTTP transport class
+ * 
+ * Provides an abstract structure for HTTP Transportation
+ * ie. \Duality\Structure\Http\Request
+ * ie. \Duality\Structure\Http\Response
  * 
  * PHP Version 5.3.4
  * 

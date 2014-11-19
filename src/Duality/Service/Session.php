@@ -15,10 +15,12 @@ namespace Duality\Service;
 
 use Duality\Core\AbstractService;
 use Duality\Core\InterfaceStorage;
-use Duality\Structure\Storage;
 
 /**
  * Abstract session service
+ * 
+ * Provides an interface for all Duality session handlers
+ * ie. \Duality\Service\Session\Native
  * 
  * PHP Version 5.3.4
  *

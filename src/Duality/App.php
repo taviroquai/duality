@@ -75,7 +75,7 @@ extends Container
         'cache'     => 'Duality\Service\Cache\APC',
         'mailer'    => 'Duality\Service\Mailer',
         'paginator' => 'Duality\Service\Paginator',
-        'ssh'       => 'Duality\Service\SSH',
+        'remote'    => 'Duality\Service\SSH',
         'server'    => 'Duality\Service\Server',
         'locale'    => 'Duality\Service\Localization',
         'cmd'       => 'Duality\Service\Commander',
@@ -271,7 +271,7 @@ extends Container
     /**
      * Call logger service alias (type hinting)
      * 
-     * @return \Duality\Service\Logger The logger service
+     * @return \Duality\Core\InterfaceErrorHandler The logger service
      */
     public function getLogger()
     {
@@ -281,7 +281,7 @@ extends Container
     /**
      * Call security service alias (type hinting)
      * 
-     * @return \Duality\Service\Security The security service
+     * @return \Duality\Core\Interface\Security The security service
      */
     public function getSecurity()
     {
@@ -291,7 +291,7 @@ extends Container
     /**
      * Call validator service alias (type hinting)
      * 
-     * @return \Duality\Service\Validator The validator service
+     * @return \Duality\Core\Interface\Validator The validator service
      */
     public function getValidator()
     {
@@ -331,7 +331,7 @@ extends Container
     /**
      * Call mailer service alias (type hinting)
      * 
-     * @return \Duality\Service\Mailer The mailer service
+     * @return \Duality\Core\Interface\Mailer The mailer service
      */
     public function getMailer()
     {
@@ -341,7 +341,7 @@ extends Container
     /**
      * Call paginator service alias (type hinting)
      * 
-     * @return \Duality\Service\Paginator The paginator service
+     * @return \Duality\Core\Interface\Paginator The paginator service
      */
     public function getPaginator()
     {
@@ -349,19 +349,19 @@ extends Container
     }
 
     /**
-     * Call ssh service alias (type hinting)
+     * Call remote service alias (type hinting)
      * 
-     * @return \Duality\Service\SSH The ssh service
+     * @return \Duality\Core\InterfaceRemote The remote service
      */
-    public function getSSH()
+    public function getRemote()
     {
-        return $this->call('ssh');
+        return $this->call('remote');
     }
 
     /**
      * Call http server service alias (type hinting)
      * 
-     * @return \Duality\Service\Server The server service
+     * @return \Duality\Core\Interface\Server The server service
      */
     public function getServer()
     {
@@ -371,7 +371,7 @@ extends Container
     /**
      * Call locale service alias (type hinting)
      * 
-     * @return \Duality\Service\Localization The localization service
+     * @return \Duality\Core\Interface\Localization The localization service
      */
     public function getLocale()
     {
@@ -381,7 +381,7 @@ extends Container
     /**
      * Call cmd service alias (type hinting)
      * 
-     * @return \Duality\Service\Commander The commander service
+     * @return \Duality\Core\Interface\Commander The commander service
      */
     public function getCmd()
     {
@@ -391,7 +391,7 @@ extends Container
     /**
      * Call http client alias (type hinting)
      * 
-     * @return \Duality\Service\Client The http client service
+     * @return \Duality\Core\Interface\Client The http client service
      */
     public function getClient()
     {

@@ -16,7 +16,9 @@ namespace Duality\Structure;
 use Duality\Core\InterfaceStorage;
 
 /**
- * Session interface
+ * Storage
+ * 
+ * Provides a structure for storage functionality
  * 
  * PHP Version 5.3.4
  *

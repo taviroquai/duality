@@ -16,6 +16,9 @@ namespace Duality\Core;
 /**
  * Abstract Container for DIC
  * 
+ * Provides an abstract container for custom containers
+ * Used by \Duality\App
+ * 
  * PHP Version 5.3.4
  *
  * @author  Marco Afonso <mafonso333@gmail.com>

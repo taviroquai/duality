@@ -19,6 +19,9 @@ use Duality\Structure\Http\Response;
 /**
  * HTTP Server interface
  * 
+ * Provides an interface for all Duality http servers
+ * ie. \Duality\Service\Server
+ * 
  * PHP Version 5.3.4
  *
  * @author  Marco Afonso <mafonso333@gmail.com>

@@ -17,7 +17,10 @@ use Duality\Core\Structure;
 use Duality\App;
 
 /**
- * Starts and ends a service
+ * Abstract Service
+ * 
+ * Provides common attributes as methods for all Duality services
+ * Used by all services at \Duality\Service\*
  * 
  * PHP Version 5.3.4
  *

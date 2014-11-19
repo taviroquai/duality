@@ -21,6 +21,9 @@ use PHPMailer;
 /**
  * Default mailer service
  * 
+ * Provides operations for sending email
+ * Based on PHPMailer
+ * 
  * PHP Version 5.3.4
  *
  * @author  Marco Afonso <mafonso333@gmail.com>

@@ -18,6 +18,8 @@ use Duality\Service\Cache;
 
 /**
  * APC cache service
+ * 
+ * Provides operations to cache data using APC PHP extension
  *
  * PHP Version 5.3.4
  *

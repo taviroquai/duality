@@ -16,6 +16,9 @@ namespace Duality\Core;
 /**
  * Security interface
  * 
+ * Provides an interface for all Duality security services
+ * ie. \Duality\Service\Security
+ * 
  * PHP Version 5.3.4
  *
  * @author  Marco Afonso <mafonso333@gmail.com>

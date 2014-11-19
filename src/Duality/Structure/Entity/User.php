@@ -1,7 +1,9 @@
 <?php
 
 /**
- * Abstract entity structure
+ * User structure
+ * 
+ * Provides a structure for an application user
  *
  * PHP Version 5.3.4
  *

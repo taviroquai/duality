@@ -18,7 +18,9 @@ use Duality\Core\AbstractService;
 use Duality\Core\InterfaceRemote;
 
 /**
- * Class SSH for remote operations
+ * SSH service for remote operations
+ * 
+ * Provides operations for dealing with remote executions
  * 
  * PHP Version 5.3.4
  *

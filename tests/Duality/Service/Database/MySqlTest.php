@@ -40,7 +40,7 @@ extends PHPUnit_Framework_TestCase
         $app = $this->getMockBuilder('\Duality\App')
             ->setConstructorArgs(array(dirname(__FILE__), $config))
             ->getMock();
-        $db = new MySql($app);
+        new MySql($app);
     }
 
     /**

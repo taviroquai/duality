@@ -13,11 +13,12 @@
 
 namespace Duality\Service\Session;
 
-use Duality\Structure\Storage;
 use Duality\Service\Session;
 
 /**
- * Default session service
+ * Native PHP session service
+ * 
+ * Provides operations to deal with sessions using native PHP sessions
  * 
  * PHP Version 5.3.4
  *

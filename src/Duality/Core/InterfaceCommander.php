@@ -16,6 +16,9 @@ namespace Duality\Core;
 /**
  * Commander interface
  * 
+ * Provides an interface for all Duality command-line services
+ * ie. \Duality\Service\Commander
+ * 
  * PHP Version 5.3.4
  * 
  * @author  Marco Afonso <mafonso333@gmail.com>
@@ -34,10 +37,12 @@ interface InterfaceCommander
 
     /**
      * Parses the command input
-     *
-     * @return void
+     * 
+     * @param array $server The $_SERVER to be passed
+     * 
+     * @return string The user input
      */
-    public static function parseFromGlobals();
+    public static function parseFromGlobals($server);
 
     /**
      * Adds command responder

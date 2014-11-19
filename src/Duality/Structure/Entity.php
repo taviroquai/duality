@@ -19,6 +19,9 @@ use Duality\Structure\Storage;
 /**
  * Entity class
  * 
+ * Provides an interface for all Duality entities
+ * It holds a properties storage for extended functionality
+ * 
  * PHP Version 5.3.4
  *
  * @author  Marco Afonso <mafonso333@gmail.com>

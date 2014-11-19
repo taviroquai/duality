@@ -16,12 +16,15 @@ namespace Duality\Service;
 use Duality\Core\DualityException;
 use Duality\Core\AbstractService;
 use Duality\Core\InterfaceServer;
+use Duality\Core\InterfaceUrl;
 use Duality\Structure\Url;
 use Duality\Structure\Http\Request;
 use Duality\Structure\Http\Response;
 
 /**
- * Simulates an HTTP server
+ * HTTP server service
+ * 
+ * Provides operations for dealing with server requests/responses
  * 
  * PHP Version 5.3.4
  *
@@ -58,7 +61,7 @@ implements InterfaceServer
     /**
      * Server base URL
      * 
-     * @var \Duality\Structure\Url Holds the base URL used to parse routes
+     * @var \Duality\Core\InterfaceUrl Holds the base URL used to parse routes
      */
     protected $baseURL;
 
@@ -86,10 +89,12 @@ implements InterfaceServer
         $this->hostname = $this->app->getConfigItem('server.hostname') ? 
             gethostname() : 
             $this->app->getConfigItem('server.hostname');
-        $url = $this->app->getConfigItem('server.url') ? 
+        $turl = $this->app->getConfigItem('server.url') ? 
             $this->app->getConfigItem('server.url') : 
             '/';
-        $this->baseURL = new Url($url);
+        $url = new Url($turl);
+        $url->setHost($this->getHostname());
+        $this->setBaseUrl($url);
 
         // Create default request and response
         $this->setResponse($this->createResponse());
@@ -296,6 +301,28 @@ implements InterfaceServer
     public function getHostname()
     {
         return $this->hostname;
+    }
+    
+    /**
+     * Sets the server base url, used to parse request route
+     * 
+     * @param string $url Give the server a name
+     * 
+     * @return void
+     */
+    public function setBaseUrl(InterfaceUrl $url)
+    {
+        $this->baseURL = $url;
+    }
+
+    /**
+     * Gets the server base url, used to parse request route
+     * 
+     * @return string The base url
+     */
+    public function getBaseUrl()
+    {
+        return (string) $this->baseURL;
     }
 
     /**

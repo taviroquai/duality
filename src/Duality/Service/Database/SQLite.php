@@ -20,6 +20,8 @@ use Duality\Service\Database;
 /**
  * SQLite database query writer
  * 
+ * Provides SQLite database operations
+ * 
  * PHP Version 5.3.4
  *
  * @author  Marco Afonso <mafonso333@gmail.com>
@@ -72,8 +74,8 @@ class SQLite extends Database
     /**
      * Returns a create table statement
      * 
-     * @param \Duality\Structure\Database\Table $table  The database table
-     * @param array                             $config The table configuration
+     * @param \Duality\Structure\Table $table  The database table
+     * @param array                                $config The table config
      * 
      * @return string Returns the SQL statement
      */
@@ -96,8 +98,8 @@ class SQLite extends Database
     /**
      * Returns a drop table statement
      * 
-     * @param Duality\Structure\DbTable $table    The database table
-     * @param boolean                   $ifExists Adds IF EXISTS clause
+     * @param \Duality\Structure\Table $table  The database table
+     * @param boolean                              $ifExists Adds IF EXISTS
      * 
      * @return string Returns the SQL statement
      */
@@ -115,9 +117,9 @@ class SQLite extends Database
     /**
      * Returns a add column statement
      * 
-     * @param \Duality\Structure\Database\Table $table      The database table
-     * @param string                            $property   The column name
-     * @param string                            $definition The table definition
+     * @param \Duality\Structure\Table $table    The database table
+     * @param string                               $property The column name
+     * @param string                               $def      The table definition
      * 
      * @return string Returns the SQL statement
      */
@@ -133,8 +135,8 @@ class SQLite extends Database
     /**
      * Returns a drop column statement
      * 
-     * @param \Duality\Structure\Database\Table $table      The database table
-     * @param string                            $property   The column name
+     * @param \Duality\Structure\Table $table    The database table
+     * @param string                               $property The column name
      * 
      * @return string Returns the SQL statement
      */
@@ -147,14 +149,15 @@ class SQLite extends Database
     /**
      * Returns a add column statement
      * 
-     * @param \Duality\Structure\Database\Table $table      The database table
-     * @param string                            $property   The column name
-     * @param string                            $definition The table definition
+     * @param \Duality\Structure\Table $table      The database table
+     * @param \Duality\Structure\Property          $property   The column name
+     * @param string                               $definition The table definition
      * 
      * @return string Returns the SQL statement
      */
-    public function getModifyColumn(Table $table, Property $property, $definition)
-    {
+    public function getModifyColumn(
+        Table $table, Property $property, $definition
+    ) {
         // Not implemented in sqlite
         return false;
     }
@@ -162,8 +165,8 @@ class SQLite extends Database
     /**
      * Returns an INSERT statement
      * 
-     * @param \Duality\Structure\Database\Table $table The database table
-     * @param string                            $item  The item as array
+     * @param \Duality\Structure\Table $table The database table
+     * @param string                               $item  The item as array
      * 
      * @return string Returns the SQL statement
      */
@@ -194,8 +197,8 @@ class SQLite extends Database
     /**
      * Returns an UPDATE statement
      * 
-     * @param \Duality\Structure\Database\Table $table The database table
-     * @param string                            $item  The item as array
+     * @param \Duality\Structure\Table $table The database table
+     * @param string                               $item  The item as array
      * 
      * @return string Returns the SQL statement
      */
@@ -217,8 +220,8 @@ class SQLite extends Database
     /**
      * Returns a DELETE statement
      * 
-     * @param \Duality\Structure\Database\Table $table The database table
-     * @param array                             $item  The item to be deleted
+     * @param \Duality\Structure\Table $table The database table
+     * @param array                                $item  The item to be deleted
      * 
      * @return string Returns the SQL statement
      */
@@ -239,7 +242,7 @@ class SQLite extends Database
     /**
      * Returns a TRUNCATE statement
      * 
-     * @param \Duality\Structure\Database\Table $table The database table
+     * @param \Duality\Structure\Table $table The database table
      * 
      * @return string Returns the SQL statement
      */
@@ -252,7 +255,7 @@ class SQLite extends Database
     /**
      * Returns a get columns statement
      * 
-     * @param string $tablename The table name
+     * @param string $tablename The database table name
      * 
      * @return string Returns the SQL statement
      */

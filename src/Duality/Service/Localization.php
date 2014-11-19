@@ -21,6 +21,8 @@ use Duality\Structure\Storage;
 /**
  * Default localization service
  * 
+ * Provides functionality for localization operations
+ * 
  * PHP Version 5.3.4
  *
  * @author  Marco Afonso <mafonso333@gmail.com>

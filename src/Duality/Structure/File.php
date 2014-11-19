@@ -19,6 +19,11 @@ use Duality\Core\Structure;
 /**
  * File structure class
  * 
+ * Provides an abstract structure for all Duality file types
+ * ie. \Duality\Structure\File\ImageFile
+ * ie. \Duality\Structure\File\StreamFile
+ * ie. \Duality\Structure\File\TextFile
+ * 
  * PHP Version 5.3.4
  *
  * @author  Marco Afonso <mafonso333@gmail.com>

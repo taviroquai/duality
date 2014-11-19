@@ -19,6 +19,8 @@ use Duality\Structure\File\TextFile;
 /**
  * HTML document class
  * 
+ * Provides a structure for Html documents with template capabilities
+ * 
  * PHP Version 5.3.4
  *
  * @author  Marco Afonso <mafonso333@gmail.com>

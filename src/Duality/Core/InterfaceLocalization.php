@@ -16,6 +16,9 @@ namespace Duality\Core;
 /**
  * Default localization service
  * 
+ * Provides an interface for all Duality localization services
+ * ie. \Duality\Service\Localization
+ * 
  * PHP Version 5.3.4
  *
  * @author  Marco Afonso <mafonso333@gmail.com>

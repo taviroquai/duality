@@ -18,6 +18,9 @@ use Duality\Structure\RuleItem;
 /**
  * Validator interface
  * 
+ * Provides an interface for all Duality rule validators
+ * ie. \Duality\Service\Validator
+ * 
  * PHP Version 5.3.4
  *
  * @author  Marco Afonso <mafonso333@gmail.com>

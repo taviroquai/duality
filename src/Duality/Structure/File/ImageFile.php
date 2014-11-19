@@ -2,6 +2,8 @@
 
 /**
  * Image file structure
+ * 
+ * Provides a wrapper for image files
  *
  * PHP Version 5.3.4
  *

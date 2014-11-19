@@ -14,12 +14,15 @@
 namespace Duality\Structure;
 
 use Duality\Core\Structure;
+use Duality\Core\InterfaceTable;
 use Duality\Structure\Property;
 use Duality\Structure\TableRow;
 use Duality\Structure\Storage;
 
 /**
  * Table class
+ * 
+ * Provides extended functionality for to deal with tables
  * 
  * PHP Version 5.3.4
  *
@@ -30,6 +33,7 @@ use Duality\Structure\Storage;
  */
 class Table 
 extends Structure
+implements InterfaceTable
 {
     /**
      * Holds the table properties

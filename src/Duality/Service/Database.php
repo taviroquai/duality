@@ -15,13 +15,16 @@ namespace Duality\Service;
 
 use Duality\Core\DualityException;
 use Duality\Core\AbstractService;
-use Duality\Core\Structure;
 use Duality\Structure\Property;
-use Duality\Structure\Database\Table;
 use Duality\Structure\Entity;
+use Duality\Structure\Database\Table;
 
 /**
- * Database class
+ * Database abstract class
+ * 
+ * Provides an interface for all Duality database services
+ * ie. \Duality\Service\Database\MySql
+ * ie. \Duality\Service\Database\SQLite
  * 
  * PHP Version 5.3.4
  *
@@ -97,7 +100,7 @@ extends AbstractService
     /**
      * Adds a table to the database
      * 
-     * @param \Duality\Structure\Database\Table $table The database table
+     * @param \Duality\Core\Table $table The database table
      * 
      * @return void
      */
@@ -136,7 +139,7 @@ extends AbstractService
     public function createTableFromEntity(Entity $entity)
     {
         // Get a database table and its data from an entity
-        $table = new Table($this);
+        $table = $this->makeTable($entity);
         $table->setColumnsFromEntity($entity);
         return $table;
     }
@@ -180,8 +183,7 @@ extends AbstractService
         }
         $this->tables = array();
         foreach ($this->schema['create'] as $name => $fields) {
-            $table = new Table($this);
-            $table->setName($name);
+            $table = $this->makeTable($name);
             $columns = array_keys($fields);
             foreach ($columns as $name) {
                 $table->addColumn(new Property($name));
@@ -337,9 +339,22 @@ extends AbstractService
             $columns[$item[$this->schema_column_name]]
                 = $item[$this->schema_column_type];
         }
-        $table = new Table($this);
-        $table->setName($tablename);
+        $table = $this->makeTable($tablename);
         $table->setColumns($columns);
+        return $table;
+    }
+    
+    /**
+     * Creates a new table for this database
+     * 
+     * @param string $name The table name
+     * 
+     * @return \Duality\Core\Table The resulting table
+     */
+    public function makeTable($name)
+    {
+        $table = new Table($this);
+        $table->setName($name);
         return $table;
     }
 
@@ -362,8 +377,8 @@ extends AbstractService
     /**
      * Returns a create table statement
      * 
-     * @param \Duality\Structure\Database\Table $table  The database table
-     * @param array                             $config The table configuration
+     * @param \Duality\Structure\Table $table  The database table
+     * @param array                                $config The table config
      * 
      * @return string Returns the SQL statement
      */
@@ -372,29 +387,33 @@ extends AbstractService
     /**
      * Returns a drop table statement
      * 
-     * @param Duality\Structure\DbTable $table    The database table
-     * @param boolean                   $ifExists Adds IF EXISTS clause
+     * @param \Duality\Structure\Table $table  The database table
+     * @param boolean                              $ifExists Adds IF EXISTS
      * 
      * @return string Returns the SQL statement
      */
-    public abstract function getDropTable(Table $table, $ifExists = true);
+    public abstract function getDropTable(
+        Table $table, $ifExists = true
+    );
 
     /**
      * Returns a add column statement
      * 
-     * @param \Duality\Structure\Database\Table $table      The database table
-     * @param string                            $property   The column name
-     * @param string                            $definition The table definition
+     * @param \Duality\Structure\Table $table    The database table
+     * @param string                               $property The column name
+     * @param string                               $def      The table definition
      * 
      * @return string Returns the SQL statement
      */
-    public abstract function getAddColumn(Table $table, $property, $definition);
+    public abstract function getAddColumn(
+        Table $table, $property, $def
+    );
 
     /**
      * Returns a drop column statement
      * 
-     * @param \Duality\Structure\Database\Table $table    The database table
-     * @param string                            $property The column name
+     * @param \Duality\Structure\Table $table    The database table
+     * @param string                               $property The column name
      * 
      * @return string Returns the SQL statement
      */
@@ -403,9 +422,9 @@ extends AbstractService
     /**
      * Returns a add column statement
      * 
-     * @param \Duality\Structure\Database\Table $table      The database table
-     * @param \Duality\Structure\Property       $property   The column name
-     * @param string                            $definition The table definition
+     * @param \Duality\Structure\Table $table      The database table
+     * @param \Duality\Structure\Property          $property   The column name
+     * @param string                               $definition The table definition
      * 
      * @return string Returns the SQL statement
      */
@@ -416,8 +435,8 @@ extends AbstractService
     /**
      * Returns an INSERT statement
      * 
-     * @param \Duality\Structure\Database\Table $table The database table
-     * @param string                            $item  The item as array
+     * @param \Duality\Structure\Table $table The database table
+     * @param string                               $item  The item as array
      * 
      * @return string Returns the SQL statement
      */
@@ -426,8 +445,8 @@ extends AbstractService
     /**
      * Returns an UPDATE statement
      * 
-     * @param \Duality\Structure\Database\Table $table The database table
-     * @param string                            $item  The item as array
+     * @param \Duality\Structure\Table $table The database table
+     * @param string                               $item  The item as array
      * 
      * @return string Returns the SQL statement
      */
@@ -436,8 +455,8 @@ extends AbstractService
     /**
      * Returns a DELETE statement
      * 
-     * @param \Duality\Structure\Database\Table $table The database table
-     * @param array                             $item  The item to be deleted
+     * @param \Duality\Structure\Table $table The database table
+     * @param array                                $item  The item to be deleted
      * 
      * @return string Returns the SQL statement
      */
@@ -446,7 +465,7 @@ extends AbstractService
     /**
      * Returns a TRUNCATE statement
      * 
-     * @param \Duality\Structure\Database\Table $table The database table
+     * @param \Duality\Structure\Table $table The database table
      * 
      * @return string Returns the SQL statement
      */
@@ -455,7 +474,7 @@ extends AbstractService
     /**
      * Returns a get columns statement
      * 
-     * @param string $table The table name
+     * @param string $table The database table name
      * 
      * @return string Returns the SQL statement
      */

@@ -15,12 +15,15 @@ namespace Duality\Service;
 
 use Duality\Core\AbstractService;
 use Duality\Core\InterfaceClient;
-use Duality\Structure\Url;
+use Duality\Core\InterfaceUrl;
 use Duality\Structure\Http\Request;
 use Duality\Structure\Http\Response;
 
 /**
- * Simulates an HTTP client
+ * HTTP client
+ * 
+ * Provides basic functionality as an HTTP client
+ * Based on curl PHP extension
  * 
  * PHP Version 5.3.4
  * 
@@ -112,11 +115,11 @@ implements InterfaceClient
     /**
      * Creates a client request
      * 
-     * @param string $url Give the URL to create the request
+     * @param \Duality\Core\InterfaceUrl $url Give the URL to create the request
      * 
      * @return \Duality\Structure\Http\Request The HTTP request
      */
-    public static function createRequest(Url $url = null)
+    public static function createRequest(InterfaceUrl $url = null)
     {
         return new Request($url);
     }

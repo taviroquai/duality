@@ -15,6 +15,11 @@ namespace Duality\Core;
 
 /**
  * Core exception class
+ * 
+ * Provides all errors codes.
+ * All errors codes should are in the format E_NAMESPACE_ERRORMSG.
+ * ie. \Duality\Core\DualityException::E_APP_PATHNOTFOUND
+ * 
  * PHP Version 5.3.4
  *
  * @author  Marco Afonso <mafonso333@gmail.com>

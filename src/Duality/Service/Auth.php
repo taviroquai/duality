@@ -16,7 +16,11 @@ namespace Duality\Service;
 use Duality\Core\AbstractService;
 
 /**
- * Default authentication service
+ * Abstract authentication service
+ * 
+ * Provides base functionality for Duality auth services
+ * ie. \Duality\Service\Auth\Database
+ * ie. \Duality\Service\Auth\LDAP
  * 
  * PHP Version 5.3.4
  *

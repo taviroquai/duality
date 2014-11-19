@@ -11,14 +11,10 @@
  * @since   0.7.0
  */
 
-namespace Duality\Structure;
+namespace Duality\Core;
 
-use Duality\Core\Structure;
-use Duality\Core\InterfaceTableRow;
-use Duality\Structure\Storage;
-use Duality\Structure\Property;
 use Duality\Structure\Table;
-
+use Duality\Structure\Property;
 
 /**
  * Table row class
@@ -30,44 +26,21 @@ use Duality\Structure\Table;
  * @link    http://github.com/taviroquai/duality
  * @since   0.7.0
  */
-class TableRow 
-extends Structure
-implements InterfaceTableRow
+interface InterfaceTableRow
 {
-    /**
-     * The dependant table
-     * 
-     * @var \Duality\Structure\Table The table which belongs
-     */
-    protected $table;
-    
-    /**
-     * Holds the table data
-     * 
-     * @var \Duality\Structure\Storage Holds the row data
-     */
-    protected $data;
-
     /**
      * Creates a new table row
      * 
      * @param \Duality\Structure\Table $table The row table
      */
-    public function __construct(Table $table)
-    {
-        $this->data = new Storage;
-        $this->table = $table;
-    }
+    public function __construct(Table $table);
 
     /**
      * Gets the dependant table
      * 
      * @return \Duality\Structure\Table $table The table which belongs
      */
-    public function getTable()
-    {
-        return $this->table;
-    }
+    public function getTable();
 
     /**
      * Adds data to the row
@@ -77,12 +50,7 @@ implements InterfaceTableRow
      * 
      * @return void
      */
-    public function addData(Property $property, $data)
-    {
-        if ($this->getTable()->columnExists($property)) {
-            $this->data->set((string) $property, $data);
-        }
-    }
+    public function addData(Property $property, $data);
 
     /**
      * Gets the row property data
@@ -91,12 +59,6 @@ implements InterfaceTableRow
      * 
      * @return string|int The result data
      */
-    public function getData(Property $property)
-    {
-        $result = null;
-        if ($this->getTable()->columnExists($property)) {
-            $result = $this->data->get((string) $property);
-        }
-        return $result;
-    }
+    public function getData(Property $property);
+    
 }

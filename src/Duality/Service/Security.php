@@ -17,7 +17,9 @@ use Duality\Core\AbstractService;
 use Duality\Core\InterfaceSecurity;
 
 /**
- * Security interface
+ * Security service
+ * 
+ * Provides operations for dealing with data security
  * 
  * PHP Version 5.3.4
  *

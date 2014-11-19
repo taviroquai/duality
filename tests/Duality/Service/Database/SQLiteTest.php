@@ -2,7 +2,6 @@
 
 use Duality\Structure\Property;
 use Duality\Structure\Entity\User;
-use Duality\Service\Database\SQLite;
 use Duality\Structure\Database\Table;
 use Duality\Structure\Database\Filter;
 
@@ -22,7 +21,7 @@ extends PHPUnit_Framework_TestCase
             'db' => array()
         );
         $app = new \Duality\App(dirname(__FILE__), $config);
-        $db = $app->call('db');
+        $app->call('db');
     }
 
     /**
@@ -40,7 +39,7 @@ extends PHPUnit_Framework_TestCase
             )
         );
         $app = new \Duality\App(dirname(__FILE__), $config);
-        $db = $app->call('db');
+        $app->call('db');
     }
 
     /**

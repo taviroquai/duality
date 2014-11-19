@@ -19,7 +19,9 @@ use Duality\Core\InterfaceErrorHandler;
 use Duality\Structure\File\StreamFile;
 
 /**
- * Default logger service
+ * Logger service
+ * 
+ * Provides basic functionality for logger services
  *
  * PHP Version 5.3.4
  *

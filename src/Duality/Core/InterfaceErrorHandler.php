@@ -16,6 +16,9 @@ namespace Duality\Core;
 /**
  * Default error handler
  * 
+ * Provides an interface for all Duality loggers
+ * ie. \Duality\Service\Logger
+ * 
  * PHP Version 5.3.4
  *
  * @author  Marco Afonso <mafonso333@gmail.com>

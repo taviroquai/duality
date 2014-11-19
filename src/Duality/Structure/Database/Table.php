@@ -13,7 +13,6 @@
 
 namespace Duality\Structure\Database;
 
-use Duality\Core\InterfaceStorage;
 use Duality\Structure\Property;
 use Duality\Structure\TableRow;
 use Duality\Structure\Table as DataTable;
@@ -22,6 +21,8 @@ use Duality\Service\Database;
 
 /**
  * Database table class
+ * 
+ * Provides a structure for database tables
  * 
  * PHP Version 5.3.4
  *
@@ -149,15 +150,14 @@ extends DataTable
         $offset = 0, $limit = 10, $where = '', $values = array(), $select = '*'
     ) {
         $sql = $this->database->getSelect(
-            '*', $this->getName(), $where, $offset, $limit
+            $select, $this->getName(), $where, $offset, $limit
         );
         $stm = $this->database->getPDO()->prepare($sql);
         $stm->execute($values);
         
         $this->rows->reset();
         while ($trow = $stm->fetch(\PDO::FETCH_ASSOC)) {
-            $row = new TableRow($this);
-            $row->setTable($this);
+            $row = $this->makeTableRow();
             foreach ($this->getColumns() as $column) {
                 $row->addData($column, $trow[(string) $column]);
             }
@@ -175,7 +175,8 @@ extends DataTable
      * 
      * @since 0.18.0
      */
-    public function filter(Filter $filter) {
+    public function filter(Filter $filter)
+    {
         $sql = $this->database->getSelect(
             $filter->getSelect(),
             $this->getName(),
@@ -190,8 +191,7 @@ extends DataTable
         $this->rows->reset();
         $columns = explode(',', $filter->getSelect());
         while ($trow = $stm->fetch(\PDO::FETCH_ASSOC)) {
-            $row = new TableRow($this);
-            $row->setTable($this);
+            $row = $this->makeTableRow();
             foreach ($columns as $column) {
                 $row->addData(
                     new Property($column),
@@ -201,6 +201,11 @@ extends DataTable
             $this->addRow($row);
         }
         return $this;
+    }
+    
+    public function makeTableRow()
+    {
+        return new TableRow($this);
     }
 
     /**
@@ -215,7 +220,7 @@ extends DataTable
     {
         $sql = $this->database->getInsert($this, (array) $value);
         $stm = $this->database->getPDO()->prepare($sql);
-        $result = $stm->execute(array_values((array)$value));
+        $stm->execute(array_values((array)$value));
     }
 
     /**
@@ -230,9 +235,9 @@ extends DataTable
     {
         $sql = $this->database->getUpdate($this, (array) $value);
         $stm = $this->database->getPDO()->prepare($sql);
-        $value = array_values((array)$value);
-        $value[] = $key;
-        $stm->execute($value);
+        $values = array_values((array)$value);
+        $values[] = $key;
+        $stm->execute($values);
     }
 
     /**

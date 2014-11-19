@@ -16,6 +16,9 @@ namespace Duality\Core;
 /**
  * The structure class
  * 
+ * Provides an interface for all structures
+ * ie. \Duality\Structure\Entity
+ * 
  * PHP Version 5.3.4
  *
  * @author  Marco Afonso <mafonso333@gmail.com>

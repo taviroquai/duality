@@ -43,7 +43,7 @@ extends PHPUnit_Framework_TestCase
                 'cache'     => 'Duality\Service\Cache',
                 'mailer'    => 'Duality\Service\Mailer',
                 'paginator' => 'Duality\Service\Paginator',
-                'ssh'       => 'Duality\Service\SSH',
+                'remote'    => 'Duality\Service\SSH',
                 'server'    => 'Duality\Service\Server',
                 'locale'    => 'Duality\Service\Localization',
                 'cmd'       => 'Duality\Service\Commander',
@@ -181,7 +181,7 @@ extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf($expected, $app->getPaginator());
 
         $expected = '\Duality\Service\SSH';
-        $this->assertInstanceOf($expected, $app->getSSH());
+        $this->assertInstanceOf($expected, $app->getRemote());
 
         $expected = '\Duality\Service\Server';
         $this->assertInstanceOf($expected, $app->getServer());

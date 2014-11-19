@@ -18,6 +18,8 @@ use Duality\Core\Structure;
 /**
  * Property class
  * 
+ * Provides extended functionality for entities and table properties
+ * 
  * PHP Version 5.3.4
  *
  * @author  Marco Afonso <mafonso333@gmail.com>

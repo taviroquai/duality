@@ -19,6 +19,8 @@ use Duality\Service\Auth;
 /**
  * Default authentication service
  * 
+ * Provides operations to authenticate against an LDAP server
+ * 
  * PHP Version 5.3.4
  *
  * @author  Marco Afonso <mafonso333@gmail.com>

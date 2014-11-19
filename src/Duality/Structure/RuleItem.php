@@ -2,6 +2,9 @@
 
 /**
  * Validation rule item
+ * 
+ * Provides a structure for validation items
+ * Used by \Duality\Service\Validator
  *
  * PHP Version 5.3.4
  *

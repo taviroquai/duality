@@ -18,7 +18,6 @@ extends PHPUnit_Framework_TestCase
         $table->addColumn($column);
 
         $row = new TableRow($table);
-        $row->setTable($table);
 
         $expected = 'value';
         $row->addData($column, $expected);

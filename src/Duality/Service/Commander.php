@@ -19,6 +19,9 @@ use Duality\Core\InterfaceCommander;
 /**
  * Commander service
  * 
+ * Provides basic functionality for a commander service that can register
+ * callback responders to user input
+ * 
  * PHP Version 5.3.4
  *
  * @author  Marco Afonso <mafonso333@gmail.com>
@@ -52,10 +55,7 @@ implements InterfaceCommander
     public function init()
     {
         // Set input from globals
-        $this->setInput(implode(' ', self::parseFromGlobals()));
-
-        // Register built-in responders
-        $app = $this->app;
+        $this->setInput(implode(' ', self::parseFromGlobals($_SERVER)));
     }
 
     /**
@@ -97,11 +97,13 @@ implements InterfaceCommander
     /**
      * Parses the command input
      * 
+     * @param array $server The $_SERVER to be passed
+     * 
      * @return string The user input
      */
-    public static function parseFromGlobals()
+    public static function parseFromGlobals($server)
     {
-        return $_SERVER['argv'];
+        return $server['argv'];
     }
 
     /**
