@@ -89,7 +89,7 @@ extends Container
      * @param string $path   Give the base path to resolve relative paths
      * @param array  $config Give the configuration as array
      */
-    public function __construct($path, $config)
+    public function __construct($path, $config = array())
     {
         if (!is_dir($path)) {
             throw new DualityException(

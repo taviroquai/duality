@@ -86,15 +86,8 @@ implements InterfaceServer
      */
     public function init()
     {
-        $this->hostname = !$this->app->getConfigItem('server.hostname') ? 
-            gethostname() : 
-            $this->app->getConfigItem('server.hostname');
-        $turl = $this->app->getConfigItem('server.url') ? 
-            $this->app->getConfigItem('server.url') : 
-            '/';
-        $url = new Url($turl);
-        $url->setHost($this->getHostname());
-        $this->setBaseUrl($url);
+        $this->hostname = gethostname();
+        $this->setBaseUrl(new Url('http://'.$this->hostname));
 
         // Create default request and response
         $this->setResponse($this->createResponse());
@@ -168,7 +161,7 @@ implements InterfaceServer
             foreach ($this->routes as $ns => $cb) {
                 // Check if route matches and stop looking
                 $uri = str_replace(
-                    (string) $this->baseURL, '', $this->hostname.$this->request->getUrl()->getUri()
+                    (string) $this->baseURL->getUri(), '', $this->request->getUrl()->getUri()
                 );
                 $uri = '/' . trim($uri, '/ ');
                 if ($result = preg_match($ns, $uri, $matches)) {
@@ -442,14 +435,26 @@ implements InterfaceServer
         array_filter($params, function(&$var) {
             $var = filter_var($var, FILTER_UNSAFE_RAW);
         });
-
-        $url = (empty($server['HTTPS']) ? 'http' 
-            : 'https') . "://"
-            . (empty($server['HTTP_HOST']) ? 
-                $this->getHostname() : $server['HTTP_HOST'])
-            . (empty($server['REQUEST_URI']) ? '/' : $server['REQUEST_URI']);
         
-        $request = new Request(new Url($url));
+        // Detect base URL and URI
+        $server['SERVER_NAME'] = empty($server['SERVER_NAME']) ? 
+                $this->hostname : $server['SERVER_NAME'];
+        $server['SCRIPT_NAME'] = empty($server['SCRIPT_NAME']) ? 
+                '/index.php' : $server['SCRIPT_NAME'];
+        $server['REQUEST_URI'] = empty($server['REQUEST_URI']) ?
+                '/' : $server['REQUEST_URI'];
+        $baseUrl = (empty($server['HTTPS']) ? 'http' : 'https')
+            . "://"
+            . $server['SERVER_NAME']
+            . dirname($server['SCRIPT_NAME']);
+        $uri = $server['REQUEST_URI'];
+        $uri = str_replace(dirname($server['SCRIPT_NAME']), '', $uri);
+        $uri = str_replace(basename($server['SCRIPT_NAME']), '', $uri);
+        $uri = '/' . trim($uri, '/');
+        
+        // Set base URL and URI strings
+        $this->setBaseUrl(new Url($baseUrl));
+        $request = new Request(new Url($baseUrl . $uri));
         $request->setMethod($server['REQUEST_METHOD']);
         $request->setContent(file_get_contents('php://input'));
         $request->setTimestamp(
