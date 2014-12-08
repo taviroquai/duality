@@ -321,13 +321,12 @@ implements InterfaceServer
      * Creates a valid server URL
      * 
      * @param string $uri    Give the URI
-     * @param string $scheme Give the HTTP scheme/protocol
      * 
      * @return string The resulting URL
      */
-    public function createUrl($uri, $scheme = 'http')
+    public function createUrl($uri)
     {
-        return new URL($scheme.'://'.$this->getHostname(). '/' . trim($uri, '/'));
+        return trim($this->baseURL, '/'). '/' . trim($uri, '/');
     }
 
     /**

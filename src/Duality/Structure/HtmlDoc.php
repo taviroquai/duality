@@ -105,6 +105,24 @@ extends Structure
             $el->appendChild($node);
         }
     }
+    
+    /**
+     * Sets an attribute value to the queried elements
+     * 
+     * @param string $query Give the xpath query to locate the node
+     * @param string $name  Give the attribute name
+     * @param mixed  $value Give the attribute value
+     */
+    public function setAttribute($query, $name, $value)
+    {
+        $xpath = new \DOMXpath($this->doc);
+        $elems = $xpath->query($query);
+        if ($elems instanceof DOMNodeList) {
+            foreach($elems as $el) {
+                $el->setAttribute($name, (string) $value);
+            }
+        }
+    }
 
     /**
      * Creates an HTML document from file path

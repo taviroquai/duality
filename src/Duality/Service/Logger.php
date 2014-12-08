@@ -100,7 +100,7 @@ implements InterfaceErrorHandler
      */
     public function log($msg, $error_type = E_USER_NOTICE)
     {
-        trigger_error($msg, $error_type);
+        $this->error($error_type, $msg, '', '');
     }
 
     /**
@@ -123,6 +123,10 @@ implements InterfaceErrorHandler
                 . " on line $errline in file $errfile\n";
             $msg .= "PHP ". PHP_VERSION . " (" . PHP_OS . ")\n";
             $msg .= "Cannot continue. Aborting...\n";
+            
+            // Set error on fatal
+            $this->error = true;
+        
             break;
 
         case E_USER_WARNING:
@@ -131,13 +135,12 @@ implements InterfaceErrorHandler
             break;
 
         default:
-            $msg  = "Duality Notice [$errno] $errstr"
-                . " on line $errline in file $errfile\n";
+            $msg  = "Duality Notice [$errno] $errstr";
+            $msg .= !empty($errline) ? " on line $errline" : '';
+            $msg .= !empty($errfile) ? " in file $errfile" : '';
+            $msg .= "\n";
             break;
         }
-
-        // Set error
-        $this->error = true;
         
         // Add date to message
         $msg = date('Y-m-d H:i:s').": ".$msg;

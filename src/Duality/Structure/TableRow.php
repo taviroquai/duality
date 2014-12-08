@@ -99,4 +99,18 @@ implements InterfaceTableRow
         }
         return $result;
     }
+    
+    /**
+     * Exports this row to array
+     * 
+     * @return array The row as array
+     */
+    public function toArray()
+    {
+        $out = array();
+        foreach ($this->data->asArray() as $key => $item) {
+            $out[$key] = $item;
+        }
+        return $out;
+    }
 }

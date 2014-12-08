@@ -219,14 +219,14 @@ extends PHPUnit_Framework_TestCase
         
         $expected = array(1 => array('id' => 1, 'email' => 'dummy1'));
         $table->add(1, array('email' => 'dummy1'));
-        $result = $table->toArray();
+        $result = $table->find()->toArray();
         $this->assertEquals($expected, $result);
 
         $expected = array(
             1 => array('id' => 1, 'email' => 'dummy2')
         );
         $table->set(1, array('id' => 1, 'email' => 'dummy2'));
-        $result = $table->toArray();
+        $result = $table->find()->toArray();
         $this->assertEquals($expected, $result);
 
         $expected = array(
@@ -240,7 +240,7 @@ extends PHPUnit_Framework_TestCase
             1 => array('id' => 1, 'email' => 'dummy2')
         );
         $filter = new Filter($table);
-        $filter->columns('id')
+        $filter->columns('id,email')
             ->where('id = ?', array(1))
             ->group('id')
             ->limit(0, 10);
@@ -258,7 +258,7 @@ extends PHPUnit_Framework_TestCase
         $expected = array(
             1 => array('id' => 1, 'email' => 'dummy2')
         );
-        $result = $table->toArray();
+        $result = $table->find()->toArray();
         $this->assertEquals($expected, $result);
 
         $expected = array(
@@ -270,19 +270,19 @@ extends PHPUnit_Framework_TestCase
             2 => array('email' => 'dummy4')
         );
         $table->importArray($data);
-        $result = $table->toArray();
+        $result = $table->find()->toArray();
         $this->assertEquals($expected, $result);
 
         $expected = $expected = array(
             2 => array('id' => 2, 'email' => 'dummy4')
         );
         $table->remove(1);
-        $result = $table->toArray();
+        $result = $table->find()->toArray();
         $this->assertEquals($expected, $result);
 
         $expected = array();
         $table->reset();
-        $result = $table->toArray();
+        $result = $table->find()->toArray();
         $this->assertEquals($expected, $result);
 
         $result = $db->getTable('dummy');

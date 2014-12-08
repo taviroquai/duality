@@ -19,6 +19,7 @@ extends PHPUnit_Framework_TestCase
         );
         $app = new \Duality\App(dirname(__FILE__), $config);
         $server = $app->call('server');
+        $server->setHostname('localhost');
 
         $url = new Url('http://localhost/dummy');
         $url->setHost('localhost');
@@ -53,8 +54,9 @@ EOF;
         $this->assertEquals($expected, $result);
 
         $expected = 'http://dummy/dummy';
+        $server->setBaseUrl(new Url('http://dummy'));
         $result = $server->createUrl('/dummy');
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expected, (string) $result);
 
         $server->terminate();
     }

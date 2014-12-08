@@ -161,7 +161,7 @@ extends DataTable
             foreach ($this->getColumns() as $column) {
                 $row->addData($column, $trow[(string) $column]);
             }
-            $this->addRow($row);
+            $this->rows->set($trow[$this->primaryKey], $row);
         }
         return $this;
     }
@@ -189,20 +189,26 @@ extends DataTable
         $stm->execute($filter->getWhereValues());
         
         $this->rows->reset();
-        $columns = explode(',', $filter->getSelect());
+        $columns = $filter->getSelect() == '*' ?
+            $this->getColumns() : explode(',', $filter->getSelect());
         while ($trow = $stm->fetch(\PDO::FETCH_ASSOC)) {
             $row = $this->makeTableRow();
             foreach ($columns as $column) {
                 $row->addData(
-                    new Property($column),
+                    new Property((string) $column),
                     $trow[(string) $column]
                 );
             }
-            $this->addRow($row);
+            $this->rows->set($trow[$this->primaryKey], $row);
         }
         return $this;
     }
     
+    /**
+     * Creates a new table row with this table fields
+     * 
+     * @return TableRow The created row for this table
+     */
     public function makeTableRow()
     {
         return new TableRow($this);
@@ -275,24 +281,20 @@ extends DataTable
         $result = (int) $stm->fetchColumn(0);
         return (boolean) $result;
     }
-
+    
     /**
-     * Returns all items as array
+     * Exports this table to array
      * 
-     * @return array Returns all stored values
+     * @return array The table as array
      */
     public function toArray()
     {
-        $sql = $this->database->getSelect('*', $this->getName());
-        $stm = $this->database->getPDO()->prepare($sql);
-        $stm->execute();
-
-        $items = array();
-        $temp = $stm->fetchAll(\PDO::FETCH_ASSOC);
-        foreach ($temp as $item) {
-            $items[$item['id']] = $item;
+        $out = array();
+        foreach ($this->rows->asArray() as $row) {
+            $trow = $row->toArray();
+            $out[$trow[$this->primaryKey]] = $trow;
         }
-        return $items;
+        return $out;
     }
 
     /**

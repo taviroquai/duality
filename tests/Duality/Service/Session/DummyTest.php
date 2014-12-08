@@ -29,6 +29,11 @@ extends PHPUnit_Framework_TestCase
         $session->remove('dummy');
         $result = $session->asArray();
         $this->assertEquals($expected, $result);
+        
+        $expected = 'dummy';
+        $session->add('dummy', $expected);
+        $result = $session->take('dummy');
+        $this->assertEquals($expected, $result);
 
         $expected = array('dummy', 'dummy');
         $session->importArray($expected);

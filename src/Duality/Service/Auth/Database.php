@@ -84,7 +84,7 @@ extends Auth
         
         $table = $this->app->call('db')->getTable($tableName);
         $filter = new Filter($table);
-        $filter->columns('email,pass')
+        $filter->columns('*')
             ->where(
                 "$userField = ? and $passField = ?", 
                 array($username, $password)

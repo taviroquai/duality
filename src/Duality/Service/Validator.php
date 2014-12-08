@@ -139,6 +139,22 @@ implements InterfaceValidator
     {
         return $this->msgStorage->asArray();
     }
+    
+    /**
+     * Get only error messages
+     * 
+     * @return array Returns only error messages
+     */
+    public function getErrorMessages()
+    {
+        $messages = array();
+        foreach ($this->itemsStorage->asArray() as $rule) {
+            if (!$rule->getResult()) {
+                $messages[$rule->getKey()] = $rule->getMessage();
+            }
+        }
+        return $messages;
+    }
 
     /**
      * Get message by key

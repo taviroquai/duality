@@ -86,6 +86,20 @@ extends Session
     {
         return $this->storage->get($key);
     }
+    
+    /**
+     * Return item and remove it from storage
+     * 
+     * @param string $key Give the key to retrieve the value
+     * 
+     * @return mixed|null The value to be retrieved or null
+     */
+    public function take($key)
+    {
+        $value = $this->get($key);
+        $this->remove($key);
+        return $value;
+    }
 
     /**
      * Checks if item exists
