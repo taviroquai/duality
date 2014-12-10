@@ -49,6 +49,12 @@ extends PHPUnit_Framework_TestCase
         );
         $result = $validator->getMessages();
         $this->assertEquals($expected, $result);
+        
+        $expected = array(
+            'key' => 'The key is invalid'
+        );
+        $result = $validator->getErrorMessages();
+        $this->assertEquals($expected, $result);
 
         $expected = 'The key is invalid';
         $result = $validator->getMessage('key');
