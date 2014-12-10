@@ -310,9 +310,9 @@ extends AbstractService
 
             switch ($fn)
             {
-            case 'hash': $value = $this->app->call('security')->encrypt($value); 
+            case 'hash': $value = $this->app->call('security')->encrypt($catchFn[0]); 
                 break;
-            case 'int': $value = (int) $value;
+            case 'int': $value = (int) $catchFn[0];
                 break;
             }
         }
