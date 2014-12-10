@@ -281,7 +281,7 @@ extends Container
     /**
      * Call security service alias (type hinting)
      * 
-     * @return \Duality\Core\Interface\Security The security service
+     * @return \Duality\Core\InterfaceSecurity The security service
      */
     public function getSecurity()
     {
@@ -291,7 +291,7 @@ extends Container
     /**
      * Call validator service alias (type hinting)
      * 
-     * @return \Duality\Core\Interface\Validator The validator service
+     * @return \Duality\Core\InterfaceValidator The validator service
      */
     public function getValidator()
     {
@@ -331,7 +331,7 @@ extends Container
     /**
      * Call mailer service alias (type hinting)
      * 
-     * @return \Duality\Core\Interface\Mailer The mailer service
+     * @return \Duality\Core\InterfaceMailer The mailer service
      */
     public function getMailer()
     {
@@ -341,7 +341,7 @@ extends Container
     /**
      * Call paginator service alias (type hinting)
      * 
-     * @return \Duality\Core\Interface\Paginator The paginator service
+     * @return \Duality\Core\InterfacePaginator The paginator service
      */
     public function getPaginator()
     {
@@ -361,7 +361,7 @@ extends Container
     /**
      * Call http server service alias (type hinting)
      * 
-     * @return \Duality\Core\Interface\Server The server service
+     * @return \Duality\Core\InterfaceServer The server service
      */
     public function getServer()
     {
@@ -371,7 +371,7 @@ extends Container
     /**
      * Call locale service alias (type hinting)
      * 
-     * @return \Duality\Core\Interface\Localization The localization service
+     * @return \Duality\Core\InterfaceLocalization The localization service
      */
     public function getLocale()
     {
@@ -381,7 +381,7 @@ extends Container
     /**
      * Call cmd service alias (type hinting)
      * 
-     * @return \Duality\Core\Interface\Commander The commander service
+     * @return \Duality\Core\InterfaceCommander The commander service
      */
     public function getCmd()
     {
@@ -391,7 +391,7 @@ extends Container
     /**
      * Call http client alias (type hinting)
      * 
-     * @return \Duality\Core\Interface\Client The http client service
+     * @return \Duality\Core\InterfaceClient The http client service
      */
     public function getClient()
     {
