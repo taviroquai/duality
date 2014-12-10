@@ -24,8 +24,15 @@ extends PHPUnit_Framework_TestCase
         $result = (string) $doc;
         $expected = "<!DOCTYPE html>\n<html><head><title>Duality dummy doc title</title></head><body></body></html>\n";
         $this->assertEquals($expected, $result);
+        
+        $doc = HtmlDoc::createFromFilePath($filename);
+        $doc->setAttribute('body', 'id', 'dummy');
+        $result = (string) $doc;
+        $expected = "<!DOCTYPE html>\n<html><head><title></title></head><body id=\"dummy\"></body></html>\n";
+        $this->assertEquals($expected, $result);
 
-        $expected = "<!DOCTYPE html>\n<html><head><title>Duality dummy doc title</title></head><body><p>Dummy content</p></body></html>\n";
+        $doc = HtmlDoc::createFromFilePath($filename);
+        $expected = "<!DOCTYPE html>\n<html><head><title></title></head><body><p>Dummy content</p></body></html>\n";
         $doc->appendTo('body', '<p>Dummy content</p>');
         $result = (string) $doc;
         $this->assertEquals($expected, $result);

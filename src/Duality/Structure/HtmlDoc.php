@@ -117,10 +117,8 @@ extends Structure
     {
         $xpath = new \DOMXpath($this->doc);
         $elems = $xpath->query($query);
-        if ($elems instanceof DOMNodeList) {
-            foreach($elems as $el) {
-                $el->setAttribute($name, (string) $value);
-            }
+        foreach ($elems as $el) {
+            $el->setAttribute($name, (string) $value);
         }
     }
 

@@ -53,6 +53,11 @@ EOF;
         $result = $server->getHostname();
         $this->assertEquals($expected, $result);
 
+        $expected = 'http://dummy/';
+        $server->setBaseUrl(new Url('http://dummy'));
+        $result = $server->getBaseUrl();
+        $this->assertEquals($expected, (string) $result);
+        
         $expected = 'http://dummy/dummy';
         $server->setBaseUrl(new Url('http://dummy'));
         $result = $server->createUrl('/dummy');
@@ -78,7 +83,7 @@ EOF;
         $request = $server->getRequestFromGlobals(array(), array());
         $this->assertEquals(FALSE, $request);
 
-        $request = $server->getRequestFromGlobals(array('REQUEST_METHOD' => 'GET'), array());
+        $request = $server->getRequestFromGlobals(array('REQUEST_METHOD' => 'GET'), array('dummy' => 'dummy'));
         $this->assertInstanceOf('\Duality\Structure\Http\Request', $request);
 
         $request = $server->getRequestFromGlobals(
