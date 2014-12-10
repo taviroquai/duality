@@ -35,7 +35,7 @@ extends Structure
     /**
      * The dependent application container
      * 
-     * @var Duality\App Holds the application container
+     * @var \Duality\App Holds the application container
      */
     protected $app;
 

@@ -39,7 +39,7 @@ class Request extends Http
     /**
      * Creates a new HTTP request
      * 
-     * @param Duality\Structure\Url $url The request URL
+     * @param \Duality\Structure\Url $url The request URL
      */
     public function __construct(Url $url = null)
     {

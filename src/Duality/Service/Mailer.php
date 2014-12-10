@@ -108,7 +108,7 @@ implements InterfaceMailer
     /**
      * Terminates the service
      * 
-     * @return Duality\Service\Mailer This instance
+     * @return \Duality\Service\Mailer This instance
      */
     public function terminate()
     {
@@ -120,7 +120,7 @@ implements InterfaceMailer
      * 
      * @param boolean $option Set the pretend option
      * 
-     * @return Duality\Service\Mailer This instance
+     * @return \Duality\Service\Mailer This instance
      */
     public function pretend($option)
     {
@@ -138,7 +138,7 @@ implements InterfaceMailer
      * @param string $port       The remote port
      * @param int    $debugLevel The debug level
      * 
-     * @return Duality\Service\Mailer
+     * @return \Duality\Service\Mailer
      */
     public function setSMTP(
         $host, $user = '', $pass = '', $encr = 'tls', $port = 587, $debugLevel = 0
@@ -161,7 +161,7 @@ implements InterfaceMailer
      * 
      * @param string $to The target recipient
      * 
-     * @return Duality\Service\Mailer This instance
+     * @return \Duality\Service\Mailer This instance
      */
     public function to($to)
     {
@@ -174,7 +174,7 @@ implements InterfaceMailer
      * 
      * @param string $address Give the recipient address
      * 
-     * @return Duality\Service\Mailer This instance
+     * @return \Duality\Service\Mailer This instance
      */
     public function addAddress($address)
     {
@@ -190,7 +190,7 @@ implements InterfaceMailer
      * @param string  $address The cc recipient
      * @param boolean $bcc     Tells whether use bcc or not
      * 
-     * @return Duality\Service\Mailer This instance
+     * @return \Duality\Service\Mailer This instance
      */
     public function copy($address, $bcc = true)
     {
@@ -208,7 +208,7 @@ implements InterfaceMailer
      * @param string $address The reply address
      * @param string $name    The reply name
      * 
-     * @return Duality\Service\Mailer This instance
+     * @return \Duality\Service\Mailer This instance
      */
     public function reply($address, $name)
     {
@@ -225,7 +225,7 @@ implements InterfaceMailer
      * @param string $from Give the sender email address
      * @param string $name Give the sender sender name
      * 
-     * @return Duality\Service\Mailer This instance
+     * @return \Duality\Service\Mailer This instance
      */
     public function from($from, $name)
     {
@@ -241,7 +241,7 @@ implements InterfaceMailer
      * 
      * @param string $subject Give the message subject
      * 
-     * @return Duality\Service\Mailer This instance
+     * @return \Duality\Service\Mailer This instance
      */
     public function subject($subject)
     {
@@ -255,7 +255,7 @@ implements InterfaceMailer
      * @param string $html    Give the HTML body
      * @param string $altBody Give the alternate text message
      * 
-     * @return Duality\Service\Mailer This instance
+     * @return \Duality\Service\Mailer This instance
      */
     public function body($html, $altBody = 'Text message')
     {
@@ -269,7 +269,7 @@ implements InterfaceMailer
      * 
      * @param array $list The list of files as array
      * 
-     * @return Duality\Service\Mailer This instance
+     * @return \Duality\Service\Mailer This instance
      */
     public function attach($list)
     {
@@ -282,7 +282,7 @@ implements InterfaceMailer
      * 
      * @param \Closure $callback Give the after sent callback
      * 
-     * @return Duality\Service\Mailer This instance
+     * @return \Duality\Service\Mailer This instance
      */
     public function send(\Closure $callback)
     {
