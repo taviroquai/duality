@@ -62,6 +62,9 @@ EOF;
         $server->setBaseUrl(new Url('http://dummy'));
         $result = $server->createUrl('/dummy');
         $this->assertEquals($expected, (string) $result);
+        
+        $result = $server->createRedirect();
+        $this->assertInstanceOf('\Duality\Structure\Http\Response', $result);
 
         $server->terminate();
     }

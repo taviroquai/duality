@@ -114,7 +114,7 @@ extends DataTable
     {
         $this->columns->reset();
         foreach ($columns as $name => $item) {
-            $property = new Property($name);
+            $property = new Property(is_string($name) ? $name : (string) $item);
             $this->addColumn($property);
         }
     }

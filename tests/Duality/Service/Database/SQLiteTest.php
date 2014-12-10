@@ -117,7 +117,7 @@ extends PHPUnit_Framework_TestCase
         $db->getTables();
         $db->getTable('notfound');
         $db->getPDO();
-        $entity = new User();
+        $entity = new User($db);
         $db->createTableFromEntity($entity);
 
         $property = new Property('dummy');

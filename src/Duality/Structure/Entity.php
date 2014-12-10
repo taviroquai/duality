@@ -15,6 +15,8 @@ namespace Duality\Structure;
 
 use Duality\Core\Structure;
 use Duality\Structure\Storage;
+use Duality\Service\Database;
+use Duality\Structure\Database\Table;
 
 /**
  * Entity class
@@ -54,11 +56,20 @@ extends Structure
      * @var string Holds the name of the property to identify
      */
     protected $defaultIdProperty = 'id';
+    
+    /**
+     * The related database table
+     * 
+     * @var \Duality\Core\InterfaceDatabaseTable The related db table
+     */
+    protected $table;
 
     /**
      * Creates a new entity
+     * 
+     * @param \Duality\Service\Database $db The database storage
      */
-    public function __construct()
+    public function __construct(Database $db)
     {
         $this->properties = new Storage;
         if (!empty($this->config['name'])) {
@@ -70,6 +81,11 @@ extends Structure
             foreach ($this->config['properties'] as $item) {
                 $this->addProperty(new Property($item));
             }
+        }
+        
+        // Set database table
+        if ($table = $db->getTable($this->getName())) {
+            $this->setTable($table);
         }
     }
 
@@ -109,6 +125,20 @@ extends Structure
             $property = new Property((string) $name);
             $this->addProperty($property);
         }
+    }
+    
+    /**
+     * Sets the related database table
+     * 
+     * @since 1.0.1
+     * 
+     * @param \Duality\Structure\Table $table
+     */
+    public function setTable(Table $table)
+    {
+        $this->table = $table;
+        $this->table->setColumnsFromEntity($this);
+        $this->table->setPrimaryKey($this->defaultIdProperty);
     }
 
     /**

@@ -338,6 +338,24 @@ implements InterfaceServer
     {
         return new Response;
     }
+    
+    /**
+     * Creates an HTTP redirect
+     * 
+     * @since 1.0.1
+     * 
+     * @param string $uri  The local uri to redirect
+     * @param int    $code The HTTP status code (defaults to 301)
+     * 
+     * @return \Duality\Structure\Http\Response A default response instance
+     */
+    public function createRedirect($uri = '/', $code = 301)
+    {
+        $response = $this->createResponse();
+        $response->addHeader('Location', $this->createUrl($uri));
+        $response->setStatus($code);
+        return $response;
+    }
 
     /**
      * Writes HTTP response to application buffer

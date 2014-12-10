@@ -15,7 +15,17 @@ extends PHPUnit_Framework_TestCase
      */
     public function testEntity()
     {
-        $entity = new \Model();
+        $config = array(
+            'db' => array(
+                'dsn'   => DB_DSN,
+                'user'  => DB_USER,
+                'pass'  => DB_PASS
+            )
+        );
+        $app = new \Duality\App(dirname(__FILE__), $config);
+        $db = $app->call('db');
+        
+        $entity = new \Model($db);
 
         $name = 'dummy';
         $expected = array(
