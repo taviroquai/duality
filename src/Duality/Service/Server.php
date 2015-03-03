@@ -17,6 +17,7 @@ use Duality\Core\DualityException;
 use Duality\Core\AbstractService;
 use Duality\Core\InterfaceServer;
 use Duality\Core\InterfaceUrl;
+use Duality\Core\InterfaceAuthorization;
 use Duality\Structure\Url;
 use Duality\Structure\Http\Request;
 use Duality\Structure\Http\Response;
@@ -154,6 +155,7 @@ implements InterfaceServer
         // Set default values
         $result = false;
         $matches = array();
+        $authorized = true;
 
         if (!empty($this->request)) {
             
@@ -184,12 +186,21 @@ implements InterfaceServer
                 && ($cb[0] instanceof AbstractService)
             ) {
                 $cb[0]->init();
+                
+                // Check for authorization
+                if ($cb[0] instanceof InterfaceAuthorization) {
+                    $authorized = $cb[0]->isAuthorized(
+                        $this->request, $this->response, $matches
+                    );
+                }
             }
 
             // Finally, call action
-            call_user_func_array(
-                $cb, array(&$this->request, &$this->response, $matches)
-            );
+            if ($authorized) {
+                call_user_func_array(
+                    $cb, array(&$this->request, &$this->response, $matches)
+                );
+            }
         }
 
         $this->send($this->response);
