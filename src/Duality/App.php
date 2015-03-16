@@ -8,13 +8,13 @@
  * @author  Marco Afonso <mafonso333@gmail.com>
  * @license http://opensource.org/licenses/MIT MIT
  * @link    http://github.com/taviroquai/duality
- * @since   0.7.0
+ * @since   2.0.0-dev
  */
 
 namespace Duality;
 
 use Duality\Core\DualityException;
-use Duality\Core\Container;
+use Duality\Core\AbstractContainer;
 use Duality\Core\AbstractService;
 use Duality\Structure\Storage;
 use Duality\Structure\File\StreamFile;
@@ -27,10 +27,10 @@ use Duality\Structure\File\StreamFile;
  * @author  Marco Afonso <mafonso333@gmail.com>
  * @license http://opensource.org/licenses/MIT MIT
  * @link    http://github.com/taviroquai/duality
- * @since   0.7.0
+ * @since   2.0.0-dev
  */
 class App 
-extends Container
+extends AbstractContainer
 {
     /**
      * Holds application working directory
@@ -76,40 +76,33 @@ extends Container
         'mailer'    => 'Duality\Service\Mailer',
         'paginator' => 'Duality\Service\Paginator',
         'remote'    => 'Duality\Service\SSH',
-        'server'    => 'Duality\Service\Server',
+        'server'    => 'Duality\Service\HTTPServer',
         'locale'    => 'Duality\Service\Localization',
         'cmd'       => 'Duality\Service\Commander',
-        'client'    => 'Duality\Service\Client',
+        'client'    => 'Duality\Service\HTTPClient',
         'performance' => 'Duality\Service\Performance'
     );
 
     /**
      * Create a new application
      * 
-     * @param string $path   Give the base path to resolve relative paths
      * @param array  $config Give the configuration as array
      */
-    public function __construct($path, $config = array())
+    public function __construct($config = array())
     {
-        if (!is_dir($path)) {
-            throw new DualityException(
-                "Error Application: path not found",
-                DualityException::E_APP_PATHNOTFOUND
-            );
-        }
-        $this->path = (string) $path;
+        $this->path = getcwd();
 
         $config['services'] = empty($config['services']) ?
-            $this->defaults : array_merge($this->defaults, $config['services']);
+            $this->defaults :
+            array_merge($this->defaults, $config['services']);
         $this->config = (array) $config;
 
         $this->services = new Storage;
-        $this->services->reset();
         $this->cache = new Storage;
-        $this->cache->reset();
 
         $bufferType = $this->getConfigItem('buffer') ? 
-            $this->getConfigItem('buffer') : 'php://output';
+            $this->getConfigItem('buffer') :
+            'php://output';
         $this->buffer = new StreamFile($bufferType);
         $this->buffer->open();
     }
@@ -363,7 +356,7 @@ extends Container
      * 
      * @return \Duality\Core\InterfaceServer The server service
      */
-    public function getServer()
+    public function getHTTPServer()
     {
         return $this->call('server');
     }
@@ -393,7 +386,7 @@ extends Container
      * 
      * @return \Duality\Core\InterfaceClient The http client service
      */
-    public function getClient()
+    public function getHTTPClient()
     {
         return $this->call('client');
     }

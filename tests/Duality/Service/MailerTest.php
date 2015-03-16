@@ -21,7 +21,7 @@ extends PHPUnit_Framework_TestCase
                 )
             )
         );
-        $app = new \Duality\App(dirname(__FILE__), $config);
+        $app = new \Duality\App($config);
         $mailer = $app->call('mailer');
 
         // SMTP

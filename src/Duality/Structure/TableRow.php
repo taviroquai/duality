@@ -13,7 +13,7 @@
 
 namespace Duality\Structure;
 
-use Duality\Core\Structure;
+use Duality\Core\AbstractStructure;
 use Duality\Core\InterfaceTableRow;
 use Duality\Structure\Storage;
 use Duality\Structure\Property;
@@ -31,7 +31,7 @@ use Duality\Structure\Table;
  * @since   0.7.0
  */
 class TableRow 
-extends Structure
+extends AbstractStructure
 implements InterfaceTableRow
 {
     /**

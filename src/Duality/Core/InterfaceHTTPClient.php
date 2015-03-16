@@ -8,7 +8,7 @@
  * @author  Marco Afonso <mafonso333@gmail.com>
  * @license http://opensource.org/licenses/MIT MIT
  * @link    http://github.com/taviroquai/duality
- * @since   1.0.0-beta
+ * @since  2.0.0-dev
  */
 
 namespace Duality\Core;
@@ -27,9 +27,9 @@ use Duality\Structure\Http\Request;
  * @author  Marco Afonso <mafonso333@gmail.com>
  * @license http://opensource.org/licenses/MIT MIT
  * @link    http://github.com/taviroquai/duality
- * @since   1.0.0-beta
+ * @since   2.0.0-dev
  */
-interface InterfaceClient
+interface InterfaceHTTPClient
 {
     /**
      * Sets the user agent

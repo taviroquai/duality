@@ -9,7 +9,7 @@ extends PHPUnit_Framework_TestCase
      */
     public function testCache()
     {
-        $app = new \Duality\App(dirname(__FILE__), null);
+        $app = new \Duality\App();
         $cache = $app->call('cache');
 
         $expected = 'dummy';

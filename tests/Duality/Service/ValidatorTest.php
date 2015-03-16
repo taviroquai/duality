@@ -18,7 +18,7 @@ extends PHPUnit_Framework_TestCase
                 'hostname' => 'localhost'
             )
         );
-        $app = new \Duality\App(dirname(__FILE__), $config);
+        $app = new \Duality\App($config);
         $server = $app->call('server');
 
         $request = new Request(new Url('http://localhost/dummy'));

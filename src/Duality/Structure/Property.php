@@ -13,7 +13,7 @@
 
 namespace Duality\Structure;
 
-use Duality\Core\Structure;
+use Duality\Core\AbstractStructure;
 
 /**
  * Property class
@@ -28,7 +28,7 @@ use Duality\Core\Structure;
  * @since   0.7.0
  */
 class Property 
-extends Structure
+extends AbstractStructure
 {
     /**
      * Creates a new property

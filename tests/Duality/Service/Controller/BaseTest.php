@@ -12,7 +12,7 @@ extends PHPUnit_Framework_TestCase
     {
         $expected = '\Duality\Service\Controller\Base';
         $app = $this->getMockBuilder('\Duality\App')
-            ->setConstructorArgs(array(dirname(__FILE__), null))
+            ->setConstructorArgs(array(null))
             ->getMock();
         $controller = new BaseController($app);
         $this->assertInstanceOf($expected, $controller);
@@ -24,7 +24,7 @@ extends PHPUnit_Framework_TestCase
     public function testService()
     {
         $app = $this->getMockBuilder('\Duality\App')
-            ->setConstructorArgs(array(dirname(__FILE__), null))
+            ->setConstructorArgs(array(null))
             ->getMock();
         $controller = new BaseController($app);
 
@@ -38,7 +38,7 @@ extends PHPUnit_Framework_TestCase
     public function testAction()
     {
         $app = $this->getMockBuilder('\Duality\App')
-            ->setConstructorArgs(array(dirname(__FILE__), null))
+            ->setConstructorArgs(array(null))
             ->getMock();
         $controller = new BaseController($app);
 
@@ -74,7 +74,7 @@ EOF;
     {
         $expected = 'Duality\Service\Controller\Base';
         $app = $this->getMockBuilder('\Duality\App')
-            ->setConstructorArgs(array(dirname(__FILE__), null))
+            ->setConstructorArgs(array(null))
             ->getMock();
         $controller = new BaseController($app);
         $this->assertEquals($expected, (string) $controller);

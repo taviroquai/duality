@@ -19,7 +19,7 @@ extends PHPUnit_Framework_TestCase
             'auth' => array(
             )
         );
-        $app = new \Duality\App(dirname(__FILE__), $config);
+        $app = new \Duality\App($config);
         $auth = $app->call('auth');
     }
 
@@ -39,7 +39,7 @@ extends PHPUnit_Framework_TestCase
                 'host' => 'localhost'
             )
         );
-        $app = new \Duality\App(dirname(__FILE__), $config);
+        $app = new \Duality\App($config);
         $auth = $app->call('auth');
         $this->assertInstanceOf('\Duality\Service\Auth\LDAP', $auth);
 

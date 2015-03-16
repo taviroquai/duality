@@ -15,7 +15,7 @@ namespace Duality\Service\Database;
 
 use Duality\Structure\Property;
 use Duality\Structure\Database\Table;
-use Duality\Service\Database;
+use Duality\Core\AbstractDatabase;
 
 /**
  * SQLite database query writer
@@ -29,7 +29,7 @@ use Duality\Service\Database;
  * @link    http://github.com/taviroquai/duality
  * @since   0.7.0
  */
-class SQLite extends Database
+class SQLite extends AbstractDatabase
 {
     /**
      * Holds the information schema column name

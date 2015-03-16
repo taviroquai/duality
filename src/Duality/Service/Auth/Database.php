@@ -15,7 +15,7 @@ namespace Duality\Service\Auth;
 
 use Duality\Core\DualityException;
 use Duality\Structure\Database\Filter;
-use Duality\Service\Auth;
+use Duality\Core\AbstractAuth;
 
 /**
  * Database authentication service
@@ -30,7 +30,7 @@ use Duality\Service\Auth;
  * @since   0.20.0
  */
 class Database
-extends Auth
+extends AbstractAuth
 {
     /**
      * Holds the database auth configuration

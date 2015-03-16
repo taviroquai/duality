@@ -13,9 +13,9 @@
 
 namespace Duality\Structure;
 
-use Duality\Core\Structure;
+use Duality\Core\AbstractStructure;
+use Duality\Core\AbstractDatabase;
 use Duality\Structure\Storage;
-use Duality\Service\Database;
 use Duality\Structure\Database\Table;
 
 /**
@@ -32,7 +32,7 @@ use Duality\Structure\Database\Table;
  * @since   0.7.0
  */
 abstract class Entity 
-extends Structure
+extends AbstractStructure
 {
     /**
      * Holds the entity configuration for extended functionality
@@ -69,7 +69,7 @@ extends Structure
      * 
      * @param \Duality\Service\Database $db The database storage
      */
-    public function __construct(Database $db)
+    public function __construct(AbstractDatabase $db)
     {
         $this->properties = new Storage;
         if (!empty($this->config['name'])) {

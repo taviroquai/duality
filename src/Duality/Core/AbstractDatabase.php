@@ -8,10 +8,10 @@
  * @author  Marco Afonso <mafonso333@gmail.com>
  * @license http://opensource.org/licenses/MIT MIT
  * @link    http://github.com/taviroquai/duality
- * @since   0.7.0
+ * @since   2.0.0-dev
  */
 
-namespace Duality\Service;
+namespace Duality\Core;
 
 use Duality\Core\DualityException;
 use Duality\Core\AbstractService;
@@ -31,9 +31,9 @@ use Duality\Structure\Database\Table;
  * @author  Marco Afonso <mafonso333@gmail.com>
  * @license http://opensource.org/licenses/MIT MIT
  * @link    http://github.com/taviroquai/duality
- * @since   0.7.0
+ * @since   2.0.0-dev
  */
-abstract class Database
+abstract class AbstractDatabase
 extends AbstractService
 {
     /**

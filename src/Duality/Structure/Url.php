@@ -14,7 +14,7 @@
 namespace Duality\Structure;
 
 use Duality\Core\InterfaceUrl;
-use Duality\Core\Structure;
+use Duality\Core\AbstractStructure;
 
 /**
  * Url class
@@ -27,7 +27,7 @@ use Duality\Core\Structure;
  * @since   0.7.0
  */
 class Url 
-extends Structure
+extends AbstractStructure
 implements InterfaceUrl
 {
     /**

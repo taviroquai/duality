@@ -2,7 +2,7 @@
 
 use Duality\Structure\Url;
 
-class ClientTest 
+class HTTPClientTest 
 extends PHPUnit_Framework_TestCase
 {
     /**
@@ -10,7 +10,7 @@ extends PHPUnit_Framework_TestCase
      */
     public function testClient()
     {
-        $app = new \Duality\App(dirname(__FILE__), null);
+        $app = new \Duality\App();
         $client = $app->call('client');
 
         $expected = 'dummy';
@@ -18,17 +18,15 @@ extends PHPUnit_Framework_TestCase
         $result = $client->getUserAgent();
         $this->assertEquals($expected, $result);
 
-        $url = new Url('http://google.pt/');
-        $request = $client->createRequest($url);
+        $request = $client->createRequest(new Url('http://google.pt/'));
         $response = $client->execute($request);
         $this->assertInstanceOf('\Duality\Structure\Http\Response', $response);
-
+        
         $expected = 'Moved Permanently';
         $result = $response->getCodeString();
         $this->assertEquals($expected, $result);
-
-        $url = new Url('http://google.pt/');
-        $request = $client->createRequest($url);
+        
+        $request = $client->createRequest(new Url('http://google.pt/'));
         $request->addHeader('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8');
         $response = $client->execute($request);
         $client->getCurlHandler();

@@ -13,7 +13,7 @@
 
 namespace Duality\Service\Session;
 
-use Duality\Service\Session;
+use Duality\Core\AbstractSession;
 
 /**
  * Native PHP session service
@@ -28,7 +28,7 @@ use Duality\Service\Session;
  * @since   0.7.0
  */
 class Native
-extends Session
+extends AbstractSession
 {
     /**
      * Initiates the service

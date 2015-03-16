@@ -8,7 +8,7 @@ extends PHPUnit_Framework_TestCase
      */
     public function testPerformance()
     {
-        $app = new \Duality\App(dirname(__FILE__), null);
+        $app = new \Duality\App();
         $performance = $app->call('performance');
 
         $string = '';

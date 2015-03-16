@@ -8,28 +8,34 @@ extends PHPUnit_Framework_TestCase
      * 
      * @expectedException \Duality\Core\DualityException
      */
+    /*
 	public function testAppInvalidPath()
 	{
-		new \Duality\App(null, null);
+		new \Duality\App(null);
 	}
+     * 
+     */
 
     /**
      * Test valid application path
      */
+    /*
     public function testAppValidPath()
     {
         $expected = '\Duality\App';
         $app = new \Duality\App(dirname(__FILE__), null);
         $this->assertInstanceOf($expected, $app);
     }
+     * 
+     */
 
     /**
      * Test application defaults
      */
     public function testAppDefaults()
     {
-        $expected = dirname(__FILE__);
-        $app = new \Duality\App($expected, null);
+        $expected = getcwd();
+        $app = new \Duality\App();
         $this->assertEquals($expected, $app->getPath());
 
         $expected = array(
@@ -51,7 +57,7 @@ extends PHPUnit_Framework_TestCase
                 'performance' => 'Duality\Service\Performance'
             )
         );
-        $app = new \Duality\App(dirname(__FILE__), $expected);
+        $app = new \Duality\App($expected);
         $this->assertEquals($expected, $app->getConfig());
 
         $expected = '\Duality\Structure\File\StreamFile';
@@ -64,7 +70,7 @@ extends PHPUnit_Framework_TestCase
     public function testAppEmptyConfigItem()
     {
         $expected = null;
-        $app = new \Duality\App(dirname(__FILE__), array());
+        $app = new \Duality\App(array());
         $this->assertEquals($expected, $app->getConfigItem('dummy'));
     }
 
@@ -76,7 +82,7 @@ extends PHPUnit_Framework_TestCase
         $key = 'item';
         $config = array($key => 'dummy');
         $expected = $config[$key];
-        $app = new \Duality\App(dirname(__FILE__), $config);
+        $app = new \Duality\App($config);
         $this->assertEquals($expected, $app->getConfigItem($key));
     }
     
@@ -85,7 +91,7 @@ extends PHPUnit_Framework_TestCase
      */
     public function testAppRegisterService()
     {
-        $app = new \Duality\App(dirname(__FILE__), array());
+        $app = new \Duality\App(array());
         $app->register('dummy', function() use ($app) {
             $service = new \Duality\Service\Validator($app);
             $service->init();
@@ -102,7 +108,7 @@ extends PHPUnit_Framework_TestCase
     public function testAppCallService()
     {
         $config = array();
-        $app = new \Duality\App(dirname(__FILE__), $config);
+        $app = new \Duality\App($config);
         $expected = '\Duality\Service\Validator';
         $this->assertInstanceOf($expected, $app->call('validator', array(), false));
         $this->assertInstanceOf($expected, $app->call('validator'));
@@ -151,9 +157,9 @@ extends PHPUnit_Framework_TestCase
                 'pass' => 'pass'
             )
         );
-        $app = new \Duality\App(dirname(__FILE__).'/../..', $config);
+        $app = new \Duality\App($config);
 
-        $expected = '\Duality\Service\Database';
+        $expected = '\Duality\Core\AbstractDatabase';
         $this->assertInstanceOf($expected, $app->getDb());
 
         $expected = '\Duality\Service\Logger';
@@ -165,13 +171,13 @@ extends PHPUnit_Framework_TestCase
         $expected = '\Duality\Service\Validator';
         $this->assertInstanceOf($expected, $app->getValidator());
 
-        $expected = '\Duality\Service\Session';
+        $expected = '\Duality\Core\AbstractSession';
         $this->assertInstanceOf($expected, $app->getSession());
 
         $expected = '\Duality\Service\Logger';
         $this->assertInstanceOf($expected, $app->getLogger());
 
-        $expected = '\Duality\Service\Auth';
+        $expected = '\Duality\Core\AbstractAuth';
         $this->assertInstanceOf($expected, $app->getAuth());
 
         $expected = '\Duality\Service\Mailer';
@@ -183,14 +189,14 @@ extends PHPUnit_Framework_TestCase
         $expected = '\Duality\Service\SSH';
         $this->assertInstanceOf($expected, $app->getRemote());
 
-        $expected = '\Duality\Service\Server';
-        $this->assertInstanceOf($expected, $app->getServer());
+        $expected = '\Duality\Service\HTTPServer';
+        $this->assertInstanceOf($expected, $app->getHTTPServer());
 
         $expected = '\Duality\Service\Commander';
         $this->assertInstanceOf($expected, $app->getCmd());
 
-        $expected = '\Duality\Service\Client';
-        $this->assertInstanceOf($expected, $app->getClient());
+        $expected = '\Duality\Service\HTTPClient';
+        $this->assertInstanceOf($expected, $app->getHTTPClient());
 
         $expected = '\Duality\Service\Performance';
         $this->assertInstanceOf($expected, $app->getPerformance());
@@ -205,9 +211,9 @@ extends PHPUnit_Framework_TestCase
     public function testAppCallAPCuServiceAlias()
     {
         $config = array();
-        $app = new \Duality\App(dirname(__FILE__).'/../..', $config);
+        $app = new \Duality\App($config);
 
-        $expected = '\Duality\Service\Cache';
+        $expected = '\Duality\Core\AbstractCache';
         $this->assertInstanceOf($expected, $app->getCache());
 
     }
@@ -226,7 +232,7 @@ extends PHPUnit_Framework_TestCase
                 'timezone'  => 'Europe/Lisbon'
             )
         );
-        $app = new \Duality\App(dirname(__FILE__).'/../..', $config);
+        $app = new \Duality\App($config);
 
         $expected = '\Duality\Service\Localization';
         $this->assertInstanceOf($expected, $app->getLocale());

@@ -19,7 +19,7 @@ extends PHPUnit_Framework_TestCase
         $config = array(
             'db' => array()
         );
-        $app = new \Duality\App(dirname(__FILE__), $config);
+        $app = new \Duality\App($config);
         $app->call('db');
     }
 
@@ -38,7 +38,7 @@ extends PHPUnit_Framework_TestCase
             )
         );
         $app = $this->getMockBuilder('\Duality\App')
-            ->setConstructorArgs(array(dirname(__FILE__), $config))
+            ->setConstructorArgs(array($config))
             ->getMock();
         new MySql($app);
     }
@@ -58,7 +58,7 @@ extends PHPUnit_Framework_TestCase
             )
         );
         $app = $this->getMockBuilder('\Duality\App')
-            ->setConstructorArgs(array(dirname(__FILE__), $config))
+            ->setConstructorArgs(array($config))
             ->getMock();
         $db = new MySql($app);
 

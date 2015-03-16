@@ -14,7 +14,7 @@ extends PHPUnit_Framework_TestCase
      */
     public function testInvalidHost()
     {
-        $app = new \Duality\App(dirname(__FILE__), null);
+        $app = new \Duality\App();
         $remote = new SSH($app);
         $remote->init();
 
@@ -30,7 +30,7 @@ extends PHPUnit_Framework_TestCase
      */
     public function testInvalidUser()
     {
-        $app = new \Duality\App(dirname(__FILE__), null);
+        $app = new \Duality\App();
         $remote = new SSH($app);
         $remote->init();
 
@@ -46,7 +46,7 @@ extends PHPUnit_Framework_TestCase
      */
     public function testInvalidAuth()
     {
-        $app = new \Duality\App(dirname(__FILE__), null);
+        $app = new \Duality\App();
         $remote = new SSH($app);
         $remote->init();
 
@@ -62,7 +62,7 @@ extends PHPUnit_Framework_TestCase
      */
     public function testInvalidFingerprint()
     {
-        $app = new \Duality\App(dirname(__FILE__), null);
+        $app = new \Duality\App();
         $remote = new SSH($app);
         $remote->init();
 
@@ -76,7 +76,7 @@ extends PHPUnit_Framework_TestCase
      */
     public function testInvalidConnection()
     {
-        $app = new \Duality\App(dirname(__FILE__), null);
+        $app = new \Duality\App();
         $remote = new SSH($app);
         $remote->init();
 
@@ -90,7 +90,7 @@ extends PHPUnit_Framework_TestCase
      */
     public function testInvalidcommand()
     {
-        $app = new \Duality\App(dirname(__FILE__), null);
+        $app = new \Duality\App();
         $remote = new SSH($app);
         $remote->init();
 
@@ -105,7 +105,7 @@ extends PHPUnit_Framework_TestCase
      */
     public function testSSH()
     {
-        $app = new \Duality\App(dirname(__FILE__), null);
+        $app = new \Duality\App();
         $remote = new SSH($app);
         $remote->init();
 

@@ -14,7 +14,7 @@
 namespace Duality\Service;
 
 use Duality\Core\AbstractService;
-use Duality\Core\InterfaceClient;
+use Duality\Core\InterfaceHTTPClient;
 use Duality\Core\InterfaceUrl;
 use Duality\Structure\Http\Request;
 use Duality\Structure\Http\Response;
@@ -32,9 +32,9 @@ use Duality\Structure\Http\Response;
  * @link    http://github.com/taviroquai/duality
  * @since   0.7.0
  */
-class Client
+class HTTPClient
 extends AbstractService
-implements InterfaceClient
+implements InterfaceHTTPClient
 {
     /**
      * Holds the client user agent

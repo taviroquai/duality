@@ -8,7 +8,7 @@ extends PHPUnit_Framework_TestCase
      */
     public function testCommander()
     {
-        $app = new \Duality\App(dirname(__FILE__), null);
+        $app = new \Duality\App();
         $cmd = $app->call('cmd');
 
         $cmd->addResponder('/dummy/', function () {

@@ -9,7 +9,7 @@ extends PHPUnit_Framework_TestCase
     public function testStructure()
     {
         $expected = 123;
-        $stub = $this->getMockForAbstractClass('\Duality\Core\Structure');
+        $stub = $this->getMockForAbstractClass('\Duality\Core\AbstractStructure');
 
         $stub->expects($this->any())
              ->method('setName')

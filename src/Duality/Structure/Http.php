@@ -14,7 +14,7 @@
 namespace Duality\Structure;
 
 use Duality\Core\DualityException;
-use Duality\Core\Structure;
+use Duality\Core\AbstractStructure;
 use Duality\Structure\Storage;
 
 /**
@@ -32,7 +32,7 @@ use Duality\Structure\Storage;
  * @since   0.7.0
  */
 abstract class Http 
-extends Structure
+extends AbstractStructure
 {
     /**
      * Holds the HTTP codes

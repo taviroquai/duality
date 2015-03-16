@@ -47,4 +47,5 @@ class DualityException extends \Exception
     const E_HTTP_INVALIDTIMESTAMP       = 16;
     const E_HTTP_INVALIDCOOKIE          = 17;
     const E_VALIDATION_INVALIDFILTER    = 18;
+    const E_HTTP_INVALIDREQUEST         = 19;
 }

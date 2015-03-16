@@ -3,7 +3,7 @@
 use Duality\Structure\Url;
 use Duality\Structure\Http\Request;
 
-class ServerTest 
+class HTTPServerTest 
 extends PHPUnit_Framework_TestCase
 {
     /**
@@ -17,7 +17,7 @@ extends PHPUnit_Framework_TestCase
                 'hostname' => 'localhost'
             )
         );
-        $app = new \Duality\App(dirname(__FILE__), $config);
+        $app = new \Duality\App($config);
         $server = $app->call('server');
         $server->setHostname('localhost');
 
@@ -41,7 +41,7 @@ extends PHPUnit_Framework_TestCase
 EOF;
         $server->setHome('\Duality\Service\Controller\Base@doIndex');
         ob_start();
-        $server->listen();
+        $server->execute();
         $result = ob_get_clean();
         $this->assertEquals($expected, $result);
 
@@ -80,7 +80,7 @@ EOF;
                 'hostname' => 'localhost'
             )
         );
-        $app = new \Duality\App(dirname(__FILE__), $config);
+        $app = new \Duality\App($config);
         $server = $app->call('server');
 
         $request = $server->getRequestFromGlobals(array(), array());
@@ -107,7 +107,7 @@ EOF;
                 'hostname' => 'localhost'
             )
         );
-        $app = new \Duality\App(dirname(__FILE__), $config);
+        $app = new \Duality\App($config);
         $server = $app->call('server');
 
         $request = new \Duality\Structure\Http\Request(new \Duality\Structure\Url('http://localhost/uri'));
@@ -129,7 +129,7 @@ EOF;
 </html>
 EOF;
         ob_start();
-        $server->listen();
+        $server->execute();
         $result = ob_get_clean();
         $this->assertEquals($expected, $result);
     }
@@ -147,7 +147,7 @@ EOF;
                 'hostname' => 'localhost'
             )
         );
-        $app = new \Duality\App(dirname(__FILE__), $config);
+        $app = new \Duality\App($config);
         $server = $app->call('server');
         $response = $server->getResponse();
         $response->setHeaders(
@@ -180,7 +180,7 @@ EOF;
                 'hostname' => 'localhost'
             )
         );
-        $app = new \Duality\App(dirname(__FILE__), $config);
+        $app = new \Duality\App($config);
         $server = $app->call('server');
 
         $request = new \Duality\Structure\Http\Request(new \Duality\Structure\Url('http://localhost/uri'));
@@ -190,7 +190,7 @@ EOF;
         $pattern = '/\/uri/';
         $server->addRoute($pattern, 'dummy');
 
-        $server->listen();
+        $server->execute();
     }
 
     /**
@@ -206,7 +206,7 @@ EOF;
                 'hostname' => 'localhost'
             )
         );
-        $app = new \Duality\App(dirname(__FILE__), $config);
+        $app = new \Duality\App($config);
         $server = $app->call('server');
 
         $request = new \Duality\Structure\Http\Request(new \Duality\Structure\Url('http://localhost/uri'));
@@ -216,7 +216,7 @@ EOF;
         $pattern = '/\/uri/';
         $server->addRoute($pattern, '\Duality\Service\Controller\Base@dummy');
 
-        $server->listen();
+        $server->execute();
     }
 
     /**

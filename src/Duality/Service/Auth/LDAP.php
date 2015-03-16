@@ -14,7 +14,7 @@
 namespace Duality\Service\Auth;
 
 use Duality\Core\DualityException;
-use Duality\Service\Auth;
+use Duality\Core\AbstractAuth;
 
 /**
  * Default authentication service
@@ -29,7 +29,7 @@ use Duality\Service\Auth;
  * @since   0.20.0
  */
 class LDAP
-extends Auth
+extends AbstractAuth
 {
     /**
      * The ldap connection resource
@@ -52,12 +52,6 @@ extends Auth
             );
         }
         $this->handler = @ldap_connect($this->app->getConfigItem('auth.host'));
-        if (!$this->handler) {
-            throw new DualityException(
-                "Error LDAP: could not connect to host",
-                DualityException::E_REMOTE_NOTCONNECTED
-            );   
-        }
     }
 
     /**

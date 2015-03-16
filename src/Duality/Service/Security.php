@@ -39,14 +39,24 @@ implements InterfaceSecurity
      */
     public function init()
     {
-        if ($this->app->call('server')->getRequest()
-            && $this->app->call('server')->getRequest()->getMethod()
+        
+    }
+    
+    /**
+     * Secures HTTP request params
+     * 
+     * @return void
+     */
+    public function secureHTTPRequest()
+    {
+        if ($this->app->getHTTPServer()->getRequest()
+            && $this->app->getHTTPServer->getRequest()->getMethod()
         ) {
-            $params = $this->app->call('server')->getRequest()->getParams();
+            $params = $this->app->getHTTPServer->getRequest()->getParams();
             foreach ($params as $key => &$value) {
                 $this->filter($value);
             }
-            $this->app->call('server')->getRequest()->setParams($params);
+            $this->app->getHTTPServer->getRequest()->setParams($params);
         }
     }
 

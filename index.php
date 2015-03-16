@@ -1,31 +1,31 @@
 <?php
 
+error_reporting(E_ALL);
+ini_set('display_errors', true);
+
 require_once './vendor/autoload.php';
 
-// Tell what our application uses
-use Duality\App;
-
 // Create a new application container
-$app = new App(dirname(__FILE__));
+$app = new Duality\App();
+
+$logger = $app->getLogger();
+$logger->log('teste');
 
 // Create a new server
-$server = $app->call('server');
-$request = $server->getRequestFromGlobals($_SERVER, $_REQUEST);
-
-// Validate request. This is a Web application.
-if (!$request) {
-	die('HTTP request not found!' . PHP_EOL);
+/*
+try {
+    $server = $app->getHTTPServer();
+} catch (DualityException $e) {
+	die($e->getMessage() . PHP_EOL);
 }
 
-// Load HTTP request from globals
-$server->setRequest($request);
-
 // Define default route
-$server->setHome(function(&$req, &$res, $matches) {
 
-	// Tell response what is the output
+$server->setHome(function(&$req, &$res) use ($app) {
+
 	$res->setContent('Hello World!');
 });
 
 // Finaly, tell server to start listening
-$server->listen();
+$server->execute();
+*/

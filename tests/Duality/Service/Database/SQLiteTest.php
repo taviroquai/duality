@@ -20,7 +20,7 @@ extends PHPUnit_Framework_TestCase
         $config = array(
             'db' => array()
         );
-        $app = new \Duality\App(dirname(__FILE__), $config);
+        $app = new \Duality\App($config);
         $app->call('db');
     }
 
@@ -38,7 +38,7 @@ extends PHPUnit_Framework_TestCase
                 'pass'  => DB_PASS
             )
         );
-        $app = new \Duality\App(dirname(__FILE__), $config);
+        $app = new \Duality\App($config);
         $app->call('db');
     }
 
@@ -58,7 +58,7 @@ extends PHPUnit_Framework_TestCase
                 'pass'  => DB_PASS
             )
         );
-        $app = new \Duality\App(dirname(__FILE__), $config);
+        $app = new \Duality\App($config);
         $db = $app->call('db');
 
         $db->getSchemaConfig();
@@ -79,7 +79,7 @@ extends PHPUnit_Framework_TestCase
                 'schema'=> DB_SCHEMA
             )
         );
-        $app = new \Duality\App(dirname(__FILE__), $config);
+        $app = new \Duality\App($config);
         $db = $app->call('db');
 
         $schema = array();
@@ -106,7 +106,7 @@ extends PHPUnit_Framework_TestCase
                 'pass'  => DB_PASS
             )
         );
-        $app = new \Duality\App(dirname(__FILE__), $config);
+        $app = new \Duality\App($config);
         $db = $app->call('db');
 
         $table = new Table($db);
@@ -194,7 +194,7 @@ extends PHPUnit_Framework_TestCase
                 'pass'  => DB_PASS
             )
         );
-        $app = new \Duality\App(dirname(__FILE__), $config);
+        $app = new \Duality\App($config);
         $db = $app->call('db');
         $db->setName('duality');
 

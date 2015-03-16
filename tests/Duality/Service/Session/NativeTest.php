@@ -15,7 +15,7 @@ extends PHPUnit_Framework_TestCase
                 'session' => '\Duality\Service\Session\Native'
             )
         );
-        $app = new \Duality\App(dirname(__FILE__), $config);
+        $app = new \Duality\App($config);
         $session = $app->call('session');
 
         $expected = 'dummy';

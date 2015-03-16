@@ -14,7 +14,7 @@
 namespace Duality\Service\Cache;
 
 use Duality\Core\DualityException;
-use Duality\Service\Cache;
+use Duality\Core\AbstractCache;
 
 /**
  * APC cache service
@@ -29,7 +29,7 @@ use Duality\Service\Cache;
  * @since   0.7.0
  */
 class APC
-extends Cache
+extends AbstractCache
 {
     /**
      * Initiates the service
@@ -38,7 +38,7 @@ extends Cache
      */
     public function init()
     {
-        if (!extension_loaded('apcu') && !extension_loaded('apc')) {
+        if (!extension_loaded('apcu') || !extension_loaded('apc')) {
             throw new DualityException(
                 "Error: apc extension not loaded",
                 DualityException::E_EXTENSION_NOTFOUND

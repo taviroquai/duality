@@ -22,7 +22,7 @@ extends PHPUnit_Framework_TestCase
                 'pass'  => DB_PASS
             )
         );
-        $app = new \Duality\App(dirname(__FILE__), $config);
+        $app = new \Duality\App($config);
         $db = $app->call('db');
         
         $entity = new \Model($db);

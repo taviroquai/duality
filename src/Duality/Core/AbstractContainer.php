@@ -8,7 +8,7 @@
  * @author  Marco Afonso <mafonso333@gmail.com>
  * @license http://opensource.org/licenses/MIT MIT
  * @link    http://github.com/taviroquai/duality
- * @since   0.7.0
+ * @since   2.0.0-dev
  */
 
 namespace Duality\Core;
@@ -24,9 +24,9 @@ namespace Duality\Core;
  * @author  Marco Afonso <mafonso333@gmail.com>
  * @license http://opensource.org/licenses/MIT MIT
  * @link    http://github.com/taviroquai/duality
- * @since   0.7.0
+ * @since   2.0.0-dev
  */
-abstract class Container
+abstract class AbstractContainer
 {
     /**
      * Container services

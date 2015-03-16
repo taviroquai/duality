@@ -14,7 +14,7 @@
 namespace Duality\Structure;
 
 use Duality\Core\DualityException;
-use Duality\Core\Structure;
+use Duality\Core\AbstractStructure;
 
 /**
  * File structure class
@@ -32,7 +32,7 @@ use Duality\Core\Structure;
  * @since   0.7.0
  */
 abstract class File 
-extends Structure
+extends AbstractStructure
 {
     /**
      * Holds the file system path

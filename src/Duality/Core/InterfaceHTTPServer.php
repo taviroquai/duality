@@ -8,7 +8,7 @@
  * @author  Marco Afonso <mafonso333@gmail.com>
  * @license http://opensource.org/licenses/MIT MIT
  * @link    http://github.com/taviroquai/duality
- * @since   1.0.0-beta
+ * @since   2.0.0-dev
  */
 
 namespace Duality\Core;
@@ -27,9 +27,9 @@ use Duality\Structure\Http\Response;
  * @author  Marco Afonso <mafonso333@gmail.com>
  * @license http://opensource.org/licenses/MIT MIT
  * @link    http://github.com/taviroquai/duality
- * @since   1.0.0-beta
+ * @since   2.0.0-dev
  */
-interface InterfaceServer
+interface InterfaceHTTPServer
 {
     /**
      * Adds a service route to the server
@@ -46,7 +46,7 @@ interface InterfaceServer
      * 
      * @return void
      */
-    public function listen();
+    public function execute();
 
     /**
      * Sets the request

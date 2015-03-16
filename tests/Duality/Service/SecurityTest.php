@@ -21,7 +21,7 @@ extends PHPUnit_Framework_TestCase
                 'salt' => 'dummy'
             )
         );
-        $app = new \Duality\App(dirname(__FILE__), $config);
+        $app = new \Duality\App($config);
 
         $request = new Request(new Url('http://localhost/items'));
         $request->setParams(array('key' => 'value', 'array' => array('value')));

@@ -14,7 +14,7 @@
 namespace Duality\Service\Session;
 
 use Duality\Structure\Storage;
-use Duality\Service\Session;
+use Duality\Core\AbstractSession;
 
 /**
  * Dummy session service
@@ -27,7 +27,7 @@ use Duality\Service\Session;
  * @since   0.19.0
  */
 class Dummy
-extends Session
+extends AbstractSession
 {
     /**
      * Initiates the service

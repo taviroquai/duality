@@ -8,7 +8,7 @@ extends PHPUnit_Framework_TestCase
      */
     public function testDummySession()
     {
-        $app = new \Duality\App(dirname(__FILE__), null);
+        $app = new \Duality\App();
         $session = $app->call('session');
 
         $expected = 'dummy';

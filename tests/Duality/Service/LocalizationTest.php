@@ -12,7 +12,7 @@ extends PHPUnit_Framework_TestCase
      */
     public function testLocalizationWithoutConfig()
     {
-        $app = new \Duality\App(dirname(__FILE__).'/../../..', null);
+        $app = new \Duality\App();
         $app->call('locale');
     }
 
@@ -32,7 +32,7 @@ extends PHPUnit_Framework_TestCase
                 'timezone'  => 'Europe/Lisbon'
             )
         );
-        $app = new \Duality\App(dirname(__FILE__).'/../../..', $config);
+        $app = new \Duality\App($config);
         $app->call('locale');
     }
 
@@ -52,7 +52,7 @@ extends PHPUnit_Framework_TestCase
                 'timezone'  => 'Europe/Lisbon'
             )
         );
-        $app = new \Duality\App(dirname(__FILE__).'/../../..', $config);
+        $app = new \Duality\App($config);
         $locale = $app->call('locale');
         $locale->setLocale('pt_PT');
     }
@@ -71,7 +71,7 @@ extends PHPUnit_Framework_TestCase
                 'timezone'  => 'Europe/Lisbon'
             )
         );
-        $app = new \Duality\App(dirname(__FILE__).'/../../..', $config);
+        $app = new \Duality\App($config);
         $locale = $app->call('locale');
         $locale->setLocale('dummy');
     }
@@ -92,7 +92,7 @@ extends PHPUnit_Framework_TestCase
                 'timezone'  => 'Europe/Lisbon'
             )
         );
-        $app = new \Duality\App(dirname(__FILE__).'/../../..', $config);
+        $app = new \Duality\App($config);
         $locale = $app->call('locale');
         $result = $locale->t('key', array(), 'dummy');
     }
@@ -111,7 +111,7 @@ extends PHPUnit_Framework_TestCase
                 'timezone'  => 'Europe/Lisbon'
             )
         );
-        $app = new \Duality\App(dirname(__FILE__).'/../../..', $config);
+        $app = new \Duality\App($config);
         $locale = $app->call('locale');
 
         $result = $locale->getDisplayLanguage();

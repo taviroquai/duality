@@ -26,7 +26,7 @@ extends PHPUnit_Framework_TestCase
                 'user' => 'email'
             )
         );
-        $app = new \Duality\App(dirname(__FILE__), $config);
+        $app = new \Duality\App($config);
         $auth = $app->call('auth');
     }
 
@@ -50,7 +50,7 @@ extends PHPUnit_Framework_TestCase
                 'pass' => 'pass'
             )
         );
-        $app = new \Duality\App(dirname(__FILE__), $config);
+        $app = new \Duality\App($config);
         $auth = $app->call('auth');
         $this->assertInstanceOf('\Duality\Service\Auth\Database', $auth);
 

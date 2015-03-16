@@ -13,7 +13,7 @@
 
 namespace Duality\Structure;
 
-use Duality\Core\Structure;
+use Duality\Core\AbstractStructure;
 use Duality\Structure\File\TextFile;
 
 /**
@@ -29,7 +29,7 @@ use Duality\Structure\File\TextFile;
  * @since   0.7.0
  */
 class HtmlDoc 
-extends Structure
+extends AbstractStructure
 {
     /**
      * Holds the DOM document

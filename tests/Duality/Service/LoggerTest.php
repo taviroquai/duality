@@ -13,7 +13,7 @@ extends PHPUnit_Framework_TestCase
     public function testLoggerWithoutConfig()
     {
         //$this->markTestSkipped('Do not use Duality error_handler.');
-        $app = new \Duality\App(dirname(__FILE__).'/../../..', null);
+        $app = new \Duality\App();
         $app->call('logger');
     }
 
@@ -27,7 +27,7 @@ extends PHPUnit_Framework_TestCase
     public function testLoggerUnreadBuffer()
     {
         //$this->markTestSkipped('Do not use Duality error_handler.');
-        $app = new \Duality\App(dirname(__FILE__).'/../../..', null);
+        $app = new \Duality\App();
         $dummy = fopen(DATA_PATH.'/log.txt', 'w+b');
         $app->call('logger');
     }
@@ -47,7 +47,7 @@ extends PHPUnit_Framework_TestCase
                 'buffer'   => 'dummy'
             )
         );
-        $app = new \Duality\App(dirname(__FILE__).'/../../..', $config);
+        $app = new \Duality\App($config);
         $logger = $app->call('logger');
     }
 
@@ -64,17 +64,32 @@ extends PHPUnit_Framework_TestCase
                 'buffer'   => 'tests/data/log.txt'
             )
         );
-        $app = new \Duality\App(dirname(__FILE__).'/../../..', $config);
+        $app = new \Duality\App($config);
         $logger = $app->call('logger');
 
-        // Test NOTICE
-        $logger->log('dummy');
+        // Test emergency
+        $logger->emergency('emergency');
 
-        // Test E_USER_WARNING
-        $logger->log('dummy', E_USER_WARNING);
+        // Test alert
+        $logger->alert('alert');
 
-        // Test E_USER_ERROR
-        $logger->log('dummy', E_USER_ERROR);
+        // Test critical
+        $logger->critical('critical');
+        
+        // Test error
+        $logger->error('error');
+        
+        // Test warning
+        $logger->warning('warning');
+        
+        // Test notice
+        $logger->notice('notice');
+        
+        // Test info
+        $logger->info('info');
+        
+        // Test debug
+        $logger->debug('debug');
 
         // Terminate
         $expected = 'Ops! Something went wrong...';

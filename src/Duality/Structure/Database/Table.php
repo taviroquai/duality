@@ -13,11 +13,11 @@
 
 namespace Duality\Structure\Database;
 
+use Duality\Core\AbstractDatabase;
 use Duality\Structure\Property;
 use Duality\Structure\TableRow;
 use Duality\Structure\Table as DataTable;
 use Duality\Structure\Entity;
-use Duality\Service\Database;
 
 /**
  * Database table class
@@ -53,7 +53,7 @@ extends DataTable
      * 
      * @param \Duality\Service\Database $database The database service
      */
-    public function __construct(Database $database)
+    public function __construct(AbstractDatabase $database)
     {
         parent::__construct();
         $this->database = $database;

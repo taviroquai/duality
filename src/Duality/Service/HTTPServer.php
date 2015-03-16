@@ -15,7 +15,7 @@ namespace Duality\Service;
 
 use Duality\Core\DualityException;
 use Duality\Core\AbstractService;
-use Duality\Core\InterfaceServer;
+use Duality\Core\InterfaceHTTPServer;
 use Duality\Core\InterfaceUrl;
 use Duality\Core\InterfaceAuthorization;
 use Duality\Structure\Url;
@@ -34,9 +34,9 @@ use Duality\Structure\Http\Response;
  * @link    http://github.com/taviroquai/duality
  * @since   0.7.0
  */
-class Server
+class HTTPServer
 extends AbstractService
-implements InterfaceServer
+implements InterfaceHTTPServer
 {
     /**
      * Default request
@@ -90,12 +90,17 @@ implements InterfaceServer
         $this->hostname = gethostname();
         $this->setBaseUrl(new Url('http://'.$this->hostname));
 
-        // Create default request and response
+        // Create default response
         $this->setResponse($this->createResponse());
 
         // Create default routes
         $this->routes = array();
         $this->setDefault('\Duality\Service\Controller\Base@doIndex');
+        
+        // Load default request
+        if ($request = $this->getRequestFromGlobals($_SERVER, $_REQUEST)) {
+            $this->setRequest($request);
+        }
     }
 
     /**
@@ -150,7 +155,7 @@ implements InterfaceServer
      * 
      * @return void
      */
-    public function listen()
+    public function execute()
     {
         // Set default values
         $result = false;
