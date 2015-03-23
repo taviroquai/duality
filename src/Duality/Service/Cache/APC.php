@@ -38,12 +38,7 @@ extends AbstractCache
      */
     public function init()
     {
-        if (!extension_loaded('apcu') || !extension_loaded('apc')) {
-            throw new DualityException(
-                "Error: apc extension not loaded",
-                DualityException::E_EXTENSION_NOTFOUND
-            );
-        }
+        
     }
 
     /**

@@ -13,9 +13,9 @@
 
 namespace Duality;
 
-use Duality\Core\DualityException;
 use Duality\Core\AbstractContainer;
 use Duality\Core\AbstractService;
+use Duality\Core\InterfaceAuthentication;
 use Duality\Structure\Storage;
 use Duality\Structure\File\StreamFile;
 
@@ -31,6 +31,7 @@ use Duality\Structure\File\StreamFile;
  */
 class App 
 extends AbstractContainer
+implements InterfaceAuthentication
 {
     /**
      * Holds application working directory
@@ -59,6 +60,13 @@ extends AbstractContainer
      * @var \Duality\File\StreamFile The output buffer
      */
     protected $buffer;
+    
+    /**
+     * Holds the authentication key
+     * 
+     * @var string The authentication key;
+     */
+    protected $authKey = '__auth';
 
     /**
      * Setup default services
@@ -77,7 +85,7 @@ extends AbstractContainer
         'paginator' => 'Duality\Service\Paginator',
         'remote'    => 'Duality\Service\SSH',
         'server'    => 'Duality\Service\HTTPServer',
-        'locale'    => 'Duality\Service\Localization',
+        'idiom'     => 'Duality\Service\Translation',
         'cmd'       => 'Duality\Service\Commander',
         'client'    => 'Duality\Service\HTTPClient',
         'performance' => 'Duality\Service\Performance'
@@ -250,6 +258,54 @@ extends AbstractContainer
         }
         return call_user_func_array($this->services->get($name), $params);
     }
+    
+    /**
+     * Login using a 2-key (username, password)
+     * 
+     * @param string $username The authentication username
+     * @param string $password The authentication password
+     * 
+     * @return boolean The authentication result (true or false)
+     */
+    public function login($username, $password)
+    {
+        $result = false;
+        if ($this->call('auth')->login($username, $password)) {
+            $this->call('session')->set($this->authKey, $username);
+            $result = true;
+        }
+        return $result;
+    }
+    
+    /**
+     * Check if there is a user logged
+     * 
+     * @return boolean Tells whether the user is logged or not
+     */
+    public function isLogged()
+    {
+        return $this->call('session')->has($this->authKey);
+    }
+
+    /**
+     * Logs a user out
+     * 
+     * @return void
+     */
+    public function logout()
+    {
+        $this->call('session')->reset();
+    }
+
+    /**
+     * Returns the current logged user
+     * 
+     * @return string The current logged username
+     */
+    public function whoAmI()
+    {
+        return $this->call('session')->get($this->authKey);
+    }
 
     /**
      * Call database service alias (type hinting)
@@ -362,13 +418,13 @@ extends AbstractContainer
     }
 
     /**
-     * Call locale service alias (type hinting)
+     * Call translation service alias (type hinting)
      * 
-     * @return \Duality\Core\InterfaceLocalization The localization service
+     * @return \Duality\Core\Interfaceslation The translation service
      */
-    public function getLocale()
+    public function getIdiom()
     {
-        return $this->call('locale');
+        return $this->call('idiom');
     }
 
     /**

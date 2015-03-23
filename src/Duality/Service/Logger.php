@@ -122,7 +122,7 @@ implements LoggerInterface
         case E_USER_WARNING:
             $message  = "Duality Warning [$errno] $errstr"
                 . " on line $errline in file $errfile\n";
-            $level = Psr\Log\LogLevel::ERROR;
+            $level = LogLevel::ERROR;
             break;
 
         default:

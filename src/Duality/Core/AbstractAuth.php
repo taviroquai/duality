@@ -1,43 +1,63 @@
 <?php
 
 /**
- * Authentication service
+ * Dummy authentication service
  *
  * PHP Version 5.3.4
  *
  * @author  Marco Afonso <mafonso333@gmail.com>
  * @license http://opensource.org/licenses/MIT MIT
  * @link    http://github.com/taviroquai/duality
- * @since   2.0.0-dev
+ * @since   0.20.0
  */
 
 namespace Duality\Core;
 
 use Duality\Core\AbstractService;
+use Duality\Core\InterfaceAuthentication;
 
 /**
- * Abstract authentication service
+ * Dummy authentication service
  * 
- * Provides base functionality for Duality auth services
- * ie. \Duality\Service\Auth\Database
- * ie. \Duality\Service\Auth\LDAP
+ * Provides operations to authenticate against an LDAP server
  * 
  * PHP Version 5.3.4
  *
  * @author  Marco Afonso <mafonso333@gmail.com>
  * @license http://opensource.org/licenses/MIT MIT
  * @link    http://github.com/taviroquai/duality
- * @since   2.0.0-dev
+ * @since   0.20.0
  */
-abstract class AbstractAuth 
+abstract class AbstractAuth
 extends AbstractService
-{
+implements InterfaceAuthentication
+{   
     /**
-     * Holds the session key
+     * Holds the login status
      * 
-     * @var string The session auth key
+     * @var boolean The login status
      */
-    protected $sessionKey = '__auth';
+    protected $status;
+
+    /**
+     * Initiates the service
+     * 
+     * @return void
+     */
+    public function init()
+    {
+        
+    }
+
+    /**
+     * Terminates the service
+     * 
+     * @return void
+     */
+    public function terminate()
+    {
+        
+    }
 
     /**
      * Login using a 2-key (username, password)
@@ -47,8 +67,8 @@ extends AbstractService
      * 
      * @return boolean The authentication result (true or false)
      */
-    abstract public function login($username, $password);
-
+    public abstract function login($username, $password);
+    
     /**
      * Check if there is a user logged
      * 
@@ -56,7 +76,7 @@ extends AbstractService
      */
     public function isLogged()
     {
-        return $this->app->call('session')->has($this->sessionKey);
+        return $this->status;
     }
 
     /**
@@ -66,17 +86,6 @@ extends AbstractService
      */
     public function logout()
     {
-        $this->app->call('session')->reset();
+        $this->status = false;
     }
-
-    /**
-     * Returns the current logged user
-     * 
-     * @return string The current logged username
-     */
-    public function whoAmI()
-    {
-        return $this->app->call('session')->get($this->sessionKey);
-    }
-
 }

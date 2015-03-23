@@ -14,7 +14,7 @@ extends PHPUnit_Framework_TestCase
     {
         $config = array(
             'services' => array(
-                'session' => '\Duality\Service\Session\Dummy'
+                'auth' => '\Duality\Service\Auth\Database'
             ),
             'db' => array(
                 'dsn'   => DB_DSN,
@@ -27,7 +27,7 @@ extends PHPUnit_Framework_TestCase
             )
         );
         $app = new \Duality\App($config);
-        $auth = $app->call('auth');
+        $app->call('auth');
     }
 
     /**
@@ -75,22 +75,19 @@ extends PHPUnit_Framework_TestCase
         $expected = true;
         $result = $auth->login('dummy', 'dummy');
         $this->assertEquals($expected, $result);
+        
+        $this->assertEquals(true, $auth->isLogged());
+        
+        $auth->logout();
 
         $table->remove(1);
         $expected = false;
         $result = $auth->login('dummy', 'dummy');
         $this->assertEquals($expected, $result);
+        
         $db->getPDO()->exec($db->getDropTable($table));
 
-        $this->assertEquals(true, $auth->isLogged());
-
-        $this->assertEquals('dummy', $auth->whoAmI());
-
-        $auth->logout();
-
         $this->assertEquals(false, $auth->isLogged());
-
-        $this->assertEquals(null, $auth->whoAmI());
 
         $this->assertNull($auth->terminate());
     }

@@ -39,6 +39,69 @@ extends AbstractService
 implements InterfaceHTTPServer
 {
     /**
+     * Holds the HTTP codes
+     * 
+     * @var array The HTTP codes list
+     */
+    static $httpCodes = array(
+        100 => 'Continue',
+        101 => 'Switching Protocols',
+        102 => 'Processing',
+        200 => 'OK',
+        201 => 'Created',
+        202 => 'Accepted',
+        203 => 'Non-Authoritative Information',
+        204 => 'No Content',
+        205 => 'Reset Content',
+        206 => 'Partial Content',
+        207 => 'Multi-Status',
+        300 => 'Multiple Choices',
+        301 => 'Moved Permanently',
+        302 => 'Found',
+        303 => 'See Other',
+        304 => 'Not Modified',
+        305 => 'Use Proxy',
+        306 => 'Switch Proxy',
+        307 => 'Temporary Redirect',
+        400 => 'Bad Request',
+        401 => 'Unauthorized',
+        402 => 'Payment Required',
+        403 => 'Forbidden',
+        404 => 'Not Found',
+        405 => 'Method Not Allowed',
+        406 => 'Not Acceptable',
+        407 => 'Proxy Authentication Required',
+        408 => 'Request Timeout',
+        409 => 'Conflict',
+        410 => 'Gone',
+        411 => 'Length Required',
+        412 => 'Precondition Failed',
+        413 => 'Request Entity Too Large',
+        414 => 'Request-URI Too Long',
+        415 => 'Unsupported Media Type',
+        416 => 'Requested Range Not Satisfiable',
+        417 => 'Expectation Failed',
+        418 => 'I\'m a teapot',
+        422 => 'Unprocessable Entity',
+        423 => 'Locked',
+        424 => 'Failed Dependency',
+        425 => 'Unordered Collection',
+        426 => 'Upgrade Required',
+        449 => 'Retry With',
+        450 => 'Blocked by Windows Parental Controls',
+        500 => 'Internal Server Error',
+        501 => 'Not Implemented',
+        502 => 'Bad Gateway',
+        503 => 'Service Unavailable',
+        504 => 'Gateway Timeout',
+        505 => 'HTTP Version Not Supported',
+        506 => 'Variant Also Negotiates',
+        507 => 'Insufficient Storage',
+        509 => 'Bandwidth Limit Exceeded',
+        510 => 'Not Extended'
+    );
+    
+    /**
      * Default request
      * 
      * @var \Duality\Structure\Http\Request Holds the current request
@@ -79,6 +142,13 @@ implements InterfaceHTTPServer
      * @var \Duality\Service\UserController Holds the default controller
      */
     protected $defaultController;
+    
+    /**
+     * Holds the unsupported asapi names
+     * 
+     * @var array
+     */
+    protected $noSupport = array('cli', 'cli-server');
 
     /**
      * Initiates the service
@@ -96,11 +166,6 @@ implements InterfaceHTTPServer
         // Create default routes
         $this->routes = array();
         $this->setDefault('\Duality\Service\Controller\Base@doIndex');
-        
-        // Load default request
-        if ($request = $this->getRequestFromGlobals($_SERVER, $_REQUEST)) {
-            $this->setRequest($request);
-        }
     }
 
     /**
@@ -119,11 +184,12 @@ implements InterfaceHTTPServer
      * @param string   $uriPattern Give the URI pattern as route identifier
      * @param \Closure $cb         The route callback
      * 
-     * @return void
+     * @return \Duality\Service\HTTPServer This HTTP server
      */
     public function addRoute($uriPattern, $cb)
     {
         $this->routes[$uriPattern] = $cb;
+        return $this;
     }
 
     /**
@@ -131,11 +197,12 @@ implements InterfaceHTTPServer
      * 
      * @param \Closure $cb Sets the default callback
      * 
-     * @return void
+     * @return \Duality\Service\HTTPServer This HTTP server
      */
     public function setDefault($cb)
     {
         $this->defaultController =  $cb;
+        return $this;
     }
     
     /**
@@ -143,11 +210,12 @@ implements InterfaceHTTPServer
      * 
      * @param \Closure $cb Give the home callback
      * 
-     * @return void
+     * @return \Duality\Service\HTTPServer This HTTP server
      */
     public function setHome($cb)
     {
-        $this->addRoute('/^\/$/i', $cb);
+        $this->routes['/^\/$/i'] = $cb;
+        return $this;
     }    
 
     /**
@@ -162,7 +230,7 @@ implements InterfaceHTTPServer
         $matches = array();
         $authorized = true;
 
-        if (!empty($this->request)) {
+        if (!empty($this->getRequest())) {
             
             // Start looking for matching routes patterns
             foreach ($this->routes as $ns => $cb) {
@@ -250,11 +318,12 @@ implements InterfaceHTTPServer
      * 
      * @param \Duality\Structure\Http\Request $request Give the current request
      * 
-     * @return void
+     * @return \Duality\Service\HTTPServer This HTTP server
      */
     public function setRequest(Request $request)
     {
         $this->request = $request;
+        return $this;
     }
 
     /**
@@ -264,6 +333,9 @@ implements InterfaceHTTPServer
      */
     public function getRequest()
     {
+        if (empty($this->request)) {
+            $this->request = $this->getRequestFromGlobals($_SERVER, $_REQUEST);
+        }
         return $this->request;
     }
 
@@ -272,11 +344,12 @@ implements InterfaceHTTPServer
      * 
      * @param \Duality\Structure\Http\Response $response Give the current response
      * 
-     * @return void
+     * @return \Duality\Service\HTTPServer This HTTP server
      */
     public function setResponse(Response $response)
     {
         $this->response = $response;
+        return $this;
     }
 
     /**
@@ -294,11 +367,12 @@ implements InterfaceHTTPServer
      * 
      * @param string $hostname Give the server a name
      * 
-     * @return void
+     * @return \Duality\Service\HTTPServer This HTTP server
      */
     public function setHostname($hostname)
     {
         $this->hostname = $hostname;
+        return $this;
     }
 
     /**
@@ -316,11 +390,12 @@ implements InterfaceHTTPServer
      * 
      * @param string $url Give the server a name
      * 
-     * @return void
+     * @return \Duality\Service\HTTPServer This HTTP server
      */
     public function setBaseUrl(InterfaceUrl $url)
     {
         $this->baseURL = $url;
+        return $this;
     }
 
     /**
@@ -379,18 +454,17 @@ implements InterfaceHTTPServer
      * @param \Duality\Structure\Http $response    Give the server response
      * @param boolean                 $withHeaders Send headers or not
      * 
-     * @return void
+     * @return \Duality\Service\HTTPServer This HTTP server
      */
     public function send(Response $response, $withHeaders = true)
     {
-        $sapi_type = php_sapi_name();
-        $no_support = array('cli', 'cli-server');
-        if ($withHeaders && !in_array($sapi_type, $no_support)) {
+        if ($withHeaders) {
             $this->sendHeaders($response);
             $this->sendCookies($response);
         }
 
         $this->app->getBuffer()->write($response->getContent());
+        return $this;
     }
 
     /**
@@ -401,47 +475,33 @@ implements InterfaceHTTPServer
      * @return \Duality\Service\Server This instance
      */
     public function sendHeaders(Response $response)
-    {
+    {   
         header(':', true, $response->getStatus());
         foreach ($response->getHeaders() as $k => $v) {
-            header($k.': '.$v);
+            header($k . ': ' . $v);
         }
         return $this;
     }
 
     /**
-     * Sets an HTTP cookie
+     * Sends HTTP cookies
      * 
-     * @param \Duality\Structure\Http\Response $response The response to be sent
+     * @param Response $response The HTTP response
      * 
-     * @throws \Duality\Core\DualityException When finds an invalid cookie
-     * 
-     * @return \Duality\Service\Server This instance
+     * @return \Duality\Service\HTTPServer
      */
     public function sendCookies(Response $response)
     {
-        $required = array('name', 'value', 'expire', 'path', 'domain', 'secure');
-        
-        foreach ($response->getCookies() as $item) {
-
-            // Validate cookie
-            $hasKeys = array_intersect_key(array_flip($required), $item);
-            if (count($hasKeys) !== count($required)) {
-                throw new DualityException(
-                    "Error HTTP Cookie: required keys: "
-                    . "name, value, expire, path, domain and secure",
-                    DualityException::E_HTTP_INVALIDCOOKIE
-                );
-            }
-
-            // send cookie
+        $cookies = $response->getCookies();
+        foreach ($cookies->asArray() as $name => $item) {
             setcookie(
-                $item['name'],
+                $name,
                 $item['value'],
                 $item['expire'],
                 $item['path'],
                 $item['domain'],
-                $item['secure']
+                $item['secure'],
+                $item['httponly']
             );
         }
         return $this;

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Authentication service
+ * LDAP authentication service
  *
  * PHP Version 5.3.4
  *
@@ -74,11 +74,6 @@ extends AbstractAuth
      */
     public function login($username, $password)
     {
-        $result = false;
-        if (@ldap_bind($this->handler, $username, $password)) {
-            $this->app->call('session')->set($this->sessionKey, $username);
-            $result = true;
-        }
-        return $result;
+        return $this->status = @ldap_bind($this->handler, $username, $password);
     }
 }

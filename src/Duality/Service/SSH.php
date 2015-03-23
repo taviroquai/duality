@@ -15,7 +15,7 @@ namespace Duality\Service;
 
 use Duality\Core\DualityException;
 use Duality\Core\AbstractService;
-use Duality\Core\InterfaceRemote;
+use Duality\Service\Auth\SSH as AuthSSH;
 
 /**
  * SSH service for remote operations
@@ -31,53 +31,7 @@ use Duality\Core\InterfaceRemote;
  */
 class SSH
 extends AbstractService
-implements InterfaceRemote
 {
-    /**
-     * Own public key
-     * 
-     * @var string Holds the public key to authenticate
-     */
-    protected $ssh_auth_pub = '/home/%s/.ssh/id_rsa.pub';
-    
-    /**
-     * Own private key
-     * 
-     * @var string Holds the private key to authenticate
-     */
-    protected $ssh_auth_priv = '/home/%s/.ssh/id_rsa';
-
-    /**
-     * Paraphrase (empty == null)
-     * 
-     * @var string Holds the authentication paraphrase
-     */
-    protected $ssh_auth_pass;
-    
-    /**
-     * Remote fingerprint (empty == null)
-     * 
-     * @var string Holds the remote server fingerprint
-     */
-    protected $ssh_fingerprint;
-
-    /**
-     * SSH Connection
-     * 
-     * @var \resource Holds the connection resource
-     */
-    protected $connection;
-
-    /**
-     * On end disconnect
-     * 
-     * @return void
-     */
-    public function __destruct()
-    {
-        $this->disconnect();
-    }
-
     /**
      * Initiates the service
      * 
@@ -95,111 +49,30 @@ implements InterfaceRemote
      */
     public function terminate()
     {
-        $this->disconnect();
+        
     }
     
     /**
-     * Starts a new connection
-     * 
-     * @param string $host       Give the remote hostname or IP
-     * @param string $username   Give the authentication username
-     * @param string $password   Give the authentication password
-     * @param string $port       Give the network port
-     * @param string $paraphrase Give the authentication paraphrase
-     * @param string $remote_fp  Give the remote server fingerprint
-     * 
-     * @return void
-     */
-    public function connectSSH(
-        $host,
-        $username,
-        $password = '',
-        $port = 22,
-        $paraphrase = null,
-        $remote_fp = ''
-    ) {
-        $this->ssh_auth_pass = $paraphrase;
-        $this->ssh_fingerprint = $remote_fp;
-        $this->connect($host, $username, $password, $port);
-    }
-
-    /**
-     * Starts a new connection
-     * 
-     * @param string $host     Give the remote hostname or IP address
-     * @param string $username Give the authentication username
-     * @param string $password Give the authentication password
-     * @param string $port     Give the network port
-     * 
-     * @return void
-     */
-    public function connect($host, $username, $password = '', $port = 22)
-    {
-        // Start connection
-        if (!($this->connection = @ssh2_connect($host, $port))) {
-            throw new DualityException(
-                'Cannot connect to server',
-                DualityException::E_REMOTE_NOTCONNECTED
-            );
-        }
-        
-        // Verify fingerprint
-        $fingerprint = @ssh2_fingerprint(
-            $this->connection, SSH2_FINGERPRINT_MD5 | SSH2_FINGERPRINT_HEX
-        );
-        if (!empty($this->ssh_fingerprint)
-            && (strcmp($this->ssh_fingerprint, $fingerprint) !== 0)
-        ) {
-            throw new DualityException(
-                'Unable to verify server identity!',
-                DualityException::E_REMOTE_FINGERPRINTNOTFOUND
-            );
-        }
-        
-        // Try auth methods
-        if (!empty($password)) {
-            if (!@ssh2_auth_password($this->connection, $username, $password)) {
-                throw new DualityException(
-                    'Autentication rejected by server',
-                    DualityException::E_REMOTE_AUTHFAILED
-                );
-            }
-        } else {
-            $public_key_path = sprintf($this->ssh_auth_pub, $username);
-            $private_key_path = sprintf($this->ssh_auth_priv, $username);
-            if (!ssh2_auth_pubkey_file(
-                $this->connection,
-                $username,
-                $public_key_path,
-                $private_key_path,
-                $this->ssh_auth_pass
-            )) {
-                throw new DualityException(
-                    'Autentication rejected by server',
-                    DualityException::E_REMOTE_AUTHFAILED
-                );
-            }    
-        }
-    }
-
-    /**
      * Runs a command on remote server
      * 
-     * @param string $cmd Give the user command to execute
+     * @param string $cmd The command to execute
      * 
      * @return string The resulting output
      */
     public function execute($cmd)
     {
-        if (!$this->connection) {
-            return '';
-        }
-        if (!($stream = @ssh2_exec($this->connection, $cmd))) {
+        $auth = $this->app->call('auth');
+        if (!($auth instanceof AuthSSH)
+            || !is_resource($auth->getConnection())
+            || !($stream = @ssh2_exec($this->app->call('auth')->getConnection(), $cmd))
+        ) {
             throw new DualityException(
-                'SSH command failed',
-                DualityException::E_CMD_FAILED
+                'Could not authenticate on ssh',
+                DualityException::E_REMOTE_AUTHFAILED
             );
         }
+        
+        // OK!
         stream_set_blocking($stream, true);
         $data = "";
         while ($buf = fread($stream, 4096)) {
@@ -208,16 +81,4 @@ implements InterfaceRemote
         fclose($stream);
         return $data;
     }
-
-    /**
-     * Disconnect from server
-     * 
-     * @return void
-     */
-    public function disconnect()
-    {
-        $this->execute('echo "EXITING" && exit;');
-        $this->connection = null;
-    }
-
 }

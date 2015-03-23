@@ -59,16 +59,6 @@ extends AbstractAuth
     }
 
     /**
-     * Terminates the service
-     * 
-     * @return void
-     */
-    public function terminate()
-    {
-
-    }
-
-    /**
      * Login using a 2-key (username, password)
      * 
      * @param string $username The authentication username
@@ -78,6 +68,7 @@ extends AbstractAuth
      */
     public function login($username, $password)
     {
+        $this->status = false;
         $tableName = $this->config['table'];
         $userField = $this->config['user'];
         $passField = $this->config['pass'];
@@ -92,10 +83,8 @@ extends AbstractAuth
         $table->filter($filter);
         $result = $table->toArray();
         if (count($result)) {
-            $this->app->call('session')
-                ->set($this->sessionKey, $username);
-            return true;    
+            $this->status = true;    
         }
-        return false;
+        return $this->status;
     }
 }

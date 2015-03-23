@@ -26,8 +26,8 @@ extends PHPUnit_Framework_TestCase
         $request = new Request(new Url('http://localhost/items'));
         $request->setParams(array('key' => 'value', 'array' => array('value')));
         $request->setMethod('POST');
-        $app->call('server')->setRequest($request);
         $security = $app->call('security');
+        $security->secureHTTPRequest($request);
 
         $expected = 'f64133af6818761d95c8230953e5c9ddee1d0cf3';
         $result = $security->encrypt('dummy');

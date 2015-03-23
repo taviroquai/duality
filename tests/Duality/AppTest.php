@@ -4,32 +4,6 @@ class AppTest
 extends PHPUnit_Framework_TestCase
 {
     /**
-     * Test invalid application path
-     * 
-     * @expectedException \Duality\Core\DualityException
-     */
-    /*
-	public function testAppInvalidPath()
-	{
-		new \Duality\App(null);
-	}
-     * 
-     */
-
-    /**
-     * Test valid application path
-     */
-    /*
-    public function testAppValidPath()
-    {
-        $expected = '\Duality\App';
-        $app = new \Duality\App(dirname(__FILE__), null);
-        $this->assertInstanceOf($expected, $app);
-    }
-     * 
-     */
-
-    /**
      * Test application defaults
      */
     public function testAppDefaults()
@@ -51,7 +25,7 @@ extends PHPUnit_Framework_TestCase
                 'paginator' => 'Duality\Service\Paginator',
                 'remote'    => 'Duality\Service\SSH',
                 'server'    => 'Duality\Service\Server',
-                'locale'    => 'Duality\Service\Localization',
+                'idiom'     => 'Duality\Service\Translation',
                 'cmd'       => 'Duality\Service\Commander',
                 'client'    => 'Duality\Service\Client',
                 'performance' => 'Duality\Service\Performance'
@@ -176,8 +150,8 @@ extends PHPUnit_Framework_TestCase
 
         $expected = '\Duality\Service\Logger';
         $this->assertInstanceOf($expected, $app->getLogger());
-
-        $expected = '\Duality\Core\AbstractAuth';
+        
+        $expected = '\Duality\Service\Auth\Database';
         $this->assertInstanceOf($expected, $app->getAuth());
 
         $expected = '\Duality\Service\Mailer';
@@ -185,10 +159,7 @@ extends PHPUnit_Framework_TestCase
 
         $expected = '\Duality\Service\Paginator';
         $this->assertInstanceOf($expected, $app->getPaginator());
-
-        $expected = '\Duality\Service\SSH';
-        $this->assertInstanceOf($expected, $app->getRemote());
-
+        
         $expected = '\Duality\Service\HTTPServer';
         $this->assertInstanceOf($expected, $app->getHTTPServer());
 
@@ -210,8 +181,7 @@ extends PHPUnit_Framework_TestCase
      */
     public function testAppCallAPCuServiceAlias()
     {
-        $config = array();
-        $app = new \Duality\App($config);
+        $app = new \Duality\App();
 
         $expected = '\Duality\Core\AbstractCache';
         $this->assertInstanceOf($expected, $app->getCache());
@@ -219,14 +189,12 @@ extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test locale service alias
-     * 
-     * @requires extension intl
+     * Test translation service alias
      */
-    public function testAppCallLocaleServiceAlias()
+    public function testAppCallTranslationServiceAlias()
     {
         $config = array(
-            'locale' => array(
+            'idiom' => array(
                 'default'   => 'en_US',
                 'dir'       => DATA_PATH . '/lang',
                 'timezone'  => 'Europe/Lisbon'
@@ -234,9 +202,53 @@ extends PHPUnit_Framework_TestCase
         );
         $app = new \Duality\App($config);
 
-        $expected = '\Duality\Service\Localization';
-        $this->assertInstanceOf($expected, $app->getLocale());
+        $expected = '\Duality\Service\Translation';
+        $this->assertInstanceOf($expected, $app->getIdiom());
 
     }
+    
+    public function testAuth()
+    {   
+        $auth = $this->getMockBuilder('\Duality\Core\AbstractAuth')
+                ->disableOriginalConstructor()
+                ->getMockForAbstractClass();
 
+        $auth->expects($this->any())
+             ->method('login')
+             ->will($this->returnValue(true));
+        
+        $app = new Duality\App();
+        $app->register('auth', function () use ($auth) {
+            return $auth;
+        });
+        
+        $expected = true;
+        $result = $app->login('dummy', 'dummy');
+        $this->assertEquals($expected, $result);
+        
+        $this->assertEquals(true, $app->isLogged());
+        
+        $this->assertEquals('dummy', $app->whoAmI());
+        
+        $this->assertNull($app->logout());
+        
+    }
+    
+    public function testSSH()
+    {
+        $config = array(
+            'services' => array(
+                'auth' => '\Duality\Service\Auth\SSH'
+            ),
+            'auth' => array(
+                'ssh' => array(
+                    'host' => 'localhost'
+                )
+            )
+        );
+        $app = new \Duality\App($config);
+        
+        $expected = '\Duality\Service\SSH';
+        $this->assertInstanceOf($expected, $app->getRemote());
+    }
 }

@@ -2,12 +2,25 @@
 
 use Duality\Structure\Url;
 use Duality\Structure\Http\Request;
+use Duality\Structure\Http\Response;
+
+class TestAuthorization
+extends Duality\Service\Controller\Base
+implements Duality\Core\InterfaceAuthorization
+{
+    public function isAuthorized(Request &$req, Response &$res, $matches = array())
+    {
+        return true;
+    }
+}
 
 class HTTPServerTest 
 extends PHPUnit_Framework_TestCase
 {
     /**
      * Test server service
+     * 
+     * @runInSeparateProcess
      */
     public function testHome()
     {
@@ -68,6 +81,49 @@ EOF;
 
         $server->terminate();
     }
+    
+    /**
+     * Test server service
+     * 
+     * @runInSeparateProcess
+     */
+    public function testAuthorization()
+    {
+        $config = array(
+            'server' => array(
+                'url' => '/',
+                'hostname' => 'localhost'
+            )
+        );
+        $app = new \Duality\App($config);
+        $server = $app->call('server');
+        $server->setHostname('localhost');
+
+        $url = new Url('http://localhost/');
+        $url->setHost('localhost');
+        $request = new Request($url);
+        $request->setParams(array('key' => 'value'));
+        $request->setMethod('GET');
+        $server->setRequest($request);
+
+        $expected = <<<EOF
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Duality default controller - Replace me!</title>
+    </head>
+    <body><h1>Duality default controller - Replace me!</h1></body>
+</html>
+EOF;
+    
+        $server->setHome('\TestAuthorization@doIndex');
+        ob_start();
+        $server->execute();
+        $result = ob_get_clean();
+        $this->assertEquals($expected, $result);
+    }
 
     /**
      * Test server global request
@@ -82,8 +138,8 @@ EOF;
         );
         $app = new \Duality\App($config);
         $server = $app->call('server');
+        $request = $server->getRequest();
 
-        $request = $server->getRequestFromGlobals(array(), array());
         $this->assertEquals(FALSE, $request);
 
         $request = $server->getRequestFromGlobals(array('REQUEST_METHOD' => 'GET'), array('dummy' => 'dummy'));
@@ -98,6 +154,8 @@ EOF;
 
     /**
      * Test valid request, route and callback
+     * 
+     * @runInSeparateProcess
      */
     public function testRoute()
     {
@@ -153,16 +211,6 @@ EOF;
         $response->setHeaders(
             array('Content-Type', 'text/html')
         );
-        $response->setCookies(array(
-            array(
-                'name'      => 'duality',
-                'value'     => 'dummy',
-                'expire'    => time(),
-                'path'      => '/',
-                'domain'    => 'duality.com',
-                'secure'    => true
-            )
-        ));
         $server->sendHeaders($server->getResponse());
         $server->sendCookies($server->getResponse());
     }
@@ -224,13 +272,13 @@ EOF;
      */
     public function testHTTP()
     {
-        $request = new \Duality\Structure\Http\Request(new \Duality\Structure\Url('http://localhost/dummy'));
+        $request = new Request(new \Duality\Structure\Url('http://localhost/dummy'));
         $request->setParams(array('key' => 'value'));
         $request->setMethod('GET');
         $request->getHeaders();
         $request->getHeaderItem('Content-Type');
 
-        $response = new \Duality\Structure\Http\Response;
+        $response = new Response;
         $response->setUrl(new \Duality\Structure\Url('http://localhost/dummy'));
         $response->getUrl();
         $response->setMethod('GET');
@@ -241,14 +289,7 @@ EOF;
         $response->getHeaders();
         $response->addHeader('Content-Type', 'text/html');
 
-        $cookie = array();
-        $cookie['name'] = 'duality';
-        $cookie['value'] = 'dummy';
-        $cookie['expire'] = 0;
-        $cookie['path'] = '/';
-        $cookie['domain'] = 'domain.com';
-        $cookie['secure'] = false;
-        $response->setCookies(array($cookie));
+        $response->setCookie('duality', 'dummy');
         $response->getCookies();
         $response->setContent('dummy');
         $response->getContent();
@@ -267,5 +308,31 @@ EOF;
     {
         $response = new \Duality\Structure\Http\Response;
         $response->setMethod('dummy');
+    }
+    
+    /**
+     * Test HTTP response headers
+     * 
+     * @runInSeparateProcess
+     */
+    public function testResponseHeaders()
+    {
+        
+        
+        $response = new Response;
+        $response->setUrl(new \Duality\Structure\Url('http://localhost/dummy'));
+        $response->setMethod('GET');
+        $response->setStatus(200);
+        $response->setHeaders(array('Content-Type' => 'text/html'));
+        $response->addHeader('Content-Type', 'text/html');
+        $response->setCookie('duality', 'dummy');
+        $response->setContent('dummy');
+        $response->setTimestamp(time());
+        
+        $app = new Duality\App();
+        $server = $app->getHTTPServer();
+        $server->setResponse($response);
+        $server->sendHeaders($response);
+        $server->sendCookies($response);
     }
 }

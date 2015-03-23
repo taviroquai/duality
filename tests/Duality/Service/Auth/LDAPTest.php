@@ -20,7 +20,7 @@ extends PHPUnit_Framework_TestCase
             )
         );
         $app = new \Duality\App($config);
-        $auth = $app->call('auth');
+        $app->call('auth');
     }
 
     /**
@@ -32,7 +32,6 @@ extends PHPUnit_Framework_TestCase
     {
         $config = array(
             'services' => array(
-                'session' => '\Duality\Service\Session\Dummy',
                 'auth'  => '\Duality\Service\Auth\LDAP'
             ),
             'auth' => array(

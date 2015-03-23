@@ -15,6 +15,7 @@ namespace Duality\Service;
 
 use Duality\Core\AbstractService;
 use Duality\Core\InterfaceSecurity;
+use Duality\Structure\Http\Request;
 
 /**
  * Security service
@@ -47,16 +48,14 @@ implements InterfaceSecurity
      * 
      * @return void
      */
-    public function secureHTTPRequest()
+    public function secureHTTPRequest(Request &$request)
     {
-        if ($this->app->getHTTPServer()->getRequest()
-            && $this->app->getHTTPServer->getRequest()->getMethod()
-        ) {
-            $params = $this->app->getHTTPServer->getRequest()->getParams();
+        if ($request->getMethod()) {
+            $params = $request->getParams();
             foreach ($params as $key => &$value) {
                 $this->filter($value);
             }
-            $this->app->getHTTPServer->getRequest()->setParams($params);
+            $request->setParams($params);
         }
     }
 

@@ -12,7 +12,6 @@ extends PHPUnit_Framework_TestCase
      */
     public function testLoggerWithoutConfig()
     {
-        //$this->markTestSkipped('Do not use Duality error_handler.');
         $app = new \Duality\App();
         $app->call('logger');
     }
@@ -26,7 +25,6 @@ extends PHPUnit_Framework_TestCase
      */
     public function testLoggerUnreadBuffer()
     {
-        //$this->markTestSkipped('Do not use Duality error_handler.');
         $app = new \Duality\App();
         $dummy = fopen(DATA_PATH.'/log.txt', 'w+b');
         $app->call('logger');
@@ -41,7 +39,6 @@ extends PHPUnit_Framework_TestCase
      */
     public function testInvalidFile()
     {
-        //$this->markTestSkipped('Do not use Duality error_handler.');
         $config = array(
             'logger' => array(
                 'buffer'   => 'dummy'
@@ -58,7 +55,6 @@ extends PHPUnit_Framework_TestCase
      */
     public function testLogger()
     {
-        //$this->markTestSkipped('Do not use Duality error_handler.');
         $config = array(
             'logger' => array(
                 'buffer'   => 'tests/data/log.txt'
@@ -91,6 +87,14 @@ extends PHPUnit_Framework_TestCase
         // Test debug
         $logger->debug('debug');
 
+        // Test error handler
+        $result = $logger->error_handler(E_USER_ERROR, 'test error', 'me.php', 1);
+        $this->assertTrue($result);
+        $result = $logger->error_handler(E_USER_WARNING, 'test error', 'me.php', 1);
+        $this->assertTrue($result);
+        $result = $logger->error_handler(E_USER_NOTICE, 'test error', 'me.php', 1);
+        $this->assertTrue($result);
+        
         // Terminate
         $expected = 'Ops! Something went wrong...';
         ob_start();

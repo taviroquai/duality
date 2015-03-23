@@ -8,24 +8,13 @@ require_once './vendor/autoload.php';
 // Create a new application container
 $app = new Duality\App();
 
-$logger = $app->getLogger();
-$logger->log('teste');
-
 // Create a new server
-/*
-try {
-    $server = $app->getHTTPServer();
-} catch (DualityException $e) {
-	die($e->getMessage() . PHP_EOL);
-}
+$server = $app->getHTTPServer();
 
 // Define default route
-
-$server->setHome(function(&$req, &$res) use ($app) {
-
+$server->setHome(function(&$req, &$res) {
 	$res->setContent('Hello World!');
 });
 
 // Finaly, tell server to start listening
 $server->execute();
-*/
