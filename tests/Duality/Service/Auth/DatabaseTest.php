@@ -22,8 +22,10 @@ extends PHPUnit_Framework_TestCase
                 'pass'  => DB_PASS
             ),
             'auth' => array(
-                'table' => 'dummy',
-                'user' => 'email'
+                'db' => array(
+                    'table' => 'dummy',
+                    'userfield' => 'email'
+                )
             )
         );
         $app = new \Duality\App($config);
@@ -45,9 +47,11 @@ extends PHPUnit_Framework_TestCase
                 'pass'  => DB_PASS
             ),
             'auth' => array(
-                'table' => 'dummy',
-                'user' => 'email',
-                'pass' => 'pass'
+                'db' => array(
+                    'table' => 'dummy',
+                    'userfield' => 'email',
+                    'passfield' => 'pass'
+                )
             )
         );
         $app = new \Duality\App($config);

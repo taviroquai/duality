@@ -17,6 +17,7 @@ extends PHPUnit_Framework_TestCase
                 'auth'  => '\Duality\Service\Auth\LDAP'
             ),
             'auth' => array(
+                'ldap' => array()
             )
         );
         $app = new \Duality\App($config);
@@ -35,7 +36,9 @@ extends PHPUnit_Framework_TestCase
                 'auth'  => '\Duality\Service\Auth\LDAP'
             ),
             'auth' => array(
-                'host' => 'localhost'
+                'ldap' => array(
+                    'host' => 'localhost'
+                )
             )
         );
         $app = new \Duality\App($config);

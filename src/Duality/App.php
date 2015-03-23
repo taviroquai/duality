@@ -130,6 +130,20 @@ implements InterfaceAuthentication
         }
         $this->getBuffer()->close();
     }
+    
+    /**
+     * Validates user classname
+     * 
+     * @param string $name The classname
+     * 
+     * @throws \Exception
+     */
+    static public function validateClassname($name)
+    {
+        if (is_string($name) && !class_exists($name)) {
+            throw new \Exception('Invalid class name: ' . $name);
+        }
+    }
 
     /**
      * Add common services
@@ -204,6 +218,18 @@ implements InterfaceAuthentication
             $result = $result[$item];
         }
         return $result;
+    }
+    
+    /**
+     * Returns environment configuration
+     * 
+     * @param string $path Give the path, ie. mailer.smtp.pass
+     * 
+     * @return mixed|null The result value or null
+     */
+    public function cfg($path)
+    {
+        return $this->getConfigItem($path);
     }
 
     /**

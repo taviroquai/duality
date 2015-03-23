@@ -1,23 +1,22 @@
 <?php
 
 /**
- * Interface for Controller Authorization
+ * Interface Routable
  *
  * PHP Version 5.3.4
  *
  * @author  Marco Afonso <mafonso333@gmail.com>
  * @license http://opensource.org/licenses/MIT MIT
  * @link    http://github.com/taviroquai/duality
- * @since   1.0.3
+ * @since   2.0.0-dev
  */
 
 namespace Duality\Core;
 
 use Duality\Structure\Http\Request;
-use Duality\Structure\Http\Response;
 
 /**
- * Authorization interface
+ * Authorization Routable
  * 
  * Provides an interface for all Duality rule validators
  * ie. \Duality\Service\Validator
@@ -27,22 +26,15 @@ use Duality\Structure\Http\Response;
  * @author  Marco Afonso <mafonso333@gmail.com>
  * @license http://opensource.org/licenses/MIT MIT
  * @link    http://github.com/taviroquai/duality
- * @since   1.0.3
+ * @since   2.0.0-dev
  */
-interface InterfaceAuthorization
+interface InterfaceRequestable
 {
     /**
-     * Validates authorization
+     * Pass the route params
      * 
-     * @return boolean The authorization result
+     * @param \Duality\Structure\HTTP\Request The HTTP request
      */
-    public function isAuthorized();
-    
-    /**
-     * Creates unauthorized response
-     * 
-     * @return \Duality\Structure\HTTP\Response
-     */
-    public function onUnauthorized();
+    public function onRequest(Request $req);
 
 }

@@ -17,6 +17,7 @@ extends PHPUnit_Framework_TestCase
                 'auth'  => '\Duality\Service\Auth\SSH'
             ),
             'auth' => array(
+                'ssh' => array()
             )
         );
         $app = new \Duality\App($config);
@@ -37,7 +38,9 @@ extends PHPUnit_Framework_TestCase
                 'auth'  => '\Duality\Service\Auth\SSH'
             ),
             'auth' => array(
-                'ssh' => array('host' => 'localhos')
+                'ssh' => array(
+                    'host' => 'localhos'
+                )
             )
         );
         $app = new \Duality\App($config);

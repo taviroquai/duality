@@ -4,13 +4,17 @@ use Duality\Structure\Url;
 use Duality\Structure\Http\Request;
 use Duality\Structure\Http\Response;
 
-class TestAuthorization
-extends Duality\Service\Controller\Base
-implements Duality\Core\InterfaceAuthorization
+class TestUnauthorized
+extends Request
 {
-    public function isAuthorized(Request &$req, Response &$res, $matches = array())
-    {
-        return true;
+    public function isAuthorized() {
+        return false;
+    }
+    
+    public function onUnauthorized() {
+        $response = new Response();
+        $response->setStatus(403);
+        return $response;
     }
 }
 
@@ -34,7 +38,7 @@ extends PHPUnit_Framework_TestCase
         $server = $app->call('server');
         $server->setHostname('localhost');
 
-        $url = new Url('http://localhost/dummy');
+        $url = new Url('http://localhost/');
         $url->setHost('localhost');
         $request = new Request($url);
         $request->setParams(array('key' => 'value'));
@@ -52,7 +56,10 @@ extends PHPUnit_Framework_TestCase
     <body><h1>Duality default controller - Replace me!</h1></body>
 </html>
 EOF;
-        $server->setHome('\Duality\Service\Controller\Base@doIndex');
+        $server->setHome(
+            '\Duality\Structure\Http\Response',
+            '\Duality\Structure\Http\Request'
+        );
         ob_start();
         $server->execute();
         $result = ob_get_clean();
@@ -105,24 +112,13 @@ EOF;
         $request->setParams(array('key' => 'value'));
         $request->setMethod('GET');
         $server->setRequest($request);
-
-        $expected = <<<EOF
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Duality default controller - Replace me!</title>
-    </head>
-    <body><h1>Duality default controller - Replace me!</h1></body>
-</html>
-EOF;
     
-        $server->setHome('\TestAuthorization@doIndex');
-        ob_start();
+        $server->setHome(
+            '\Duality\Structure\Http\Response',
+            '\TestUnauthorized'
+        );
         $server->execute();
-        $result = ob_get_clean();
-        $this->assertEquals($expected, $result);
+        $this->assertEquals(403, $server->getResponse()->getStatus());
     }
 
     /**
@@ -168,12 +164,12 @@ EOF;
         $app = new \Duality\App($config);
         $server = $app->call('server');
 
-        $request = new \Duality\Structure\Http\Request(new \Duality\Structure\Url('http://localhost/uri'));
+        $request = new Request(new Url('http://localhost/uri'));
         $request->setParams(array('key' => 'value'));
         $request->setMethod('GET');
         $server->setRequest($request);
         $pattern = '/\/uri/';
-        $server->addRoute($pattern, '\Duality\Service\Controller\Base@doIndex');
+        $server->addRoute($pattern, '\Duality\Structure\Http\Response');
 
         $expected = <<<EOF
 <!DOCTYPE html>
@@ -190,6 +186,29 @@ EOF;
         $server->execute();
         $result = ob_get_clean();
         $this->assertEquals($expected, $result);
+    }
+    
+    /**
+     * Test not found route
+     * 
+     * @runInSeparateProcess
+     */
+    public function testNotFoundRoute()
+    {
+        $config = array(
+            'server' => array(
+                'url' => '/',
+                'hostname' => 'localhost'
+            )
+        );
+        $app = new \Duality\App($config);
+        $server = $app->call('server');
+
+        $request = new Request(new Url('http://localhost/uri'));
+        $request->setParams(array('key' => 'value'));
+        $request->setMethod('GET');
+        $server->setRequest($request);
+        $server->execute();
     }
 
     /**
@@ -213,12 +232,18 @@ EOF;
         );
         $server->sendHeaders($server->getResponse());
         $server->sendCookies($server->getResponse());
+        
+        $server->setHome('\Duality\Structure\Http\Json');
+        $request = new Request(new Url('http://localhost/'));
+        $request->setMethod('GET');
+        $server->setRequest($request);
+        $server->execute();
     }
 
     /**
      * Test invalid callback
      * 
-     * @expectedException \Duality\Core\DualityException
+     * @expectedException \Exception
      */
     public function testInvalidCallback()
     {
@@ -231,38 +256,12 @@ EOF;
         $app = new \Duality\App($config);
         $server = $app->call('server');
 
-        $request = new \Duality\Structure\Http\Request(new \Duality\Structure\Url('http://localhost/uri'));
+        $request = new Request(new Url('http://localhost/uri'));
         $request->setParams(array('key' => 'value'));
         $request->setMethod('GET');
         $server->setRequest($request);
         $pattern = '/\/uri/';
         $server->addRoute($pattern, 'dummy');
-
-        $server->execute();
-    }
-
-    /**
-     * Test invalid action not found
-     * 
-     * @expectedException \Duality\Core\DualityException
-     */
-    public function testInvalidAction()
-    {
-        $config = array(
-            'server' => array(
-                'url' => '/',
-                'hostname' => 'localhost'
-            )
-        );
-        $app = new \Duality\App($config);
-        $server = $app->call('server');
-
-        $request = new \Duality\Structure\Http\Request(new \Duality\Structure\Url('http://localhost/uri'));
-        $request->setParams(array('key' => 'value'));
-        $request->setMethod('GET');
-        $server->setRequest($request);
-        $pattern = '/\/uri/';
-        $server->addRoute($pattern, '\Duality\Service\Controller\Base@dummy');
 
         $server->execute();
     }
@@ -277,6 +276,10 @@ EOF;
         $request->setMethod('GET');
         $request->getHeaders();
         $request->getHeaderItem('Content-Type');
+        $request->setRouteParams(array('name' => 'value'));
+        $request->getRouteParams();
+        $request->getRouteParam('name');
+        $request->onUnauthorized();
 
         $response = new Response;
         $response->setUrl(new \Duality\Structure\Url('http://localhost/dummy'));

@@ -15,6 +15,7 @@ namespace Duality\Service\Auth;
 
 use Duality\Core\DualityException;
 use Duality\Core\AbstractAuth;
+use Duality\Structure\Storage;
 
 /**
  * SSH authentication service
@@ -32,18 +33,11 @@ class SSH
 extends AbstractAuth
 {
     /**
-     * Holds the remote host
+     * Holds the ssh configuration
      * 
-     * @var string
+     * var \Duality\Structure\Storage The configuration params
      */
-    protected $host;
-    
-    /**
-     * Holds the remote port
-     * 
-     * @var integer
-     */
-    protected $port;
+    protected $config;
     
     /**
      * Own public key
@@ -58,20 +52,6 @@ extends AbstractAuth
      * @var string Holds the private key to authenticate
      */
     protected $ssh_auth_priv = '/home/%s/.ssh/id_rsa';
-
-    /**
-     * Paraphrase (empty == null)
-     * 
-     * @var string Holds the authentication paraphrase
-     */
-    protected $ssh_auth_pass;
-    
-    /**
-     * Remote fingerprint (empty == null)
-     * 
-     * @var string Holds the remote server fingerprint
-     */
-    protected $ssh_fingerprint;
 
     /**
      * SSH Connection
@@ -104,13 +84,20 @@ extends AbstractAuth
             );
         }
         
+        $this->config = new Storage;
+        $this->setConfig(
+            $this->app->getConfigItem('auth.ssh.host'),
+            $this->app->getConfigItem('auth.ssh.port'),
+            $this->app->getConfigItem('auth.ssh.paraphrase'),
+            $this->app->getConfigItem('auth.ssh.fingerprint')
+        );
+        
         // Start connection
-        $this->host = $this->app->getConfigItem('auth.ssh.host');
-        $this->port = $this->app->getConfigItem('auth.ssh.port') ?
-                $this->app->getConfigItem('auth.ssh.port') : 22;
-        $this->ssh_auth_pass = $this->app->getConfigItem('auth.ssh.paraphrase');
-        $this->ssh_fingerprint = $this->app->getConfigItem('auth.ssh.fingerprint');
-        if (!($this->connection = @ssh2_connect($this->host, $this->port))) {
+        if (!($this->connection = @ssh2_connect(
+            $this->config->get('host'),
+            $this->config->get('port')
+            )
+        )) {
             throw new DualityException(
                 'Cannot connect to auth host',
                 DualityException::E_REMOTE_NOTCONNECTED
@@ -168,14 +155,32 @@ extends AbstractAuth
         $fingerprint = @ssh2_fingerprint(
             $this->connection, SSH2_FINGERPRINT_MD5 | SSH2_FINGERPRINT_HEX
         );
-        if (!empty($this->ssh_fingerprint)
-            && (strcmp($this->ssh_fingerprint, $fingerprint) !== 0)
+        if (!empty($this->config->get('fingerprint'))
+            && (strcmp($this->config->get('fingerprint'), $fingerprint) !== 0)
         ) {
             throw new DualityException(
                 'Unable to verify ssh server identity!',
                 DualityException::E_REMOTE_FINGERPRINTNOTFOUND
             );
         }
+    }
+    
+    /**
+     * Sets the SSh configuration
+     * 
+     * @param string $host          The remote server address
+     * @param string $port          The remote service port
+     * @param string $paraphrase    The user paraphrase
+     * @param string $fingerprint   The server fingerprint
+     * 
+     * @return void
+     */
+    public function setConfig($host, $port = 22, $paraphrase = null, $fingerprint = null)
+    {
+        $this->config->set('host', $host);
+        $this->config->set('port', empty($port) ? 22 : $port);
+        $this->config->set('paraphrase', $paraphrase);
+        $this->config->set('fingerprint', $fingerprint);
     }
 
 }

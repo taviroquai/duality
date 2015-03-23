@@ -57,7 +57,7 @@ extends PHPUnit_Framework_TestCase
         $config = array($key => 'dummy');
         $expected = $config[$key];
         $app = new \Duality\App($config);
-        $this->assertEquals($expected, $app->getConfigItem($key));
+        $this->assertEquals($expected, $app->cfg($key));
     }
     
     /**
@@ -126,9 +126,11 @@ extends PHPUnit_Framework_TestCase
                 )
             ),
             'auth' => array(
-                'table' => 'dummy',
-                'user' => 'email',
-                'pass' => 'pass'
+                'db' => array(
+                    'table' => 'dummy',
+                    'userfield' => 'email',
+                    'passfield' => 'pass'
+                )
             )
         );
         $app = new \Duality\App($config);

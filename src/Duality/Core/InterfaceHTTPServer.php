@@ -32,14 +32,25 @@ use Duality\Structure\Http\Response;
 interface InterfaceHTTPServer
 {
     /**
-     * Adds a service route to the server
+     * Add a route
      * 
-     * @param string   $uriPattern Give the URI pattern as route identifier
-     * @param \Closure $cb         The route callback
+     * @param string $uriPattern The uri matching pattern
+     * @param string $res        The home response
+     * @param string $req        The home request
      * 
-     * @return void
+     * @return \Duality\Service\HTTPServer This HTTP server
      */
-    public function addRoute($uriPattern, $cb);
+    public function addRoute($uriPattern, $res, $req = null);
+    
+    /**
+     * Sets the home route
+     * 
+     * @param string $res The home response
+     * @param string $req The home request
+     * 
+     * @return \Duality\Service\HTTPServer This HTTP server
+     */
+    public function setHome($res, $req = null);
 
     /**
      * Starts server and run routes callbacks

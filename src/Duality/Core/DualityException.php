@@ -30,7 +30,7 @@ namespace Duality\Core;
 class DualityException extends \Exception
 {
     const E_APP_PATHNOTFOUND            = 1;
-    const E_SERVER_CTRLNOTFOUND         = 2;
+    const E_SERVER_RESPNOTFOUND         = 2;
     const E_SERVER_ACTIONNOTFOUND       = 3;
     const E_CONFIG_NOTFOUND             = 4;
     const E_EXTENSION_NOTFOUND          = 5;

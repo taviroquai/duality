@@ -17,10 +17,10 @@ use Duality\Core\DualityException;
 use Duality\Core\AbstractService;
 use Duality\Core\InterfaceHTTPServer;
 use Duality\Core\InterfaceUrl;
-use Duality\Core\InterfaceAuthorization;
 use Duality\Structure\Url;
 use Duality\Structure\Http\Request;
 use Duality\Structure\Http\Response;
+use Duality\App;
 
 /**
  * HTTP server service
@@ -137,13 +137,6 @@ implements InterfaceHTTPServer
     protected $routes;
     
     /**
-     * Holds the default controller when no route is matched
-     * 
-     * @var \Duality\Service\UserController Holds the default controller
-     */
-    protected $defaultController;
-    
-    /**
      * Holds the unsupported asapi names
      * 
      * @var array
@@ -165,7 +158,9 @@ implements InterfaceHTTPServer
 
         // Create default routes
         $this->routes = array();
-        $this->setDefault('\Duality\Service\Controller\Base@doIndex');
+        
+        // Set default home
+        $this->setHome('\Duality\Structure\Http\Response');
     }
 
     /**
@@ -179,44 +174,39 @@ implements InterfaceHTTPServer
     }
 
     /**
-     * Adds a service route to the server
+     * Add a route
      * 
-     * @param string   $uriPattern Give the URI pattern as route identifier
-     * @param \Closure $cb         The route callback
-     * 
-     * @return \Duality\Service\HTTPServer This HTTP server
-     */
-    public function addRoute($uriPattern, $cb)
-    {
-        $this->routes[$uriPattern] = $cb;
-        return $this;
-    }
-
-    /**
-     * Sets a default callback to the server when no route is matched
-     * 
-     * @param \Closure $cb Sets the default callback
+     * @param string $uriPattern The uri matching pattern
+     * @param string $res        The home response
+     * @param string $req        The home request
      * 
      * @return \Duality\Service\HTTPServer This HTTP server
      */
-    public function setDefault($cb)
+    public function addRoute($uriPattern, $res, $req = null)
     {
-        $this->defaultController =  $cb;
+        App::validateClassname($res);
+        App::validateClassname($req);
+        $this->routes[$uriPattern] = array(
+            'response'  => $res,
+            'request'   => $req
+        );
         return $this;
     }
     
     /**
-     * Sets the home callback
+     * Sets the home route
      * 
-     * @param \Closure $cb Give the home callback
+     * @param string $res The home response
+     * @param string $req The home request
      * 
      * @return \Duality\Service\HTTPServer This HTTP server
      */
-    public function setHome($cb)
+    public function setHome($res, $req = null)
     {
-        $this->routes['/^\/$/i'] = $cb;
+        unset($this->routes['/^\/$/i']);
+        $this->addRoute('/^\/$/i', $res, $req);
         return $this;
-    }    
+    }
 
     /**
      * Starts server and run routes callbacks
@@ -225,54 +215,25 @@ implements InterfaceHTTPServer
      */
     public function execute()
     {
-        // Set default values
-        $result = false;
-        $matches = array();
-        $authorized = true;
+        $route = $this->findRouteMatch();   
+        if ($route) {
 
-        if (!empty($this->getRequest())) {
-            
-            // Start looking for matching routes patterns
-            foreach ($this->routes as $ns => $cb) {
-                // Check if route matches and stop looking
-                $uri = str_replace(
-                    (string) $this->baseURL->getUri(), '', $this->request->getUrl()->getUri()
-                );
-                $uri = '/' . trim($uri, '/ ');
-                if ($result = preg_match($ns, $uri, $matches)) {
-                    array_shift($matches);
-                    $cb = is_string($cb) ? $this->validateStringAction($cb) : $cb;
-                    break;
-                }
-            }
-            
-            // No route matches. Call default controller
-            if (!$result) {
-                $cb = is_string($this->defaultController) ? 
-                    $this->validateStringAction($this->defaultController) : 
-                    $this->defaultController;
-            }
-            
-            // Call controller init
-            if (is_array($cb) 
-                && is_object($cb[0]) 
-                && ($cb[0] instanceof AbstractService)
-            ) {
-                $cb[0]->init();
-                
-                // Check for authorization
-                if ($cb[0] instanceof InterfaceAuthorization) {
-                    $authorized = $cb[0]->isAuthorized(
-                        $this->request, $this->response, $matches
-                    );
-                }
+            // Get user request
+            if (!empty($route['request'])) {
+                $request = new $route['request'];
+                $request->import($this->getRequest());
+                $request->setRouteParams($route['params']);
+                $this->setRequest($request);
             }
 
-            // Finally, call action
-            if ($authorized) {
-                call_user_func_array(
-                    $cb, array(&$this->request, &$this->response, $matches)
-                );
+            // Set response
+            $this->setResponse(new $route['response']);
+
+            // Check for authorization
+            if ($this->request->isAuthorized()) {
+                $this->response->onRequest($this->request);
+            } else {
+                $this->setResponse($this->request->onUnauthorized());
             }
         }
 
@@ -280,37 +241,25 @@ implements InterfaceHTTPServer
     }
     
     /**
-     * Translates route callback to callable
+     * Finds a matchable route
      * 
-     * @param string $cb Give the callback to validate
-     * 
-     * @throws DualityException If fails, throws exception
-     * 
-     * @return array The valid and callable callback
+     * @return boolean
      */
-    protected function validateStringAction($cb)
-    {   
-        // Translate
-        @list($controllerClass, $method) = explode('@', $cb, 2);
-        
-        // Validate class name
-        if (!class_exists($controllerClass)) {
-            throw new DualityException(
-                "Error Route: controller not found: ".$controllerClass,
-                DualityException::E_SERVER_CTRLNOTFOUND
-            );
-        }
-        $controller = new $controllerClass($this->app);
-        $action = array($controller, $method);
+    protected function findRouteMatch()
+    {
+        // Start looking for matching routes patterns
+        foreach ($this->routes as $ns => $route) {
 
-        // Validate callable
-        if (!is_callable($action)) {
-            throw new DualityException(
-                "Error Route: action not callable: ".$cb,
-                DualityException::E_SERVER_ACTIONNOTFOUND
-            );
+            // Check if route matches and stop looking
+            $uri = $this->getRequest()->getUrl()->getUri();
+            $uri = str_replace((string) $this->baseURL->getUri(), '', $uri);
+            $uri = '/' . trim($uri, '/ ');
+            if (preg_match($ns, $uri, $matches)) {
+                $route['params'] = array_shift($matches);
+                return $route;
+            }
         }
-        return $action;
+        return false;
     }
 
     /**

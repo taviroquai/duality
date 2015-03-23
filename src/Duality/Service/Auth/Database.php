@@ -16,6 +16,7 @@ namespace Duality\Service\Auth;
 use Duality\Core\DualityException;
 use Duality\Structure\Database\Filter;
 use Duality\Core\AbstractAuth;
+use Duality\Structure\Storage;
 
 /**
  * Database authentication service
@@ -35,7 +36,7 @@ extends AbstractAuth
     /**
      * Holds the database auth configuration
      * 
-     * var array The configuration params
+     * var \Duality\Structure\Storage The configuration params
      */
     protected $config;
 
@@ -46,16 +47,21 @@ extends AbstractAuth
      */
     public function init()
     {
-        if (!$this->app->getConfigItem('auth.table')
-            || !$this->app->getConfigItem('auth.user')
-            || !$this->app->getConfigItem('auth.pass')
+        if (!$this->app->getConfigItem('auth.db.table')
+            || !$this->app->getConfigItem('auth.db.userfield')
+            || !$this->app->getConfigItem('auth.db.passfield')
         ) {
             throw new DualityException(
-                "Error Config: auth configuration (table|user|pass) not found",
+                "Error Config: auth.db configuration (table, userfield or passfield) not found",
                 DualityException::E_CONFIG_NOTFOUND
             );
         }
-        $this->config = $this->app->getConfigItem('auth');
+        $this->config = new Storage;
+        $this->setConfig(
+            $this->app->getConfigItem('auth.db.table'),
+            $this->app->getConfigItem('auth.db.userfield'),
+            $this->app->getConfigItem('auth.db.passfield')
+        );
     }
 
     /**
@@ -69,9 +75,9 @@ extends AbstractAuth
     public function login($username, $password)
     {
         $this->status = false;
-        $tableName = $this->config['table'];
-        $userField = $this->config['user'];
-        $passField = $this->config['pass'];
+        $tableName = $this->config->get('table');
+        $userField = $this->config->get('userfield');
+        $passField = $this->config->get('passfield');
         
         $table = $this->app->call('db')->getTable($tableName);
         $filter = new Filter($table);
@@ -86,5 +92,19 @@ extends AbstractAuth
             $this->status = true;    
         }
         return $this->status;
+    }
+    
+    /**
+     * Sets the authentication configuration
+     * 
+     * @param string $tablename The table containing the authentication data
+     * @param string $userField The field containing the username
+     * @param string $passField The field containing the password
+     */
+    public function setConfig($tablename, $userField, $passField)
+    {
+        $this->config->set('table', $tablename);
+        $this->config->set('userfield', $userField);
+        $this->config->set('passfield', $passField);
     }
 }
