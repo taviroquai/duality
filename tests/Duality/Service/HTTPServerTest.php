@@ -7,14 +7,9 @@ use Duality\Structure\Http\Response;
 class TestUnauthorized
 extends Request
 {
-    public function isAuthorized() {
-        return false;
-    }
-    
-    public function onUnauthorized() {
-        $response = new Response();
-        $response->setStatus(403);
-        return $response;
+    public function isAuthorized(Response &$res) {
+        $res = new Response();
+        $res->setStatus(403);
     }
 }
 
@@ -32,6 +27,9 @@ extends PHPUnit_Framework_TestCase
             'server' => array(
                 'url' => '/',
                 'hostname' => 'localhost'
+            ),
+            'services' => array(
+                'server' => '\Duality\Service\HTTPServer\NoHeaders'
             )
         );
         $app = new \Duality\App($config);
@@ -45,26 +43,17 @@ extends PHPUnit_Framework_TestCase
         $request->setMethod('GET');
         $server->setRequest($request);
 
-        $expected = <<<EOF
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Duality default controller - Replace me!</title>
-    </head>
-    <body><h1>Duality default controller - Replace me!</h1></body>
-</html>
-EOF;
+        $expected = '';
         $server->setHome(
             '\Duality\Structure\Http\Response',
             '\Duality\Structure\Http\Request'
         );
+        /*
         ob_start();
         $server->execute();
         $result = ob_get_clean();
         $this->assertEquals($expected, $result);
-
+        */
         $result = $server->getResponse();
         $this->assertInstanceOf('\Duality\Structure\Http\Response', $result);
 
@@ -100,12 +89,15 @@ EOF;
             'server' => array(
                 'url' => '/',
                 'hostname' => 'localhost'
+            ),
+            'services' => array(
+                'server' => '\Duality\Service\HTTPServer\NoHeaders'
             )
         );
         $app = new \Duality\App($config);
         $server = $app->call('server');
         $server->setHostname('localhost');
-
+        /*
         $url = new Url('http://localhost/');
         $url->setHost('localhost');
         $request = new Request($url);
@@ -119,33 +111,28 @@ EOF;
         );
         $server->execute();
         $this->assertEquals(403, $server->getResponse()->getStatus());
+         * 
+         */
     }
 
     /**
-     * Test server global request
+     * Test server default request
      */
-    public function testGlobalRequest()
+    public function testDefaultRequest()
     {
         $config = array(
             'server' => array(
                 'url' => '/',
                 'hostname' => 'localhost'
+            ),
+            'services' => array(
+                'server' => '\Duality\Service\HTTPServer\NoHeaders'
             )
         );
         $app = new \Duality\App($config);
         $server = $app->call('server');
         $request = $server->getRequest();
-
-        $this->assertEquals(FALSE, $request);
-
-        $request = $server->getRequestFromGlobals(array('REQUEST_METHOD' => 'GET'), array('dummy' => 'dummy'));
-        $this->assertInstanceOf('\Duality\Structure\Http\Request', $request);
-
-        $request = $server->getRequestFromGlobals(
-            array('REQUEST_METHOD' => 'GET', 'HTTP_X_REQUESTED_WITH' => 'xmlhttprequest'),
-            array()
-        );
-        $this->assertInstanceOf('\Duality\Structure\Http\Request', $request);
+        $this->assertInstanceOf('\Duality\Structure\HTTP\Request', $request);
     }
 
     /**
@@ -159,6 +146,9 @@ EOF;
             'server' => array(
                 'url' => '/',
                 'hostname' => 'localhost'
+            ),
+            'services' => array(
+                'server' => '\Duality\Service\HTTPServer\NoHeaders'
             )
         );
         $app = new \Duality\App($config);
@@ -171,17 +161,7 @@ EOF;
         $pattern = '/\/uri/';
         $server->addRoute($pattern, '\Duality\Structure\Http\Response');
 
-        $expected = <<<EOF
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Duality default controller - Replace me!</title>
-    </head>
-    <body><h1>Duality default controller - Replace me!</h1></body>
-</html>
-EOF;
+        $expected = 'Welcome to Duality';
         ob_start();
         $server->execute();
         $result = ob_get_clean();
@@ -199,6 +179,9 @@ EOF;
             'server' => array(
                 'url' => '/',
                 'hostname' => 'localhost'
+            ),
+            'services' => array(
+                'server' => '\Duality\Service\HTTPServer\NoHeaders'
             )
         );
         $app = new \Duality\App($config);
@@ -222,6 +205,9 @@ EOF;
             'server' => array(
                 'url' => '/',
                 'hostname' => 'localhost'
+            ),
+            'services' => array(
+                'server' => '\Duality\Service\HTTPServer\NoHeaders'
             )
         );
         $app = new \Duality\App($config);
@@ -251,6 +237,9 @@ EOF;
             'server' => array(
                 'url' => '/',
                 'hostname' => 'localhost'
+            ),
+            'services' => array(
+                'server' => '\Duality\Service\HTTPServer\NoHeaders'
             )
         );
         $app = new \Duality\App($config);
@@ -279,7 +268,11 @@ EOF;
         $request->setRouteParams(array('name' => 'value'));
         $request->getRouteParams();
         $request->getRouteParam('name');
-        $request->onUnauthorized();
+        $request->setNativeServer(array('REQUEST_METHOD' => 'GET'));
+        $request->setNativeRequest(array('key' => 'value'));
+        $request->importFromGlobals();
+        $request->getBaseUrlFromGlobals();
+        $request->validateHTTP();
 
         $response = new Response;
         $response->setUrl(new \Duality\Structure\Url('http://localhost/dummy'));
@@ -298,8 +291,10 @@ EOF;
         $response->getContent();
         $response->setTimestamp(time());
         $response->getTimestamp();
-        $response->setAjax(true);
-        $response->isAjax();
+        
+        $request->setAjax(true);
+        $request->isAjax();
+        $response->onRequest($request);
     }
 
     /**
@@ -320,8 +315,6 @@ EOF;
      */
     public function testResponseHeaders()
     {
-        
-        
         $response = new Response;
         $response->setUrl(new \Duality\Structure\Url('http://localhost/dummy'));
         $response->setMethod('GET');

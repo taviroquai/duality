@@ -13,7 +13,6 @@
 
 namespace Duality\Core;
 
-use Duality\Core\InterfaceUrl;
 use Duality\Structure\Http\Request;
 
 /**
@@ -50,11 +49,11 @@ interface InterfaceHTTPClient
     /**
      * Creates a client request
      * 
-     * @param \Duality\Core\InterfaceUrl $url Give the URL to create the request
+     * @param string $url Give the URL to create the request
      * 
      * @return \Duality\Structure\Http\Request The HTTP request
      */
-    public static function createRequest(InterfaceUrl $url = null);
+    public static function createRequest($url);
 
     /**
      * Executes a request

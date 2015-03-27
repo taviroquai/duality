@@ -108,6 +108,23 @@ extends AbstractService
     {
         $this->tables[(string) $table] = $table;
     }
+    
+    /**
+     * Removes a table from cache
+     * 
+     * @param \Duality\Core\Table $table The database table
+     * @param boolean             $real  Drop real table
+     * 
+     * @return void
+     */
+    public function removeTable(Table $table, $real = false)
+    {
+        unset($this->tables[(string) $table]);
+        if ($real) {
+            $sql = $this->getDropTable($table);
+            $this->getPDO()->exec($sql);
+        }
+    }
 
     /**
      * Gets all database tables
@@ -324,10 +341,13 @@ extends AbstractService
      * 
      * @param string $tablename The table name
      * 
-     * @return string|false Returns the table or false on failure
+     * @return \Duality\Structure\Database\Table|false Returns the table
      */
     public function getTable($tablename)
     {
+        if (!empty($this->tables[$tablename])) {
+            return $this->tables[$tablename];
+        }
         $stm = $this->pdo->prepare($this->getColumns($tablename));
         $stm->execute();
         $info = $stm->fetchAll(\PDO::FETCH_ASSOC);
@@ -341,6 +361,9 @@ extends AbstractService
         }
         $table = $this->makeTable($tablename);
         $table->setColumns($columns);
+        
+        // Add this table
+        $this->addTable($table);
         return $table;
     }
     

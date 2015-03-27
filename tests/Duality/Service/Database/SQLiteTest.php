@@ -1,9 +1,16 @@
 <?php
 
 use Duality\Structure\Property;
-use Duality\Structure\Entity\User;
 use Duality\Structure\Database\Table;
 use Duality\Structure\Database\Filter;
+
+class User extends Duality\Structure\Entity
+{
+    protected $config = array(
+        'name' => 'dummy',
+        'properties' => array('dummy')
+    );
+}
 
 class SQLiteTest 
 extends PHPUnit_Framework_TestCase
@@ -113,7 +120,7 @@ extends PHPUnit_Framework_TestCase
         $table->setName('dummy');
         $table->setColumns(array('dummy' => 'integer'));
 
-        $db->AddTable($table);
+        $db->addTable($table);
         $db->getTables();
         $db->getTable('notfound');
         $db->getPDO();
@@ -290,8 +297,10 @@ extends PHPUnit_Framework_TestCase
 
         $sql = $db->getDropTable($table);
         $db->getPDO()->exec($sql);
+        $db->removeTable($table);
         $result = $db->getTable('dummy');
         $this->assertFalse($result);
+        $db->removeTable($table, true);
 
         // Clean up
         $this->cleanUp();

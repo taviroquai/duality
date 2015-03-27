@@ -17,7 +17,6 @@ use Duality\Core\DualityException;
 use Duality\Core\AbstractService;
 use Duality\Core\InterfaceHTTPServer;
 use Duality\Core\InterfaceUrl;
-use Duality\Structure\Url;
 use Duality\Structure\Http\Request;
 use Duality\Structure\Http\Response;
 use Duality\App;
@@ -34,7 +33,7 @@ use Duality\App;
  * @link    http://github.com/taviroquai/duality
  * @since   0.7.0
  */
-class HTTPServer
+abstract class HTTPServer
 extends AbstractService
 implements InterfaceHTTPServer
 {
@@ -116,32 +115,11 @@ implements InterfaceHTTPServer
     protected $response;
 
     /**
-     * Server host name
-     * 
-     * @var string Holds the server hostname
-     */
-    protected $hostname;
-
-    /**
-     * Server base URL
-     * 
-     * @var \Duality\Core\InterfaceUrl Holds the base URL used to parse routes
-     */
-    protected $baseURL;
-
-    /**
      * Server services routes
      * 
      * @var array Holds the available URL routes
      */
     protected $routes;
-    
-    /**
-     * Holds the unsupported asapi names
-     * 
-     * @var array
-     */
-    protected $noSupport = array('cli', 'cli-server');
 
     /**
      * Initiates the service
@@ -150,9 +128,6 @@ implements InterfaceHTTPServer
      */
     public function init()
     {
-        $this->hostname = gethostname();
-        $this->setBaseUrl(new Url('http://'.$this->hostname));
-
         // Create default response
         $this->setResponse($this->createResponse());
 
@@ -214,52 +189,38 @@ implements InterfaceHTTPServer
      * @return void
      */
     public function execute()
-    {
-        $route = $this->findRouteMatch();   
-        if ($route) {
-
-            // Get user request
-            if (!empty($route['request'])) {
-                $request = new $route['request'];
-                $request->import($this->getRequest());
-                $request->setRouteParams($route['params']);
-                $this->setRequest($request);
-            }
-
-            // Set response
-            $this->setResponse(new $route['response']);
-
-            // Check for authorization
-            if ($this->request->isAuthorized()) {
-                $this->response->onRequest($this->request);
-            } else {
-                $this->setResponse($this->request->onUnauthorized());
-            }
-        }
-
-        $this->send($this->response);
-    }
-    
-    /**
-     * Finds a matchable route
-     * 
-     * @return boolean
-     */
-    protected function findRouteMatch()
-    {
+    {   
+        // Set temporary request and response
+        $response = $this->getResponse();
+        $request = $this->getRequest();
+        
         // Start looking for matching routes patterns
         foreach ($this->routes as $ns => $route) {
 
+            // Reload temporary
+            $response = $this->getResponse();
+            $request = empty($route['request']) ?
+                    $this->getRequest()
+                    : new $route['request']($this->getRequest()->getUrl());
+            
             // Check if route matches and stop looking
-            $uri = $this->getRequest()->getUrl()->getUri();
-            $uri = str_replace((string) $this->baseURL->getUri(), '', $uri);
-            $uri = '/' . trim($uri, '/ ');
+            $uri = $request->getUrl()->getUri();
             if (preg_match($ns, $uri, $matches)) {
-                $route['params'] = array_shift($matches);
-                return $route;
+                $request->setRouteParams(array_shift($matches));
+                $response = new $route['response'];
+                break;
             }
         }
-        return false;
+
+        // Check for authorization
+        $request->isAuthorized($response);
+        
+        // Set request and response
+        $this->setRequest($request);
+        $this->setResponse($response);
+
+        // Finally send response
+        $this->send($this->getResponse());
     }
 
     /**
@@ -283,7 +244,8 @@ implements InterfaceHTTPServer
     public function getRequest()
     {
         if (empty($this->request)) {
-            $this->request = $this->getRequestFromGlobals($_SERVER, $_REQUEST);
+            $this->request = new Request();
+            $this->request->importFromGlobals();
         }
         return $this->request;
     }
@@ -423,14 +385,7 @@ implements InterfaceHTTPServer
      * 
      * @return \Duality\Service\Server This instance
      */
-    public function sendHeaders(Response $response)
-    {   
-        header(':', true, $response->getStatus());
-        foreach ($response->getHeaders() as $k => $v) {
-            header($k . ': ' . $v);
-        }
-        return $this;
-    }
+    abstract public function sendHeaders(Response $response);
 
     /**
      * Sends HTTP cookies
@@ -439,92 +394,6 @@ implements InterfaceHTTPServer
      * 
      * @return \Duality\Service\HTTPServer
      */
-    public function sendCookies(Response $response)
-    {
-        $cookies = $response->getCookies();
-        foreach ($cookies->asArray() as $name => $item) {
-            setcookie(
-                $name,
-                $item['value'],
-                $item['expire'],
-                $item['path'],
-                $item['domain'],
-                $item['secure'],
-                $item['httponly']
-            );
-        }
-        return $this;
-    }
-
-    /**
-     * Parses HTTP properties from PHP global environment
-     * 
-     * @param array $server The global $_SERVER variable
-     * @param array $params The global $_REQUEST/$_GET/$_POST variable
-     * 
-     * @return Request The resulting request instance
-     */
-    public function getRequestFromGlobals($server, $params)
-    {
-        if (empty($server['REQUEST_METHOD'])) {
-            return false;
-        }
-        
-        // Filter input
-        array_filter($server, function(&$var) {
-            $var = filter_var($var, FILTER_UNSAFE_RAW);
-        });
-        array_filter($params, function(&$var) {
-            $var = filter_var($var, FILTER_UNSAFE_RAW);
-        });
-        
-        // Detect base URL and URI
-        $server['SERVER_NAME'] = empty($server['SERVER_NAME']) ? 
-                $this->hostname : $server['SERVER_NAME'];
-        $server['SCRIPT_NAME'] = empty($server['SCRIPT_NAME']) ? 
-                '/index.php' : $server['SCRIPT_NAME'];
-        $server['REQUEST_URI'] = empty($server['REQUEST_URI']) ?
-                '/' : $server['REQUEST_URI'];
-        $baseUrl = (empty($server['HTTPS']) ? 'http' : 'https')
-            . "://"
-            . $server['SERVER_NAME']
-            . dirname($server['SCRIPT_NAME']);
-        $uri = $server['REQUEST_URI'];
-        $uri = str_replace(dirname($server['SCRIPT_NAME']), '', $uri);
-        $uri = str_replace(basename($server['SCRIPT_NAME']), '', $uri);
-        $uri = '/' . trim($uri, '/');
-        
-        // Set base URL and URI strings
-        $this->setBaseUrl(new Url($baseUrl));
-        $request = new Request(new Url($baseUrl . $uri));
-        $request->setMethod($server['REQUEST_METHOD']);
-        $request->setContent(file_get_contents('php://input'));
-        $request->setTimestamp(
-            empty($server['REQUEST_TIME']) ? time() : $server['REQUEST_TIME']
-        );
-        $headers = array(
-            'Http-Accept'           => empty($server['HTTP_ACCEPT']) ? 
-                'text/html' : $server['HTTP_ACCEPT'],
-            'Http-Accept-Language'  => !empty($server['HTTP_ACCEPT_LANGUAGE']) ?
-                $server['HTTP_ACCEPT_LANGUAGE'] : 'en-US',
-            'Http-Accept-Charset'   => !empty($server['HTTP_ACCEPT_CHARSET']) ? 
-                $server['HTTP_ACCEPT_CHARSET'] : 
-                !empty($server['HTTP_ACCEPT_ENCODING']) ? 
-                $server['HTTP_ACCEPT_ENCODING'] : 'utf-8',
-            'Http-Host'             => empty($server['REMOTE_HOST']) ? 
-                empty($server['REMOTE_ADDR']) ? '' : $server['REMOTE_ADDR']
-                : $server['REMOTE_HOST'],
-            'Referer'               => empty($server['REFERER']) ? 
-                '' : $server['REFERER']
-        );
-        $request->setHeaders($headers);
-        $request->setParams($params);
-
-        if (!empty($server['HTTP_X_REQUESTED_WITH']) 
-            && strtolower($server['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest'
-        ) {
-            $request->setAjax(true);
-        }
-        return $request;
-    }
+    abstract public function sendCookies(Response $response);
+    
 }

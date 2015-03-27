@@ -24,7 +24,7 @@ extends PHPUnit_Framework_TestCase
                 'mailer'    => 'Duality\Service\Mailer',
                 'paginator' => 'Duality\Service\Paginator',
                 'remote'    => 'Duality\Service\SSH',
-                'server'    => 'Duality\Service\Server',
+                'server'    => 'Duality\Service\HTTPServer\Native',
                 'idiom'     => 'Duality\Service\Translation',
                 'cmd'       => 'Duality\Service\Commander',
                 'client'    => 'Duality\Service\Client',
@@ -131,6 +131,9 @@ extends PHPUnit_Framework_TestCase
                     'userfield' => 'email',
                     'passfield' => 'pass'
                 )
+            ),
+            'services' => array(
+                'server' => '\Duality\Service\HTTPServer\NoHeaders'
             )
         );
         $app = new \Duality\App($config);

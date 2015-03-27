@@ -36,13 +36,6 @@ interface InterfaceAuthorization
      * 
      * @return boolean The authorization result
      */
-    public function isAuthorized();
-    
-    /**
-     * Creates unauthorized response
-     * 
-     * @return \Duality\Structure\HTTP\Response
-     */
-    public function onUnauthorized();
+    public function isAuthorized(Response &$response);
 
 }

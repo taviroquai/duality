@@ -84,7 +84,7 @@ implements InterfaceAuthentication
         'mailer'    => 'Duality\Service\Mailer',
         'paginator' => 'Duality\Service\Paginator',
         'remote'    => 'Duality\Service\SSH',
-        'server'    => 'Duality\Service\HTTPServer',
+        'server'    => 'Duality\Service\HTTPServer\Native',
         'idiom'     => 'Duality\Service\Translation',
         'cmd'       => 'Duality\Service\Commander',
         'client'    => 'Duality\Service\HTTPClient',

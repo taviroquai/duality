@@ -84,7 +84,7 @@ extends AbstractStructure
         }
         
         // Set database table
-        if ($table = $db->getTable($this->getName())) {
+        if ($table = $db->getTable($this->getName(), true)) {
             $this->setTable($table);
         }
     }

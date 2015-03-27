@@ -32,6 +32,13 @@ extends Http
 implements InterfaceRequestable
 {
     /**
+     * The default content
+     * 
+     * @var string The default content
+     */
+    protected $content = 'Welcome to Duality';
+    
+    /**
      * Default response
      * 
      * @param \Duality\Structure\Http\Request $req Give the current request
@@ -40,17 +47,8 @@ implements InterfaceRequestable
      */
     public function onRequest(Request $req)
     {
-        $this->setContent(
-'<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Duality default controller - Replace me!</title>
-    </head>
-    <body><h1>Duality default controller - Replace me!</h1></body>
-</html>'
-        );
-        $this->setStatus(404);
+        if ($req->isAjax()) {
+            $this->setContent(json_encode(array('content' => $this->getContent())));
+        }
     }
 }
