@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Interface for Controller Authorization
+ * Interface for Validation
  *
  * PHP Version 5.3.4
  *
@@ -16,7 +16,7 @@ namespace Duality\Core;
 use Duality\Structure\Http\Response;
 
 /**
- * Authorization interface
+ * Validation interface
  * 
  * Provides an interface for all Duality rule validators
  * ie. \Duality\Service\Validator
@@ -28,13 +28,13 @@ use Duality\Structure\Http\Response;
  * @link    http://github.com/taviroquai/duality
  * @since   1.0.3
  */
-interface InterfaceAuthorization
+interface InterfaceValidation
 {
     /**
      * Validates authorization
      * 
      * @return boolean The authorization result
      */
-    public function isAuthorized(Response &$response);
+    public function isValid();
 
 }

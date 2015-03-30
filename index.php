@@ -18,6 +18,9 @@ extends Request
     public function __construct(InterfaceUrl $url) {
         parent::__construct($url);
         $this->importFromGlobals();
+        
+        // Do something on request
+        $this->name = $this->name . ' changed!';
     }
 }
 
@@ -27,7 +30,7 @@ extends Response
 {
     public function onRequest(Request $req)
     {
-        $this->setContent('Hello World!');
+        $this->setContent('Hello ' . $req->name);
     }
 }
 

@@ -1,7 +1,5 @@
 <?php
 
-use Duality\Structure\Http\Request;
-use Duality\Structure\Url;
 use Duality\Structure\RuleItem;
 
 class ValidatorTest 
@@ -21,16 +19,11 @@ extends PHPUnit_Framework_TestCase
         $app = new \Duality\App($config);
         $server = $app->call('server');
 
-        $request = new Request(new Url('http://localhost/dummy'));
-        $request->setParams(array('key' => 'value'));
-        $request->setMethod('GET');
-        $server->setRequest($request);
-
         $validator = $app->call('validator');
 
         $item = new RuleItem(
             'key',
-            $request->getParam('key'),
+            'value',
             'required|number|alpha|email|equals|password|length:2:3',
             'The key is valid',
             'The key is invalid'
@@ -41,7 +34,7 @@ extends PHPUnit_Framework_TestCase
         $validator->validate();
 
         $expected = false;
-        $result = $validator->ok();
+        $result = $validator->isValid();
         $this->assertEquals($expected, $result);
 
         $expected = array(

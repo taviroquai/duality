@@ -14,6 +14,7 @@
 namespace Duality\Service;
 
 use Duality\Core\AbstractService;
+use Duality\Core\InterfaceValidation;
 use Duality\Core\InterfaceValidator;
 use Duality\Structure\Storage;
 use Duality\Structure\RuleItem;
@@ -30,7 +31,7 @@ use Duality\Structure\RuleItem;
  */
 class Validator
 extends AbstractService
-implements InterfaceValidator
+implements InterfaceValidator, InterfaceValidation
 {
     /**
      * Holds the messages msgStorage
@@ -125,7 +126,7 @@ implements InterfaceValidator
      * 
      * @return boolean Tells the current validation result
      */
-    public function ok()
+    public function isValid()
     {
         return $this->result ? true : false;
     }

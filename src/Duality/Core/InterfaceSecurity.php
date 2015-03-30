@@ -46,14 +46,4 @@ interface InterfaceSecurity
      */
     public function decrypt($data);
 
-    /**
-     * Filter data
-     * 
-     * @param string &$data Give the data to be decrypted
-     * @param int    $type  Give the type of filter
-     * 
-     * @return string The resulting decrypted data
-     */
-    public function filter(&$data, $type = FILTER_SANITIZE_STRING);
-
 }

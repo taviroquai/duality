@@ -21,7 +21,7 @@ extends PHPUnit_Framework_TestCase
         $paginator = $app->call('paginator');
 
         $request = new Request(new Url('http://localhost/items'));
-        $request->setParams(array('page' => 2));
+        $request->page = 2;
         $app->call('server')->setRequest($request);
         $paginator->config('http://localhost/items', 20, 3);
 
@@ -50,8 +50,8 @@ extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $result);
 
         // Ask out of range page
-        $request = new Request(new Url('http://localhost/items'));
-        $request->setParams(array('page' => 21));
+        $request = new TestRequest(new Url('http://localhost/items'));
+        $request->page = 21;
         $app->call('server')->setRequest($request);
         $paginator->config('http://localhost/items?', 20, 3);
 

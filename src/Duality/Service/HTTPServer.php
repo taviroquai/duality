@@ -13,12 +13,13 @@
 
 namespace Duality\Service;
 
-use Duality\Core\DualityException;
 use Duality\Core\AbstractService;
 use Duality\Core\InterfaceHTTPServer;
 use Duality\Core\InterfaceUrl;
+use Duality\Structure\Storage;
 use Duality\Structure\Http\Request;
 use Duality\Structure\Http\Response;
+use Duality\Structure\Http\Route;
 use Duality\App;
 
 /**
@@ -117,7 +118,7 @@ implements InterfaceHTTPServer
     /**
      * Server services routes
      * 
-     * @var array Holds the available URL routes
+     * @var \Duality\Structure\Storage Holds the available URL routes
      */
     protected $routes;
 
@@ -132,7 +133,7 @@ implements InterfaceHTTPServer
         $this->setResponse($this->createResponse());
 
         // Create default routes
-        $this->routes = array();
+        $this->routes = new Storage();
         
         // Set default home
         $this->setHome('\Duality\Structure\Http\Response');
@@ -161,10 +162,10 @@ implements InterfaceHTTPServer
     {
         App::validateClassname($res);
         App::validateClassname($req);
-        $this->routes[$uriPattern] = array(
-            'response'  => $res,
-            'request'   => $req
-        );
+        $route = new Route($uriPattern);
+        $route->setResponse($res);
+        $route->setRequest($req);
+        $this->routes->set($uriPattern, $route);
         return $this;
     }
     
@@ -178,7 +179,7 @@ implements InterfaceHTTPServer
      */
     public function setHome($res, $req = null)
     {
-        unset($this->routes['/^\/$/i']);
+        $this->routes->remove('/^\/$/i');
         $this->addRoute('/^\/$/i', $res, $req);
         return $this;
     }
@@ -195,21 +196,22 @@ implements InterfaceHTTPServer
         $request = $this->getRequest();
         
         // Start looking for matching routes patterns
-        foreach ($this->routes as $ns => $route) {
-
+        foreach ($this->routes->asArray() as $ns => $route) {
+            
             // Reload temporary
             $response = $this->getResponse();
-            $request = empty($route['request']) ?
-                    $this->getRequest()
-                    : new $route['request']($this->getRequest()->getUrl());
+            $request = $this->getRequest();
+            if ($classname = $route->getRequest()) {
+                $request = new $classname($request->getUrl());
+            }
             
             // Check if route matches and stop looking
-            $uri = $request->getUrl()->getUri();
-            if (preg_match($ns, $uri, $matches)) {
-                $request->setRouteParams(array_shift($matches));
-                $response = new $route['response'];
+            if ($request->matchRoute($ns)) {
+                $classname = $route->getResponse();
+                $response = new $classname;
                 break;
             }
+            unset($classname);
         }
 
         // Check for authorization
@@ -245,7 +247,7 @@ implements InterfaceHTTPServer
     {
         if (empty($this->request)) {
             $this->request = new Request();
-            $this->request->importFromGlobals();
+            $this->request->importFromGlobals($_SERVER, $_REQUEST);
         }
         return $this->request;
     }

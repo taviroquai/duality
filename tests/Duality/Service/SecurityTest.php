@@ -24,8 +24,8 @@ extends PHPUnit_Framework_TestCase
         $app = new \Duality\App($config);
 
         $request = new Request(new Url('http://localhost/items'));
-        $request->setParams(array('key' => 'value', 'array' => array('value')));
-        $request->setMethod('POST');
+        $request->key = 'value';
+        $request->array = array('value');
         $security = $app->call('security');
         $security->secureHTTPRequest($request);
 

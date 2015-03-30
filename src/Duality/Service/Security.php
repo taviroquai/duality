@@ -50,13 +50,10 @@ implements InterfaceSecurity
      */
     public function secureHTTPRequest(Request &$request)
     {
-        if ($request->getMethod()) {
-            $params = $request->getParams();
-            foreach ($params as $key => &$value) {
-                $this->filter($value);
-            }
-            $request->setParams($params);
-        }
+        $params = $request->getParams();
+        foreach ($params as $key => &$value) {
+            $request->filter($value);
+        }   
     }
 
     /**
@@ -106,23 +103,5 @@ implements InterfaceSecurity
     public function decrypt($data)
     {
         return $data;
-    }
-
-    /**
-     * Filter data
-     * 
-     * @param string &$data Give the data to be decrypted
-     * @param int    $type  Give the type of filter
-     * 
-     * @return void
-     */
-    public function filter(&$data, $type = FILTER_UNSAFE_RAW)
-    {
-        if (is_array($data)) {
-            foreach ($data as $key => &$item) {
-                $this->filter($item, $type);
-            }
-        }
-        filter_var($data, $type);
     }
 }

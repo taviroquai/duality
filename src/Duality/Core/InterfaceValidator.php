@@ -53,11 +53,4 @@ interface InterfaceValidator
      */
     public function getMessages();
 
-    /**
-     * Get validation result
-     * 
-     * @return boolean Tells whether the validation is success
-     */
-    public function ok();
-
 }

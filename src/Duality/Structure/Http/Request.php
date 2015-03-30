@@ -89,18 +89,6 @@ implements InterfaceAuthorization
     {
         $response->onRequest($this);
     }
-    
-    /**
-     * Sets the route params
-     * 
-     * @param array $params The route parameters
-     * 
-     * @return void
-     */
-    public function setRouteParams($params)
-    {
-        $this->routeParams->importArray((array)$params);
-    }
 
     /**
      * Gets the route params as array
@@ -125,18 +113,6 @@ implements InterfaceAuthorization
     }
 
     /**
-     * Sets the request params
-     * 
-     * @param array $params Give the request parameters
-     * 
-     * @return void
-     */
-    public function setParams($params)
-    {
-        $this->params->importArray((array)$params);
-    }
-
-    /**
      * Gets the request params as array
      * 
      * @return array The parameters
@@ -147,75 +123,83 @@ implements InterfaceAuthorization
     }
 
     /**
-     * Get one request param by key
-     * 
-     * @param string $key Give the parameter key to identify the value
-     * 
-     * @return string|null The resulting item or null
-     */
-    public function getParam($key)
-    {
-        return $this->hasParam($key) ? $this->params->get($key) : null;
-    }
-
-    /**
-     * Checks whether has a param or not
-     * 
-     * @param string $key Give the key to identify the item
-     * 
-     * @return boolean Tells whether the key exists or not
-     */
-    public function hasParam($key)
-    {
-        return $this->params->has($key);
-    }
-
-    /**
      * Get one request header by key
      * 
      * @param string $key Give the header key
      * 
      * @return string|null
      */
-    public function getHeaderItem($key)
+    public function getHeader($key)
     {
-        return $this->hasHeader($key) ? $this->headers->get($key) : null;
+        return $this->headers->get((string) $key);
+    }
+    
+    /**
+     * Sets the request param value
+     * 
+     * @param string $name  The param name
+     * @param mixed  $value The param value
+     * 
+     * @return void
+     */
+    public function __set($name, $value) {
+        $this->params->set($name, $value);
+    }
+    
+    /**
+     * Gets the request param value
+     * 
+     * @param string $name The param name
+     * 
+     * @return mixed The param value
+     */
+    public function __get($name) {
+        return $this->params->get((string)$name);
+    }
+    
+    /**
+     * Returns whether there is a param or not
+     * 
+     * @param string $name The param name
+     * 
+     * @return boolean
+     */
+    public function __isset($name) {
+        return $this->params->has((string) $name);
+    }
+    
+    /**
+     * Unsets a param
+     * 
+     * @param string $name The param name
+     * 
+     * @return void
+     */
+    public function __unset($name) {
+        $this->params->remove((string) $name);
+    }
+    
+    /**
+     * Whether matches the route or not
+     * 
+     * @param string $route The route expression
+     * 
+     * @return boolean
+     */
+    public function matchRoute($route)
+    {
+        $uri = $this->getUrl()->getUri();
+        if (preg_match($route, $uri, $matches)) {
+            foreach ((array) array_shift($matches) as $key => $value) {
+                $this->routeParams->set($key, $value);
+            }
+            return true;
+        }
+        return false;
     }
 
     /**
-     * Checks whether has a header item or not
-     * 
-     * @param string $key Give the key to tell if header exists or not
-     * 
-     * @return boolean The check result
-     */
-    public function hasHeader($key)
-    {
-        return $this->headers->has($key);
-    }
-    
-    /**
-     * Sets the native server params
-     * 
-     * @param array $server The native server params
-     */
-    public function setNativeServer($server)
-    {
-        $this->nativeServer = $server;
-    }
-    
-    /**
-     * Sets the native request params
-     * 
-     * @param array $request The native request params
-     */
-    public function setNativeRequest($request)
-    {
-        $this->nativeRequest = $request;
-    }
-    
-    /**
-     * Parses HTTP properties
+     * Imports globals
      * 
      * @return \Duality\Structure\Http\Request Whether there is an HTTP request or not
      */
@@ -267,7 +251,9 @@ implements InterfaceAuthorization
                 '' : $this->nativeServer['REFERER']
         );
         $this->setHeaders($headers);
-        $this->setParams($this->nativeRequest);
+        foreach ($this->nativeRequest as $key => $item) {
+            $this->$key = $item;
+        }
 
         if (!empty($this->nativeServer['HTTP_X_REQUESTED_WITH']) 
             && strtolower($this->nativeServer['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest'
@@ -298,5 +284,23 @@ implements InterfaceAuthorization
     public function validateHTTP()
     {
         return !empty($this->nativeServer['REQUEST_METHOD']);
+    }
+    
+    /**
+     * Filter data
+     * 
+     * @param string &$data Give the data to be decrypted
+     * @param int    $type  Give the type of filter
+     * 
+     * @return void
+     */
+    public function filter(&$data, $type = FILTER_UNSAFE_RAW)
+    {
+        if (is_array($data)) {
+            foreach ($data as $key => &$item) {
+                $this->filter($item, $type);
+            }
+        }
+        filter_var($data, $type);
     }
 }

@@ -3,10 +3,19 @@
 use Duality\Structure\Url;
 use Duality\Structure\Http\Request;
 use Duality\Structure\Http\Response;
+use Duality\Structure\Http\Json;
 
-class TestUnauthorized
+class TestRequest
 extends Request
 {
+    public function __construct(\Duality\Core\InterfaceUrl $url = null) {
+        parent::__construct($url);
+        
+        $this->nativeServer = array('REQUEST_METHOD' => 'GET');
+        $this->nativeRequest = array('key' => 'value');
+        $this->routeParams->set('name', 'value');
+    }
+
     public function isAuthorized(Response &$res) {
         $res = new Response();
         $res->setStatus(403);
@@ -18,8 +27,6 @@ extends PHPUnit_Framework_TestCase
 {
     /**
      * Test server service
-     * 
-     * @runInSeparateProcess
      */
     public function testHome()
     {
@@ -38,22 +45,20 @@ extends PHPUnit_Framework_TestCase
 
         $url = new Url('http://localhost/');
         $url->setHost('localhost');
-        $request = new Request($url);
-        $request->setParams(array('key' => 'value'));
-        $request->setMethod('GET');
+        $request = new TestRequest($url);
         $server->setRequest($request);
 
-        $expected = '';
+        $expected = 'Welcome to Duality';
         $server->setHome(
             '\Duality\Structure\Http\Response',
             '\Duality\Structure\Http\Request'
         );
-        /*
+        
         ob_start();
         $server->execute();
         $result = ob_get_clean();
         $this->assertEquals($expected, $result);
-        */
+        
         $result = $server->getResponse();
         $this->assertInstanceOf('\Duality\Structure\Http\Response', $result);
 
@@ -80,8 +85,6 @@ extends PHPUnit_Framework_TestCase
     
     /**
      * Test server service
-     * 
-     * @runInSeparateProcess
      */
     public function testAuthorization()
     {
@@ -97,22 +100,18 @@ extends PHPUnit_Framework_TestCase
         $app = new \Duality\App($config);
         $server = $app->call('server');
         $server->setHostname('localhost');
-        /*
+        
         $url = new Url('http://localhost/');
         $url->setHost('localhost');
-        $request = new Request($url);
-        $request->setParams(array('key' => 'value'));
-        $request->setMethod('GET');
+        $request = new TestRequest($url);
         $server->setRequest($request);
     
         $server->setHome(
             '\Duality\Structure\Http\Response',
-            '\TestUnauthorized'
+            '\TestRequest'
         );
         $server->execute();
         $this->assertEquals(403, $server->getResponse()->getStatus());
-         * 
-         */
     }
 
     /**
@@ -137,8 +136,6 @@ extends PHPUnit_Framework_TestCase
 
     /**
      * Test valid request, route and callback
-     * 
-     * @runInSeparateProcess
      */
     public function testRoute()
     {
@@ -154,9 +151,7 @@ extends PHPUnit_Framework_TestCase
         $app = new \Duality\App($config);
         $server = $app->call('server');
 
-        $request = new Request(new Url('http://localhost/uri'));
-        $request->setParams(array('key' => 'value'));
-        $request->setMethod('GET');
+        $request = new TestRequest(new Url('http://localhost/uri'));
         $server->setRequest($request);
         $pattern = '/\/uri/';
         $server->addRoute($pattern, '\Duality\Structure\Http\Response');
@@ -170,8 +165,6 @@ extends PHPUnit_Framework_TestCase
     
     /**
      * Test not found route
-     * 
-     * @runInSeparateProcess
      */
     public function testNotFoundRoute()
     {
@@ -187,41 +180,7 @@ extends PHPUnit_Framework_TestCase
         $app = new \Duality\App($config);
         $server = $app->call('server');
 
-        $request = new Request(new Url('http://localhost/uri'));
-        $request->setParams(array('key' => 'value'));
-        $request->setMethod('GET');
-        $server->setRequest($request);
-        $server->execute();
-    }
-
-    /**
-     * Test send HTTP headers
-     * 
-     * @runInSeparateProcess
-     */
-    public function testHttpHeaders()
-    {
-        $config = array(
-            'server' => array(
-                'url' => '/',
-                'hostname' => 'localhost'
-            ),
-            'services' => array(
-                'server' => '\Duality\Service\HTTPServer\NoHeaders'
-            )
-        );
-        $app = new \Duality\App($config);
-        $server = $app->call('server');
-        $response = $server->getResponse();
-        $response->setHeaders(
-            array('Content-Type', 'text/html')
-        );
-        $server->sendHeaders($server->getResponse());
-        $server->sendCookies($server->getResponse());
-        
-        $server->setHome('\Duality\Structure\Http\Json');
-        $request = new Request(new Url('http://localhost/'));
-        $request->setMethod('GET');
+        $request = new TestRequest(new Url('http://localhost/uri'));
         $server->setRequest($request);
         $server->execute();
     }
@@ -245,9 +204,7 @@ extends PHPUnit_Framework_TestCase
         $app = new \Duality\App($config);
         $server = $app->call('server');
 
-        $request = new Request(new Url('http://localhost/uri'));
-        $request->setParams(array('key' => 'value'));
-        $request->setMethod('GET');
+        $request = new TestRequest(new Url('http://localhost/uri'));
         $server->setRequest($request);
         $pattern = '/\/uri/';
         $server->addRoute($pattern, 'dummy');
@@ -260,16 +217,19 @@ extends PHPUnit_Framework_TestCase
      */
     public function testHTTP()
     {
-        $request = new Request(new \Duality\Structure\Url('http://localhost/dummy'));
-        $request->setParams(array('key' => 'value'));
+        $url = new \Duality\Structure\Url('http://localhost/dummy');
+        $request = new TestRequest($url);
+        $request->key = 'value';
+        $value = $request->key;
+        $request->dummy = 'dummy';
+        isset($request->key);
+        unset($request->dummy);
+        
         $request->setMethod('GET');
         $request->getHeaders();
-        $request->getHeaderItem('Content-Type');
-        $request->setRouteParams(array('name' => 'value'));
+        $request->getHeader('Content-Type');
         $request->getRouteParams();
         $request->getRouteParam('name');
-        $request->setNativeServer(array('REQUEST_METHOD' => 'GET'));
-        $request->setNativeRequest(array('key' => 'value'));
         $request->importFromGlobals();
         $request->getBaseUrlFromGlobals();
         $request->validateHTTP();
@@ -294,6 +254,9 @@ extends PHPUnit_Framework_TestCase
         
         $request->setAjax(true);
         $request->isAjax();
+        $response->onRequest($request);
+        
+        $response = new Json();
         $response->onRequest($request);
     }
 
